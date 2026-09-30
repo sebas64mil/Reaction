@@ -1,0 +1,145 @@
+:root {
+  /* ========================================
+     COLORS
+     ======================================== */
+
+  /* ---------- Primary ---------- */
+
+  --color-primary-100: #ffd2cf;
+  --color-primary-200: #ffa59e;
+  --color-primary-300: #ff796e;
+  --color-primary-400: #ff4c3d;
+  --color-primary-500: #ff1f0d;
+  --color-primary-600: #e41100;
+  --color-primary-700: #bb0e00;
+  --color-primary-800: #930b00;
+  --color-primary-900: #6a0800;
+
+  --color-primary-alpha-10: #ff1f0d1a;
+  --color-primary-alpha-50: #ff1f0d80;
+
+
+  /* ---------- Secondary ---------- */
+
+  --color-secondary-100: #ffe8cc;
+  --color-secondary-200: #ffd199;
+  --color-secondary-300: #ffba67;
+  --color-secondary-400: #ffa334;
+  --color-secondary-500: #ff8c01;
+  --color-secondary-600: #da7700;
+  --color-secondary-700: #b36200;
+  --color-secondary-800: #8d4d00;
+  --color-secondary-900: #663800;
+
+  --color-secondary-alpha-10: #ff8c011a;
+  --color-secondary-alpha-50: #ff8c0180;
+
+
+  /* ---------- Neutral ---------- */
+
+  --color-neutral-100: #eaeaea;
+  --color-neutral-200: #cdcdcd;
+  --color-neutral-300: #b1b1b1;
+  --color-neutral-400: #949494;
+  --color-neutral-500: #787878;
+  --color-neutral-600: #5b5b5b;
+  --color-neutral-700: #3f3f3f;
+  --color-neutral-800: #222222;
+  --color-neutral-900: #060606;
+
+  --color-neutral-alpha-10: #0606061a;
+
+
+  /* ---------- Tertiary ---------- */
+
+  --color-tertiary-100: #a8f6f5;
+  --color-tertiary-200: #7df2f0;
+  --color-tertiary-300: #52edec;
+  --color-tertiary-400: #27e9e7;
+  --color-tertiary-500: #15cbc9;
+  --color-tertiary-600: #109f9e;
+  --color-tertiary-700: #0c7473;
+  --color-tertiary-800: #095554;
+  --color-tertiary-900: #063636;
+
+  --color-tertiary-alpha-10: #0c74731a;
+  --color-tertiary-alpha-50: #0c747380;
+
+
+  /* ---------- Red ---------- */
+
+  --color-red-100: #fb3748;
+  --color-red-200: #d00416;
+
+  --color-red-alpha-10: #fb37481a;
+
+
+  /* ---------- Yellow ---------- */
+
+  --color-yellow-100: #ffdb43;
+  --color-yellow-200: #dfb400;
+
+  --color-yellow-alpha-10: #ffdb431a;
+
+
+  /* ---------- Green ---------- */
+
+  --color-green-100: #84ebb4;
+  --color-green-200: #1fc16b;
+
+  --color-green-alpha-10: #1fc16b1a;
+
+
+  /* ========================================
+     RADIUS
+     ======================================== */
+
+  --radius-none: 0px;
+  --radius-2xs: 2px;
+  --radius-xs: 4px;
+  --radius-s: 6px;
+  --radius-m: 8px;
+  --radius-l: 10px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 20px;
+  --radius-4xl: 24px;
+  --radius-5xl: 28px;
+  --radius-6xl: 32px;
+  --radius-7xl: 36px;
+  --radius-8xl: 40px;
+  --radius-full: 999px;
+
+
+  /* ========================================
+     STROKE
+     ======================================== */
+
+  --stroke-s: 1px;
+  --stroke-m: 2px;
+  --stroke-l: 4px;
+  --stroke-xl: 6px;
+  --stroke-2xl: 8px;
+  --stroke-3xl: 10px;
+
+
+  /* ========================================
+     SPACING
+     ======================================== */
+
+  --spacing-3xs: 2px;
+  --spacing-2xs: 4px;
+  --spacing-xs: 8px;
+  --spacing-s: 12px;
+  --spacing-m: 16px;
+  --spacing-l: 20px;
+  --spacing-xl: 24px;
+  --spacing-2xl: 32px;
+  --spacing-3xl: 40px;
+  --spacing-4xl: 48px;
+  --spacing-5xl: 56px;
+  --spacing-6xl: 64px;
+  --spacing-7xl: 72px;
+  --spacing-8xl: 80px;
+  --spacing-9xl: 96px;
+}
