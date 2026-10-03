@@ -1,27 +1,30 @@
 .site-footer {
-  width: min(1180px, calc(100% - 64px));
-  margin: 0 auto;
-  padding: 25px 0 30px;
-  border-top: 1px solid var(--line);
+  width: 100%;
+  margin: 0;
+  padding: 25px max(32px, calc((100vw - 1180px) / 2)) 30px;
+  border-top: 1px solid var(--color-primary-600);
   display: flex;
   justify-content: space-between;
-  color: var(--muted);
-  font:
-    11px "DM Mono",
-    monospace;
+  color: var(--color-primary-100);
+  background: var(--color-primary-500);
+  font: var(--font-label);
 }
 
 .footer-brand {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--ink);
+  color: var(--color-neutral-100);
   font-weight: 700;
   font-size: 14px;
 }
 
 .footer-brand svg {
-  color: var(--red);
+  color: var(--color-primary-100);
+}
+
+.site-footer > span {
+  color: var(--color-primary-100);
 }
 
 .site-footer a {
@@ -34,7 +37,8 @@
 
 @media (max-width: 760px) {
   .site-footer {
-    width: min(100% - 36px, 560px);
+    width: 100%;
+    padding: 25px 18px 30px;
     flex-wrap: wrap;
     gap: 18px;
     line-height: 1.5;

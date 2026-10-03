@@ -1,33 +1,94 @@
 .stat-card {
-  border-left: 1px solid var(--line);
   padding: 10px 20px;
+
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
   min-height: 130px;
+
+  position: relative;
+  text-align: center;
 }
 
-.stat-card strong {
-  font-size: 44px;
-  letter-spacing: -0.07em;
+/* =========================
+   LINE
+========================= */
+
+.stat-card::before {
+  content: "";
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+
+  width: 1px;
+
+  background: var(--line);
 }
+
+.stat-line-left::before {
+  left: 0;
+}
+
+.stat-line-right::before {
+  right: 0;
+}
+
+/* =========================
+   ICON
+========================= */
+
+.stat-card-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-top: 10px;
+  font-size: 32px;
+}
+
+.stat-card-icon svg {
+  width: 1em;
+  height: 1em;
+}
+
+/* =========================
+   VALUE
+========================= */
+
+.stat-card strong {
+  display: block;
+}
+
+/* =========================
+   LABEL
+========================= */
 
 .stat-card span {
   color: var(--muted);
-  font:
-    11px "DM Mono",
-    monospace;
   text-transform: uppercase;
-  line-height: 1.4;
 }
 
-.stat-orange strong {
+/* =========================
+   ACCENTS
+========================= */
+
+.stat-orange strong,
+.stat-orange .stat-card-icon {
   color: var(--orange);
 }
 
-.stat-cyan strong {
+.stat-cyan strong,
+.stat-cyan .stat-card-icon {
   color: var(--color-tertiary-600);
 }
+
+/* =========================
+   MOBILE
+========================= */
 
 @media (max-width: 760px) {
   .stat-card {
@@ -35,11 +96,7 @@
     padding: 10px 12px;
   }
 
-  .stat-card strong {
-    font-size: 32px;
-  }
-
-  .stat-card span {
-    font-size: 9px;
+  .stat-card-icon {
+    font-size: 26px;
   }
 }

@@ -1,0 +1,77 @@
+.experience-results {
+  padding: 110px 0 130px;
+  border-top: 1px solid var(--line);
+}
+
+.experience-results-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.experience-result-card {
+  min-height: 220px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  background: var(--color-surface-card);
+}
+
+.experience-result-card > span {
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.experience-result-card h3 {
+  margin: 24px 0 0;
+}
+
+.experience-result-card > p {
+  margin: 42px 0 0;
+  color: var(--muted);
+}
+
+.experience-result-card.is-available {
+  border-color: var(--color-tertiary-500);
+  background: var(--color-tertiary-100);
+}
+
+.experience-result-card.is-available > span {
+  color: var(--color-tertiary-700);
+}
+
+.experience-result-values {
+  display: grid;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.experience-result-values span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.experience-result-values small {
+  color: var(--muted);
+}
+
+.experience-result-values strong {
+  color: var(--color-tertiary-700);
+}
+
+@media (max-width: 1000px) {
+  .experience-results-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .experience-results {
+    padding: 80px 0;
+  }
+
+  .experience-results-grid {
+    grid-template-columns: 1fr;
+  }
+}

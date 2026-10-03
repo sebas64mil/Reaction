@@ -1,0 +1,4 @@
+.dashboard-data-layout {
+  display: grid;
+  gap: 24px;
+}

@@ -1,0 +1,54 @@
+.player-identity-section {
+  margin-top: 55px;
+}
+
+.dashboard-panel-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.dashboard-panel-heading h2 {
+  margin-top: 10px;
+}
+
+.dashboard-panel-status {
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font: var(--font-meta);
+  text-transform: uppercase;
+}
+
+.identity-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  align-items: end;
+  gap: 14px;
+}
+
+.identity-confirmation {
+  margin: 18px 0 0;
+  color: var(--color-tertiary-700);
+}
+
+@media (max-width: 760px) {
+  .player-identity-section {
+    margin-top: 40px;
+  }
+
+  .dashboard-panel-heading {
+    display: block;
+  }
+
+  .dashboard-panel-status {
+    display: inline-block;
+    margin-top: 18px;
+  }
+
+  .identity-form {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,20 +1,196 @@
 .stats-band {
   display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  gap: 60px;
+  grid-template-columns: 0.8fr 1.4fr 0.8fr;
+  gap: 45px;
+  align-items: center;
+
   padding-top: 100px;
   padding-bottom: 120px;
+
   border-top: 1px solid var(--line);
+}
+
+/* =========================
+   COLUMNS
+========================= */
+
+.stats-column {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.stats-column-left {
+  align-items: flex-center;
+}
+
+.stats-column-right {
+  align-items: flex-center;
+}
+
+/* =========================
+   CENTER
+========================= */
+
+.stats-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 45px;
+
+  text-align: center;
+}
+
+.stats-center .section-intro {
+  width: 100%;
+}
+
+.stats-image {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+
+  overflow: hidden;
+
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+
+  background: var(--surface);
+}
+
+.stats-image img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+
+  transition: transform 0.5s ease;
+}
+
+.stats-image:hover img {
+  transform: scale(1.03);
+}
+
+/* The three reveal directions make the section feel like it is opening into view. */
+.stats-column-left,
+.stats-column-right,
+.stats-center {
+  opacity: 0;
+  transition:
+    opacity 1100ms ease,
+    transform 1100ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-down .stats-column-left {
+  transform: translateX(-140px);
+}
+
+.reveal-down .stats-column-right {
+  transform: translateX(140px);
+}
+
+.reveal-down .stats-center {
+  transform: translateY(140px);
+}
+
+.reveal-up .stats-column-left {
+  transform: translateX(140px);
+}
+
+.reveal-up .stats-column-right {
+  transform: translateX(-140px);
+}
+
+.reveal-up .stats-center {
+  transform: translateY(-140px);
+}
+
+.stats-band.is-visible .stats-column-left,
+.stats-band.is-visible .stats-column-right,
+.stats-band.is-visible .stats-center {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+.stats-band.is-visible .stats-column-left,
+.stats-band.is-visible .stats-center,
+.stats-band.is-visible .stats-column-right {
+  transition-delay: 0ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stats-column-left,
+  .stats-column-right,
+  .stats-center {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1000px) {
+  .stats-band {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  .stats-center {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .stats-column-left {
+    grid-column: 1;
+    grid-row: 2;
+    align-items: stretch;
+  }
+
+  .stats-column-right {
+    grid-column: 2;
+    grid-row: 2;
+    align-items: stretch;
+  }
 }
 
 @media (max-width: 760px) {
   .stats-band {
-    display: block;
-    padding-top: 75px;
+    display: flex;
+    flex-direction: column;
+
+    padding-top: 120px;
     padding-bottom: 80px;
+
+    gap: 45px;
   }
 
-  .stats-band .section-intro {
-    margin-bottom: 45px;
+  .stats-center {
+    order: 1;
+  }
+
+  .stats-column-left {
+    order: 2;
+    width: 100%;
+  }
+
+  .stats-column-right {
+    order: 3;
+    width: 100%;
+  }
+
+  .stats-center {
+    gap: 30px;
+  }
+
+  .stats-image {
+    aspect-ratio: 16 / 9;
+  }
+
+  .stats-column {
+    gap: 16px;
   }
 }

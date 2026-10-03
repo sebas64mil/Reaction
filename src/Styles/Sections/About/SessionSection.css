@@ -18,10 +18,8 @@
 }
 
 .session-steps > div > span {
-  color: #777773;
-  font:
-    11px "DM Mono",
-    monospace;
+  color: var(--color-process-subtle);
+  font: var(--font-label);
 }
 
 .session-steps svg {

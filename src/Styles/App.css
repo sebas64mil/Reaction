@@ -2,9 +2,9 @@
 
 :root {
   --ink: var(--color-neutral-900);
-  --paper: #f5f4ef;
+  --paper: var(--color-surface-paper);
   --muted: var(--color-neutral-600);
-  --line: #d9d8d1;
+  --line: var(--color-surface-line);
   --orange: var(--color-secondary-500);
   --red: var(--color-primary-500);
   --cyan: var(--color-tertiary-400);
@@ -41,9 +41,7 @@ a {
 .kicker,
 .eyebrow {
   color: var(--muted);
-  font:
-    11px "DM Mono",
-    monospace;
+  font: var(--font-label);
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
@@ -88,7 +86,7 @@ h2 em {
 
 .section-heading > p {
   max-width: 340px;
-  color: #a5a5a2;
+  color: var(--color-process-copy);
   line-height: 1.65;
   font-size: 14px;
 }

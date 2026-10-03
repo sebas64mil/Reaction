@@ -9,6 +9,27 @@
 :root {
    --font-heading: "College", sans-serif;
    --font-body: "Electrolize", sans-serif;
+   --font-label: 14px "Electrolize", sans-serif;
+   --font-meta: 10px "Electrolize", sans-serif;
+   --font-caption: 12px "Electrolize", sans-serif;
+
+   --color-surface-paper: #f5f4ef;
+   --color-surface-line: #d9d8d1;
+   --color-surface-card: #e9e8e1;
+   --color-surface-card-line: #cccac0;
+   --color-surface-placeholder: #eeede7;
+   --color-art-grid: #787878;
+   --color-art-glow: #27e9e744;
+   --color-process-line: #3d3d3a;
+   --color-process-subtle: #777773;
+   --color-process-muted: #92928e;
+   --color-process-copy: #a5a5a2;
+   --gradient-team-card: linear-gradient(
+      to top,
+      rgba(6, 6, 6, 0.96) 0%,
+      rgba(6, 6, 6, 0.72) 32%,
+      rgba(6, 6, 6, 0) 78%
+   );
 
    /* ---------- Typography ---------- */
 

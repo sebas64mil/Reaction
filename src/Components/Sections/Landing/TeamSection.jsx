@@ -1,39 +1,113 @@
+import { useEffect, useRef, useState } from "react";
 import { FiArrowUpRight } from "react-icons/fi";
+
 import TeamMemberCard from "../../Ui/TeamMemberCard.jsx";
 import TextButton from "../../Ui/TextButton.jsx";
+
 import "../../../Styles/Sections/Landing/TeamSection.css";
 
 function TeamSection() {
+  const [isVisible, setIsVisible] = useState(false);
+  const [entryDirection, setEntryDirection] = useState("down");
+  const sectionRef = useRef(null);
+  const lastScrollY = useRef(0);
+  const scrollDirection = useRef("down");
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > lastScrollY.current) {
+        scrollDirection.current = "down";
+      } else if (currentScrollY < lastScrollY.current) {
+        scrollDirection.current = "up";
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setEntryDirection(scrollDirection.current);
+          setIsVisible(true);
+        } else {
+          setIsVisible(false);
+        }
+      },
+      { threshold: 0.16 },
+    );
+
+    lastScrollY.current = window.scrollY;
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      observer.disconnect();
+    };
+  }, []);
+
   return (
-    <section className="team-section section-wrap">
+    <section
+      ref={sectionRef}
+      className={`team-section section-wrap reveal-${entryDirection} ${
+        isVisible ? "is-visible" : ""
+      }`}
+    >
       <div className="section-heading">
-        <div>
-          <p className="kicker">Las personas detrás</p>
+        <div className="team-title">
+          <p className="kicker">El equipo</p>
+
           <h2 className="h-2">
-            Hecho para
+            Las personas
             <br />
-            <em>quienes juegan.</em>
+            <em>detrás de la experiencia.</em>
           </h2>
         </div>
-        <TextButton to="/about" variant="secondary" underline>
+
+        <TextButton
+          className="team-link"
+          to="/about"
+          variant="secondary"
+          underline
+        >
           Conocer el proyecto <FiArrowUpRight />
         </TextButton>
       </div>
+
       <div className="team-grid">
         <TeamMemberCard
-          initials="MR"
-          name="María Rojas"
-          role="Diseño de experiencia"
+          initials="SV"
+          name="Sebastian Villamil"
+          role="Desarrollo Web/UX/VR"
+          image="src/assets/Img/SebasPhoto.jpeg"
+          href="https://www.serbew.games"
         />
+
         <TeamMemberCard
-          initials="JG"
-          name="Juan García"
-          role="Desarrollo Unity"
+          initials="KG"
+          name="Katherine Guayazan"
+          role="Artistas 3D y Diseñadora UI"
+          image="src/assets/Img/KatheFoto.jpeg"
+          href="https://www.behance.net/swnoswift"
         />
+
         <TeamMemberCard
           initials="SV"
           name="Sofía Vargas"
           role="Investigación deportiva"
+          href="https://..."
+        />
+
+        <TeamMemberCard
+          initials="CT"
+          name="Camila Torres"
+          role="Producción audiovisual"
+          href="https://..."
         />
       </div>
     </section>

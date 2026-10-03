@@ -48,8 +48,8 @@
   inset: 0;
   opacity: 0.25;
   background-image:
-    linear-gradient(#787878 1px, transparent 1px),
-    linear-gradient(90deg, #787878 1px, transparent 1px);
+    linear-gradient(var(--color-art-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-art-grid) 1px, transparent 1px);
   background-size: 44px 44px;
   transform: perspective(500px) rotateX(55deg) scale(1.6) translateY(80px);
 }
@@ -66,7 +66,7 @@
   height: 400px;
   left: 20%;
   top: 13%;
-  box-shadow: 0 0 60px #27e9e744;
+  box-shadow: 0 0 60px var(--color-art-glow);
 }
 
 .art-ring-small {
@@ -88,9 +88,7 @@
 .art-label {
   position: absolute;
   color: var(--paper);
-  font:
-    10px "DM Mono",
-    monospace;
+  font: var(--font-meta);
   letter-spacing: 0.1em;
 }
 
@@ -125,9 +123,7 @@
   align-items: center;
   gap: 8px;
   color: var(--muted);
-  font:
-    10px "DM Mono",
-    monospace;
+  font: var(--font-meta);
   text-transform: uppercase;
 }
 

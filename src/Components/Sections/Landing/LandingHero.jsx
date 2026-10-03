@@ -7,9 +7,6 @@ function LandingHero() {
   return (
     <section className="hero section-wrap">
       <div className="hero-copy">
-        <p className="kicker">
-          <span className="live-dot" /> Entrenamiento inmersivo / Meta Quest 3
-        </p>
         <h1 className="h-1">
           Reacciona
           <br />
@@ -44,9 +41,6 @@ function LandingHero() {
         </span>
         <div className="art-ball" />
       </div>
-      <span className="scroll-note">
-        Scroll to explore <FiArrowDownRight />
-      </span>
     </section>
   );
 }

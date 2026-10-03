@@ -1,5 +1,5 @@
 .exercise-card {
-  background: #e9e8e1;
+  background: var(--color-surface-card);
 }
 
 .exercise-visual {
@@ -25,9 +25,7 @@
   top: 18px;
   left: 18px;
   color: rgba(0, 0, 0, 0.5);
-  font:
-    12px "DM Mono",
-    monospace;
+  font: var(--font-caption);
 }
 
 .court-line {
@@ -96,14 +94,12 @@
   gap: 6px;
   margin-top: 22px;
   padding-top: 16px;
-  border-top: 1px solid #cccac0;
+  border-top: 1px solid var(--color-surface-card-line);
 }
 
 .exercise-meta span {
   color: var(--muted);
-  font:
-    10px "DM Mono",
-    monospace;
+  font: var(--font-meta);
   text-transform: uppercase;
 }
 
@@ -117,9 +113,7 @@
   gap: 9px;
   margin-top: 25px;
   color: var(--muted);
-  font:
-    10px "DM Mono",
-    monospace;
+  font: var(--font-meta);
 }
 
 .pulse-dot {
