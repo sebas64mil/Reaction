@@ -18,7 +18,6 @@
   --color-primary-alpha-10: #ff1f0d1a;
   --color-primary-alpha-50: #ff1f0d80;
 
-
   /* ---------- Secondary ---------- */
 
   --color-secondary-100: #ffe8cc;
@@ -34,7 +33,6 @@
   --color-secondary-alpha-10: #ff8c011a;
   --color-secondary-alpha-50: #ff8c0180;
 
-
   /* ---------- Neutral ---------- */
 
   --color-neutral-100: #eaeaea;
@@ -48,7 +46,6 @@
   --color-neutral-900: #060606;
 
   --color-neutral-alpha-10: #0606061a;
-
 
   /* ---------- Tertiary ---------- */
 
@@ -65,14 +62,12 @@
   --color-tertiary-alpha-10: #0c74731a;
   --color-tertiary-alpha-50: #0c747380;
 
-
   /* ---------- Red ---------- */
 
   --color-red-100: #fb3748;
   --color-red-200: #d00416;
 
   --color-red-alpha-10: #fb37481a;
-
 
   /* ---------- Yellow ---------- */
 
@@ -81,14 +76,12 @@
 
   --color-yellow-alpha-10: #ffdb431a;
 
-
   /* ---------- Green ---------- */
 
   --color-green-100: #84ebb4;
   --color-green-200: #1fc16b;
 
   --color-green-alpha-10: #1fc16b1a;
-
 
   /* ========================================
      RADIUS
@@ -110,7 +103,6 @@
   --radius-8xl: 40px;
   --radius-full: 999px;
 
-
   /* ========================================
      STROKE
      ======================================== */
@@ -121,7 +113,6 @@
   --stroke-xl: 6px;
   --stroke-2xl: 8px;
   --stroke-3xl: 10px;
-
 
   /* ========================================
      SPACING

@@ -1,4 +1,5 @@
-import { FiArrowUpRight, FiPlay } from 'react-icons/fi'
+import { FiArrowUpRight, FiPlay } from "react-icons/fi";
+import Button from "./Button.jsx";
 
 function ExerciseCard({ number, name, description, target, color }) {
   return (
@@ -8,17 +9,30 @@ function ExerciseCard({ number, name, description, target, color }) {
         <span className="court-line court-line-one" />
         <span className="court-line court-line-two" />
         <span className="ball" />
-        <button className="play-button" aria-label={`Ver demo de ${name}`}><FiPlay /></button>
+        <Button
+          className="play-button"
+          variant="secondary"
+          aria-label={`Ver demo de ${name}`}
+        >
+          <FiPlay />
+        </Button>
       </div>
       <div className="exercise-content">
-        <div className="eyebrow">Ejercicio 0{number} <FiArrowUpRight /></div>
+        <div className="eyebrow">
+          Ejercicio 0{number} <FiArrowUpRight />
+        </div>
         <h3>{name}</h3>
         <p>{description}</p>
-        <div className="exercise-meta"><span>Objetivo</span><strong>{target}</strong></div>
-        <div className="video-label"><span className="pulse-dot" /> Demo disponible próximamente</div>
+        <div className="exercise-meta">
+          <span>Objetivo</span>
+          <strong>{target}</strong>
+        </div>
+        <div className="video-label">
+          <span className="pulse-dot" /> Demo disponible próximamente
+        </div>
       </div>
     </article>
-  )
+  );
 }
 
-export default ExerciseCard
+export default ExerciseCard;

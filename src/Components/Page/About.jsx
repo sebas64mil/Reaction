@@ -1,8 +1,17 @@
-import { FiArrowUpRight, FiCheck, FiMove, FiRadio } from 'react-icons/fi'
-import ExerciseCard from '../Ui/ExerciseCard.jsx'
+import AboutHero from "../Sections/About/AboutHero.jsx";
+import AboutDetail from "../Sections/About/AboutDetail.jsx";
+import ExerciseSection from "../Sections/About/ExerciseSection.jsx";
+import SessionSection from "../Sections/About/SessionSection.jsx";
 
 function About() {
-  return <div className="page about-page"><section className="inner-hero section-wrap"><p className="kicker"><span className="live-dot" /> Sobre la experiencia</p><h1>Una cancha.<br /><em>Mil respuestas.</em></h1><p>Una plataforma experimental desarrollada en Unity para Meta Quest 3 que entrena la velocidad con la que los jugadores perciben y responden.</p></section><section className="about-detail section-wrap"><div className="about-statement"><span>01 / CONTEXTO</span><h2>El cuerpo sabe.<br /><em>Hay que activarlo.</em></h2></div><div className="about-copy"><p>En el baloncesto, la diferencia ocurre entre el estímulo y la respuesta. Reaction Hoops crea escenarios controlados para practicar ese instante: observar, interpretar y actuar.</p><p>La realidad virtual permite repetir situaciones de alta presión sin límites, adaptando la intensidad y el tipo de estímulo a cada sesión.</p><div className="feature-list"><span><FiCheck /> Entorno inmersivo</span><span><FiCheck /> Estímulos multisensoriales</span><span><FiCheck /> Datos listos para medir</span></div></div></section><section className="exercise-section section-wrap"><div className="section-heading"><div><p className="kicker">Protocolos de entrenamiento</p><h2>Tres formas de<br /><em>poner a prueba la reacción.</em></h2></div><p>La colección crece con cada iteración. Cada ejercicio trabaja un tipo de decisión distinto.</p></div><div className="exercise-grid"><ExerciseCard number="1" name="Luz periférica" description="Identifica el estímulo que aparece fuera de tu foco central y responde con velocidad." target="Percepción periférica" color="visual-coral" /><ExerciseCard number="2" name="Pase de decisión" description="Elige el objetivo correcto cuando las señales visuales y sonoras compiten entre sí." target="Decisión bajo presión" color="visual-orange" /><ExerciseCard number="3" name="Zona de reacción" description="Muévete dentro de la cancha virtual y encuentra la ruta más rápida hacia la señal." target="Tiempo de respuesta" color="visual-cyan" /></div></section><section className="session-section section-wrap"><div><p className="kicker">Flujo de una sesión</p><h2>De cero a<br /><em>reacción.</em></h2></div><div className="session-steps"><div><span>01</span><FiRadio /><h3>Calibrar</h3><p>El sistema reconoce tu espacio y prepara los estímulos.</p></div><div><span>02</span><FiMove /><h3>Entrenar</h3><p>Completa rondas cortas con dificultad progresiva.</p></div><div><span>03</span><FiArrowUpRight /><h3>Revisar</h3><p>Observa tus resultados y descubre dónde mejorar.</p></div></div></section></div>
+  return (
+    <div className="page about-page">
+      <AboutHero />
+      <AboutDetail />
+      <ExerciseSection />
+      <SessionSection />
+    </div>
+  );
 }
 
-export default About
+export default About;

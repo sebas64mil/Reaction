@@ -1,10 +1,10 @@
-import './App.css'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Navbar from './Components/Ui/Navbar.jsx'
-import Footer from './Components/Ui/Footer.jsx'
-import Landing from './Components/Page/Landing.jsx'
-import About from './Components/Page/About.jsx'
-import Dashboard from './Components/Page/Dashboard.jsx'
+import "./App.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Navbar from "./Components/Ui/Navbar.jsx";
+import Footer from "./Components/Ui/Footer.jsx";
+import Landing from "./Components/Page/Landing.jsx";
+import About from "./Components/Page/About.jsx";
+import Dashboard from "./Components/Page/Dashboard.jsx";
 
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
       </main>
       <Footer />
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;
