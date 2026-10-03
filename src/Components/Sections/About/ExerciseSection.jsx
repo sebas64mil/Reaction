@@ -1,4 +1,5 @@
 import ExerciseCard from "../../Ui/ExerciseCard.jsx";
+import "../../../Styles/Sections/About/ExerciseSection.css";
 
 function ExerciseSection() {
   return (

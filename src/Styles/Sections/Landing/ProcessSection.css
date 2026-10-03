@@ -1,0 +1,87 @@
+.process-section {
+  padding: 110px 0;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.process-section .kicker,
+.process-section .section-heading h2 {
+  color: var(--paper);
+}
+
+.process-section h2 em {
+  color: var(--orange);
+}
+
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid #3d3d3a;
+}
+
+.process-card {
+  padding: 27px 24px 10px 0;
+  border-right: 1px solid #3d3d3a;
+  min-height: 240px;
+}
+
+.process-card:not(:first-child) {
+  padding-left: 24px;
+}
+
+.process-card:last-child {
+  border: 0;
+}
+
+.process-card > span {
+  color: #777773;
+  font:
+    11px "DM Mono",
+    monospace;
+}
+
+.process-card svg {
+  display: block;
+  margin: 38px 0 22px;
+  color: var(--cyan);
+  font-size: 24px;
+}
+
+.process-card h3 {
+  margin: 0 0 10px;
+  font-size: 22px;
+}
+
+.process-card p {
+  margin: 0;
+  max-width: 230px;
+  color: #92928e;
+  line-height: 1.55;
+  font-size: 13px;
+}
+
+.active-process svg {
+  color: var(--orange);
+}
+
+@media (max-width: 760px) {
+  .process-section {
+    padding: 75px 0;
+  }
+
+  .process-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .process-card,
+  .process-card:not(:first-child) {
+    min-height: 0;
+    padding: 25px 0;
+    border-right: 0;
+    border-bottom: 1px solid #3d3d3a;
+  }
+
+  .process-card svg {
+    margin: 22px 0 13px;
+  }
+}

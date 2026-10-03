@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import { FiArrowUpRight, FiActivity } from "react-icons/fi";
 import Button from "./Button.jsx";
 import TextButton from "./TextButton.jsx";
+import "../../Styles/Ui/Navbar.css";
 
 function Navbar() {
   return (

@@ -1,4 +1,5 @@
 import { FiBox, FiCrosshair, FiHeadphones } from "react-icons/fi";
+import "../../../Styles/Sections/Landing/ProcessSection.css";
 
 function ProcessSection() {
   return (

@@ -1,0 +1,19 @@
+.exercise-section {
+  padding: 100px 0 125px;
+}
+
+.exercise-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+@media (max-width: 760px) {
+  .exercise-section {
+    padding: 75px 0 80px;
+  }
+
+  .exercise-grid {
+    grid-template-columns: 1fr;
+  }
+}

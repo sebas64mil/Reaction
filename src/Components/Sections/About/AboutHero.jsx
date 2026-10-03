@@ -1,3 +1,5 @@
+import "../../../Styles/Sections/About/AboutHero.css";
+
 function AboutHero() {
   return (
     <section className="inner-hero section-wrap">

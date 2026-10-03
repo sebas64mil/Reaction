@@ -1,4 +1,5 @@
 import { FiCheck } from "react-icons/fi";
+import "../../../Styles/Sections/About/AboutDetail.css";
 
 function AboutDetail() {
   return (

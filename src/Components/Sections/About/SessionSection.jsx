@@ -1,4 +1,5 @@
 import { FiArrowUpRight, FiMove, FiRadio } from "react-icons/fi";
+import "../../../Styles/Sections/About/SessionSection.css";
 
 function SessionSection() {
   return (

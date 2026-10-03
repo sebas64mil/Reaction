@@ -1,6 +1,7 @@
 import { FiArrowDownRight, FiArrowUpRight } from "react-icons/fi";
 import Button from "../../Ui/Button.jsx";
 import TextButton from "../../Ui/TextButton.jsx";
+import "../../../Styles/Sections/Landing/LandingHero.css";
 
 function LandingHero() {
   return (

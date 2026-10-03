@@ -1,5 +1,6 @@
 import { FiArrowUpRight } from "react-icons/fi";
 import Button from "../../Ui/Button.jsx";
+import "../../../Styles/Sections/Landing/CtaSection.css";
 
 function CtaSection() {
   return (

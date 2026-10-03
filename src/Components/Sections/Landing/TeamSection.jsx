@@ -1,6 +1,7 @@
 import { FiArrowUpRight } from "react-icons/fi";
 import TeamMemberCard from "../../Ui/TeamMemberCard.jsx";
 import TextButton from "../../Ui/TextButton.jsx";
+import "../../../Styles/Sections/Landing/TeamSection.css";
 
 function TeamSection() {
   return (

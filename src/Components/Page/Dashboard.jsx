@@ -1,5 +1,6 @@
 import { FiArrowLeft, FiBarChart2, FiLock } from "react-icons/fi";
 import Button from "../Ui/Button.jsx";
+import "../../Styles/Page/Dashboard.css";
 
 function Dashboard() {
   return (

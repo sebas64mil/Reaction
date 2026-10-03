@@ -1,3 +1,5 @@
+import "../../Styles/Ui/TeamMemberCard.css";
+
 function TeamMemberCard({ initials, name, role }) {
   return (
     <article className="team-card">

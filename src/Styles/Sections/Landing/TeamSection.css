@@ -1,0 +1,27 @@
+.team-section {
+  padding: 120px 0;
+}
+
+.team-section .section-heading {
+  align-items: end;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+@media (max-width: 760px) {
+  .team-section {
+    padding: 80px 0;
+  }
+
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .team-section .section-heading .text-button {
+    margin-top: 27px;
+  }
+}

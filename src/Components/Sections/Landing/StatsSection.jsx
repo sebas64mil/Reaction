@@ -1,4 +1,5 @@
 import StatCard from "../../Ui/StatCard.jsx";
+import "../../../Styles/Sections/Landing/StatsSection.css";
 
 function StatsSection() {
   return (

@@ -1,5 +1,6 @@
 import { FiArrowUpRight, FiPlay } from "react-icons/fi";
 import Button from "./Button.jsx";
+import "../../Styles/Ui/ExerciseCard.css";
 
 function ExerciseCard({ number, name, description, target, color }) {
   return (

@@ -1,3 +1,5 @@
+import "../../Styles/Ui/StatCard.css";
+
 function StatCard({ value, label, accent }) {
   return (
     <div className={`stat-card ${accent || ""}`}>

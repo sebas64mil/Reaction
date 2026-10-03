@@ -1,0 +1,48 @@
+.site-footer {
+  width: min(1180px, calc(100% - 64px));
+  margin: 0 auto;
+  padding: 25px 0 30px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font:
+    11px "DM Mono",
+    monospace;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink);
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.footer-brand svg {
+  color: var(--red);
+}
+
+.site-footer a {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+@media (max-width: 760px) {
+  .site-footer {
+    width: min(100% - 36px, 560px);
+    flex-wrap: wrap;
+    gap: 18px;
+    line-height: 1.5;
+  }
+
+  .site-footer > span {
+    order: 3;
+    width: 100%;
+  }
+}

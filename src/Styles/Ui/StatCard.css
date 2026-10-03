@@ -1,0 +1,45 @@
+.stat-card {
+  border-left: 1px solid var(--line);
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 130px;
+}
+
+.stat-card strong {
+  font-size: 44px;
+  letter-spacing: -0.07em;
+}
+
+.stat-card span {
+  color: var(--muted);
+  font:
+    11px "DM Mono",
+    monospace;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+.stat-orange strong {
+  color: var(--orange);
+}
+
+.stat-cyan strong {
+  color: var(--color-tertiary-600);
+}
+
+@media (max-width: 760px) {
+  .stat-card {
+    min-height: 115px;
+    padding: 10px 12px;
+  }
+
+  .stat-card strong {
+    font-size: 32px;
+  }
+
+  .stat-card span {
+    font-size: 9px;
+  }
+}

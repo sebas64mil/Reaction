@@ -1,5 +1,6 @@
 import { FiArrowUpRight, FiActivity } from "react-icons/fi";
 import TextButton from "./TextButton.jsx";
+import "../../Styles/Ui/Footer.css";
 
 function Footer() {
   return (
