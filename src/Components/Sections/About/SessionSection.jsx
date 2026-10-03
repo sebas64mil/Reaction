@@ -6,7 +6,7 @@ function SessionSection() {
     <section className="session-section section-wrap">
       <div>
         <p className="kicker">Flujo de una sesión</p>
-        <h2>
+        <h2 className="h-2">
           De cero a<br />
           <em>reacción.</em>
         </h2>
@@ -15,20 +15,20 @@ function SessionSection() {
         <div>
           <span>01</span>
           <FiRadio />
-          <h3>Calibrar</h3>
-          <p>El sistema reconoce tu espacio y prepara los estímulos.</p>
+          <h3 className="h-4">Calibrar</h3>
+          <p className="b-3">El sistema reconoce tu espacio y prepara los estímulos.</p>
         </div>
         <div>
           <span>02</span>
           <FiMove />
-          <h3>Entrenar</h3>
-          <p>Completa rondas cortas con dificultad progresiva.</p>
+          <h3 className="h-4">Entrenar</h3>
+          <p className="b-3">Completa rondas cortas con dificultad progresiva.</p>
         </div>
         <div>
           <span>03</span>
           <FiArrowUpRight />
-          <h3>Revisar</h3>
-          <p>Observa tus resultados y descubre dónde mejorar.</p>
+          <h3 className="h-4">Revisar</h3>
+          <p className="b-3">Observa tus resultados y descubre dónde mejorar.</p>
         </div>
       </div>
     </section>

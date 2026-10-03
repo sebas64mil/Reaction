@@ -7,7 +7,7 @@ function CtaSection() {
     <section className="cta-section section-wrap">
       <div>
         <p className="kicker">Siguiente nivel</p>
-        <h2>
+        <h2 className="h-2">
           Tu reacción
           <br />
           <em>es tu ventaja.</em>

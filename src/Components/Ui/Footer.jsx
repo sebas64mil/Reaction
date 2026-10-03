@@ -8,7 +8,7 @@ function Footer() {
       <div className="footer-brand">
         <FiActivity /> reactionhoops
       </div>
-      <span>Entrenar la reaccion. Cambiar el juego.</span>
+      <span className="b-3">Entrenar la reaccion. Cambiar el juego.</span>
       <TextButton
         href="mailto:hello@reactionhoops.com"
         variant="secondary"

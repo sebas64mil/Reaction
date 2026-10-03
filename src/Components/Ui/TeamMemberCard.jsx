@@ -5,8 +5,8 @@ function TeamMemberCard({ initials, name, role }) {
     <article className="team-card">
       <div className="avatar">{initials}</div>
       <div>
-        <h3>{name}</h3>
-        <p>{role}</p>
+        <h3 className="h-6">{name}</h3>
+        <p className="b-3">{role}</p>
       </div>
     </article>
   );

@@ -9,7 +9,7 @@ function TeamSection() {
       <div className="section-heading">
         <div>
           <p className="kicker">Las personas detrás</p>
-          <h2>
+          <h2 className="h-2">
             Hecho para
             <br />
             <em>quienes juegan.</em>

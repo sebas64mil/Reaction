@@ -12,10 +12,6 @@
 
 .dashboard-page h1 {
   margin: 25px 0 22px;
-  font-size: clamp(58px, 8vw, 100px);
-  line-height: 0.86;
-  letter-spacing: -0.085em;
-  font-weight: 600;
 }
 
 .coming-badge {
@@ -55,16 +51,12 @@
 
 .dashboard-placeholder h2 {
   margin: 26px 0 10px;
-  font-size: 28px;
-  letter-spacing: -0.06em;
 }
 
 .dashboard-placeholder p {
   max-width: 390px;
   margin: 0 0 28px;
   color: var(--muted);
-  line-height: 1.6;
-  font-size: 14px;
 }
 
 .preview-stats {

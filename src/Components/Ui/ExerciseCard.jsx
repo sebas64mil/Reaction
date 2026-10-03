@@ -22,8 +22,8 @@ function ExerciseCard({ number, name, description, target, color }) {
         <div className="eyebrow">
           Ejercicio 0{number} <FiArrowUpRight />
         </div>
-        <h3>{name}</h3>
-        <p>{description}</p>
+        <h3 className="h-5">{name}</h3>
+        <p className="b-3">{description}</p>
         <div className="exercise-meta">
           <span>Objetivo</span>
           <strong>{target}</strong>

@@ -1,4 +1,50 @@
+@font-face {
+   font-family: "College";
+   src: url("../assets/Fonts/college.ttf") format("truetype");
+   font-style: normal;
+   font-weight: 400;
+   font-display: swap;
+}
+
 :root {
+   --font-heading: "College", sans-serif;
+   --font-body: "Electrolize", sans-serif;
+
+   /* ---------- Typography ---------- */
+
+   --font-size-h1: clamp(64px, 9vw, 124px);
+   --font-size-h2: clamp(36px, 4.5vw, 58px);
+   --font-size-h3: 32px;
+   --font-size-h4: 24px;
+   --font-size-h5: 20px;
+   --font-size-h6: 16px;
+
+   --line-height-h1: 0.90;
+   --line-height-h2: 0.98;
+   --line-height-h3: 1;
+   --line-height-h4: 1.1;
+   --line-height-h5: 1.2;
+   --line-height-h6: 1.3;
+
+   --letter-spacing-h1: -0.085em;
+   --letter-spacing-h2: -0.07em;
+   --letter-spacing-h3: -0.05em;
+   --letter-spacing-h4: -0.03em;
+   --letter-spacing-h5: 0;
+   --letter-spacing-h6: 0;
+
+   --font-size-b1: 16px;
+   --font-size-b2: 14px;
+   --font-size-b3: 12px;
+
+   --line-height-b1: 1.65;
+   --line-height-b2: 1.55;
+   --line-height-b3: 1.4;
+
+   --letter-spacing-b1: 0;
+   --letter-spacing-b2: 0;
+   --letter-spacing-b3: 0;
+
   /* ========================================
      COLORS
      ======================================== */
@@ -133,4 +179,91 @@
   --spacing-7xl: 72px;
   --spacing-8xl: 80px;
   --spacing-9xl: 96px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+   margin: 0;
+   color: inherit;
+   font-family: var(--font-heading);
+   font-weight: 400;
+}
+
+.h-1,
+.h-2,
+.h-3,
+.h-4,
+.h-5,
+.h-6 {
+   margin: 0;
+   color: inherit;
+   font-family: var(--font-heading);
+   font-weight: 400;
+}
+
+.h-1 {
+   font-size: var(--font-size-h1);
+   line-height: var(--line-height-h1);
+   letter-spacing: var(--letter-spacing-h1);
+}
+
+.h-2 {
+   font-size: var(--font-size-h2);
+   line-height: var(--line-height-h2);
+   letter-spacing: var(--letter-spacing-h2);
+}
+
+.h-3 {
+   font-size: var(--font-size-h3);
+   line-height: var(--line-height-h3);
+   letter-spacing: var(--letter-spacing-h3);
+}
+
+.h-4 {
+   font-size: var(--font-size-h4);
+   line-height: var(--line-height-h4);
+   letter-spacing: var(--letter-spacing-h4);
+}
+
+.h-5 {
+   font-size: var(--font-size-h5);
+   line-height: var(--line-height-h5);
+   letter-spacing: var(--letter-spacing-h5);
+}
+
+.h-6 {
+   font-size: var(--font-size-h6);
+   line-height: var(--line-height-h6);
+   letter-spacing: var(--letter-spacing-h6);
+}
+
+.b-1,
+.b-2,
+.b-3 {
+   margin: 0;
+   color: inherit;
+   font-family: var(--font-body);
+   font-weight: 400;
+}
+
+.b-1 {
+   font-size: var(--font-size-b1);
+   line-height: var(--line-height-b1);
+   letter-spacing: var(--letter-spacing-b1);
+}
+
+.b-2 {
+   font-size: var(--font-size-b2);
+   line-height: var(--line-height-b2);
+   letter-spacing: var(--letter-spacing-b2);
+}
+
+.b-3 {
+   font-size: var(--font-size-b3);
+   line-height: var(--line-height-b3);
+   letter-spacing: var(--letter-spacing-b3);
 }

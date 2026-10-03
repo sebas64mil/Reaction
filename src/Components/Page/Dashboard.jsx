@@ -10,7 +10,7 @@ function Dashboard() {
           <p className="kicker">
             <span className="live-dot" /> Zona de rendimiento
           </p>
-          <h1>
+          <h1 className="h-1">
             Tu juego,
             <br />
             <em>en números.</em>
@@ -24,8 +24,8 @@ function Dashboard() {
         <div className="placeholder-icon">
           <FiBarChart2 />
         </div>
-        <h2>El dashboard está calentando.</h2>
-        <p>
+        <h2 className="h-3">El dashboard está calentando.</h2>
+        <p className="b-2">
           Aquí podrás consultar tus sesiones, tiempos de reacción y evolución de
           rendimiento. Estamos preparando la primera versión.
         </p>

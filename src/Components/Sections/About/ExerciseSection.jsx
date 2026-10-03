@@ -7,13 +7,13 @@ function ExerciseSection() {
       <div className="section-heading">
         <div>
           <p className="kicker">Protocolos de entrenamiento</p>
-          <h2>
+          <h2 className="h-2">
             Tres formas de
             <br />
             <em>poner a prueba la reacción.</em>
           </h2>
         </div>
-        <p>
+        <p className="b-2">
           La colección crece con cada iteración. Cada ejercicio trabaja un tipo
           de decisión distinto.
         </p>

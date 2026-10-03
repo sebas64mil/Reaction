@@ -15,9 +15,6 @@
 
 .about-statement h2 {
   margin: 35px 0 0;
-  font-size: 42px;
-  line-height: 1;
-  letter-spacing: -0.07em;
 }
 
 .about-statement em {
@@ -28,8 +25,6 @@
 .about-copy {
   max-width: 460px;
   color: var(--muted);
-  line-height: 1.7;
-  font-size: 15px;
 }
 
 .feature-list {
@@ -61,11 +56,7 @@
   }
 
   .about-statement h2 {
-    font-size: 38px;
     margin-bottom: 38px;
   }
 
-  .about-copy {
-    font-size: 14px;
-  }
 }

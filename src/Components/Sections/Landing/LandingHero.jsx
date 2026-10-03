@@ -10,12 +10,12 @@ function LandingHero() {
         <p className="kicker">
           <span className="live-dot" /> Entrenamiento inmersivo / Meta Quest 3
         </p>
-        <h1>
+        <h1 className="h-1">
           Reacciona
           <br />
           <em>antes.</em>
         </h1>
-        <p className="hero-intro">
+        <p className="hero-intro b-1">
           Una experiencia de realidad virtual que convierte cada estímulo en una
           oportunidad para leer el juego, decidir y moverse.
         </p>

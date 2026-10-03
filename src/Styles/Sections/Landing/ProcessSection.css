@@ -21,14 +21,11 @@
 
 .process-card {
   padding: 27px 24px 10px 0;
-  border-right: 1px solid #3d3d3a;
   min-height: 240px;
 }
 
 .process-card:not(:first-child) {
   padding-left: 24px;
-}
-
 .process-card:last-child {
   border: 0;
 }

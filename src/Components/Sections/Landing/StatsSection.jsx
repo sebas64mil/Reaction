@@ -6,7 +6,7 @@ function StatsSection() {
     <section className="stats-band section-wrap">
       <div className="section-intro">
         <p className="kicker">El proyecto en datos</p>
-        <h2>
+        <h2 className="h-2">
           Diseñado para el
           <br />
           <em>momento decisivo.</em>
