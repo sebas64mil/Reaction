@@ -1,9 +1,19 @@
 import "../../../Styles/Sections/Dashboard/DashboardResultsSection.css";
 
-function DashboardResultsSection({ repetitions }) {
+function DashboardResultsSection({ repetitions, completedAt }) {
   const latest = repetitions[repetitions.length - 1];
   const accuracy = latest
-    ? Math.round((latest.hits / latest.attempts) * 100)
+    ? latest.combinedAccuracy.toFixed(1)
+    : null;
+  const completedDate = completedAt
+    ? new Intl.DateTimeFormat("es-CO", {
+        dateStyle: "long",
+      }).format(new Date(completedAt))
+    : null;
+  const completedTime = completedAt
+    ? new Intl.DateTimeFormat("es-CO", {
+        timeStyle: "short",
+      }).format(new Date(completedAt))
     : null;
 
   return (
@@ -31,12 +41,14 @@ function DashboardResultsSection({ repetitions }) {
           <div className="result-highlight-grid">
             <div className="result-highlight">
               <span className="b-3">Reacción promedio</span>
-              <strong className="h-3">{latest.reaction.toFixed(2)}s</strong>
+              <strong className="h-3">
+                {latest.averageReaction.toFixed(2)}s
+              </strong>
             </div>
             <div className="result-highlight">
               <span className="b-3">Aciertos</span>
               <strong className="h-3">
-                {latest.hits}/{latest.attempts}
+                {latest.correctAnswers}/{latest.totalAttempts}
               </strong>
             </div>
             <div className="result-highlight">
@@ -47,13 +59,23 @@ function DashboardResultsSection({ repetitions }) {
           <div className="hand-results-grid">
             <div className="hand-result">
               <span className="b-3">Mano izquierda</span>
-              <strong className="h-5">{latest.leftReaction.toFixed(2)}s</strong>
-              <small className="b-3">Precisión {latest.leftAccuracy}%</small>
+              <strong className="h-5">{latest.leftHandReaction.toFixed(2)}s</strong>
+              <small className="b-3">Precisión {latest.leftHandAccuracy.toFixed(1)}%</small>
             </div>
             <div className="hand-result">
               <span className="b-3">Mano derecha</span>
-              <strong className="h-5">{latest.rightReaction.toFixed(2)}s</strong>
-              <small className="b-3">Precisión {latest.rightAccuracy}%</small>
+              <strong className="h-5">{latest.rightHandReaction.toFixed(2)}s</strong>
+              <small className="b-3">Precisión {latest.rightHandAccuracy.toFixed(1)}%</small>
+            </div>
+          </div>
+          <div className="result-session-meta">
+            <div>
+              <span className="b-3">Fecha de finalización</span>
+              <strong className="b-2">{completedDate}</strong>
+            </div>
+            <div>
+              <span className="b-3">Hora de finalización</span>
+              <strong className="b-2">{completedTime}</strong>
             </div>
           </div>
           <p className="results-note b-3">

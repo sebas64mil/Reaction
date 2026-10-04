@@ -14,6 +14,11 @@
   margin-top: 32px;
 }
 
+.dashboard-firebase-status {
+  margin: 16px 0 0;
+  color: var(--color-tertiary-700);
+}
+
 .dashboard-top {
   display: flex;
   align-items: start;
@@ -122,5 +127,57 @@
 
   .preview-stats strong {
     font-size: 23px;
+  }
+}
+
+/* ── Sección analíticas / gráficas ── */
+.dashboard-charts-section {
+  margin-top: 24px;
+}
+
+.charts-controls-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.control-label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.control-label > span {
+  color: var(--color-process-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.charts-hint {
+  margin-top: 14px;
+  color: var(--color-process-subtle);
+}
+
+.dashboard-charts-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 40px 0;
+  color: var(--color-process-subtle);
+}
+
+.spin-icon {
+  animation: spin 1.2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@media (max-width: 760px) {
+  .charts-controls-grid {
+    grid-template-columns: 1fr;
   }
 }

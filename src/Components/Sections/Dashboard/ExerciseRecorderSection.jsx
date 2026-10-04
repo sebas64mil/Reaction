@@ -10,16 +10,31 @@ const exercises = [
   { value: "dribbling", label: "Drible", available: false },
 ];
 
+const levelFields = [
+  [
+    ["averageReaction", "Reacción promedio (s)", "number", "0.01"],
+    ["correctAnswers", "Respuestas correctas", "number"],
+    ["totalAttempts", "Intentos totales", "number"],
+    ["leftHandReaction", "Reacción mano izquierda (s)", "number", "0.01"],
+    ["rightHandReaction", "Reacción mano derecha (s)", "number", "0.01"],
+    ["leftHandCorrect", "Aciertos mano izquierda", "number"],
+    ["leftHandAttempts", "Intentos mano izquierda", "number"],
+    ["rightHandCorrect", "Aciertos mano derecha", "number"],
+    ["rightHandAttempts", "Intentos mano derecha", "number"],
+  ],
+];
+
 function ExerciseRecorderSection({
   selectedExercise,
   onExerciseChange,
   draft,
-  onDraftChange,
-  onAddRepetition,
-  repetitions,
+  onLevelChange,
+  onSaveSession,
   disabled,
 }) {
-  const selected = exercises.find((exercise) => exercise.value === selectedExercise);
+  const selected = exercises.find(
+    (exercise) => exercise.value === selectedExercise,
+  );
 
   return (
     <section className="dashboard-panel exercise-recorder-section">
@@ -29,7 +44,7 @@ function ExerciseRecorderSection({
           <h2 className="h-4">Simula una sesión de experiencia.</h2>
         </div>
         <span className="dashboard-panel-counter b-3">
-          {repetitions.length} repeticiones guardadas
+          3 niveles se guardan como una sesión
         </span>
       </div>
 
@@ -60,100 +75,69 @@ function ExerciseRecorderSection({
           </p>
         </div>
       ) : (
-        <form className="movement-form" onSubmit={onAddRepetition}>
+        <form className="movement-form" onSubmit={onSaveSession}>
           <div className="movement-form-intro">
             <span className="exercise-status">Disponible</span>
             <p className="b-2">
-              Registra una nueva repetición de reacción de movimiento. Puedes
-              repetir la variable tantas veces como necesites.
+              Completa los datos de los tres niveles. La sesión se enviará a
+              Firebase únicamente cuando estén todos listos.
             </p>
           </div>
-          <div className="movement-input-grid">
+
+          <div className="session-date-grid">
             <TextInput
-              id="reaction-time"
-              label="Reacción promedio (s)"
-              name="reaction"
-              type="number"
-              min="0"
-              step="0.01"
-              value={draft.reaction}
-              onChange={onDraftChange}
+              id="completed-date"
+              label="Fecha de finalización"
+              name="completedDate"
+              type="date"
+              value={draft.completedDate}
+              onChange={(event) => onLevelChange("session", event)}
               disabled={disabled}
               required
             />
             <TextInput
-              id="hits"
-              label="Aciertos"
-              name="hits"
-              type="number"
-              min="0"
-              value={draft.hits}
-              onChange={onDraftChange}
-              disabled={disabled}
-              required
-            />
-            <TextInput
-              id="attempts"
-              label="Intentos"
-              name="attempts"
-              type="number"
-              min="1"
-              value={draft.attempts}
-              onChange={onDraftChange}
-              disabled={disabled}
-              required
-            />
-            <TextInput
-              id="left-reaction"
-              label="Reacción mano izquierda (s)"
-              name="leftReaction"
-              type="number"
-              min="0"
-              step="0.01"
-              value={draft.leftReaction}
-              onChange={onDraftChange}
-              disabled={disabled}
-              required
-            />
-            <TextInput
-              id="right-reaction"
-              label="Reacción mano derecha (s)"
-              name="rightReaction"
-              type="number"
-              min="0"
-              step="0.01"
-              value={draft.rightReaction}
-              onChange={onDraftChange}
-              disabled={disabled}
-              required
-            />
-            <TextInput
-              id="left-accuracy"
-              label="Precisión mano izquierda (%)"
-              name="leftAccuracy"
-              type="number"
-              min="0"
-              max="100"
-              value={draft.leftAccuracy}
-              onChange={onDraftChange}
-              disabled={disabled}
-              required
-            />
-            <TextInput
-              id="right-accuracy"
-              label="Precisión mano derecha (%)"
-              name="rightAccuracy"
-              type="number"
-              min="0"
-              max="100"
-              value={draft.rightAccuracy}
-              onChange={onDraftChange}
+              id="completed-time"
+              label="Hora de finalización"
+              name="completedTime"
+              type="time"
+              value={draft.completedTime}
+              onChange={(event) => onLevelChange("session", event)}
               disabled={disabled}
               required
             />
           </div>
+
+          <div className="level-input-list">
+            {draft.levels.map((level, levelIndex) => (
+              <fieldset className="level-input-card" key={levelIndex}>
+                <legend className="h-5">Nivel {levelIndex + 1}</legend>
+                <div className="movement-input-grid">
+                  {levelFields[0].map(([name, label, type, step]) => (
+                    <TextInput
+                      key={name}
+                      id={`level-${levelIndex + 1}-${name}`}
+                      label={label}
+                      name={name}
+                      type={type}
+                      min="0"
+                      step={step}
+                      value={level[name]}
+                      onChange={(event) => onLevelChange(levelIndex, event)}
+                      disabled={disabled}
+                      required
+                    />
+                  ))}
+                </div>
+                <p className="level-calculation b-3">
+                  Precisión por mano y combinada: se calculará con aciertos e
+                  intentos al guardar.
+                </p>
+              </fieldset>
+            ))}
+          </div>
+
           <Button type="submit" variant="secondary" disabled={disabled}>
-            <FiPlus /> Registrar repetición
+            <FiPlus /> Finalizar y guardar los 3 niveles
           </Button>
           {disabled && (
             <p className="recorder-hint b-3">

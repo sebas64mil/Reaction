@@ -1,79 +1,197 @@
-import { useState } from "react";
-import { FiArrowLeft } from "react-icons/fi";
+import { useState, useEffect } from "react";
+import { FiArrowLeft, FiLoader } from "react-icons/fi";
+import { FirestoreService, MOVEMENT_EXERCISE_ID } from "../../../Modules/firebase.service.js";
 import Button from "../Ui/Button.jsx";
-import DashboardResultsSection from "../Sections/Dashboard/DashboardResultsSection.jsx";
 import ExerciseRecorderSection from "../Sections/Dashboard/ExerciseRecorderSection.jsx";
 import PlayerIdentitySection from "../Sections/Dashboard/PlayerIdentitySection.jsx";
+import MovementCharts from "../Graficos/MovementCharts.jsx";
+import ComingSoonChart from "../Graficos/ComingSoonChart.jsx";
 import "../../Styles/Page/Dashboard.css";
 import "../../Styles/Page/DashboardData.css";
 
-const initialPlayer = {
-  name: "",
-  universityId: "",
-};
+const firestoreService = new FirestoreService();
+
+const initialPlayer = { name: "", universityId: "" };
+
+const currentDateTime = new Date();
+const localDate = [
+  currentDateTime.getFullYear(),
+  String(currentDateTime.getMonth() + 1).padStart(2, "0"),
+  String(currentDateTime.getDate()).padStart(2, "0"),
+].join("-");
+const localTime = [
+  String(currentDateTime.getHours()).padStart(2, "0"),
+  String(currentDateTime.getMinutes()).padStart(2, "0"),
+].join(":");
 
 const initialDraft = {
-  reaction: "0.82",
-  hits: "16",
-  attempts: "20",
-  leftReaction: "0.78",
-  rightReaction: "0.86",
-  leftAccuracy: "84",
-  rightAccuracy: "76",
+  completedDate: localDate,
+  completedTime: localTime,
+  levels: [
+    {
+      averageReaction: "0.92", correctAnswers: "18", totalAttempts: "20",
+      leftHandReaction: "0.89", rightHandReaction: "0.95",
+      leftHandCorrect: "18", leftHandAttempts: "20",
+      rightHandCorrect: "17", rightHandAttempts: "20",
+    },
+    {
+      averageReaction: "0.81", correctAnswers: "19", totalAttempts: "20",
+      leftHandReaction: "0.78", rightHandReaction: "0.84",
+      leftHandCorrect: "19", leftHandAttempts: "20",
+      rightHandCorrect: "18", rightHandAttempts: "20",
+    },
+    {
+      averageReaction: "0.74", correctAnswers: "20", totalAttempts: "20",
+      leftHandReaction: "0.72", rightHandReaction: "0.76",
+      leftHandCorrect: "20", leftHandAttempts: "20",
+      rightHandCorrect: "19", rightHandAttempts: "20",
+    },
+  ],
 };
 
+const CHART_EXERCISES = [
+  { value: MOVEMENT_EXERCISE_ID, label: "Reaccion de movimiento", available: true },
+  { value: "lights", label: "Luces", available: false },
+  { value: "passes", label: "Pases", available: false },
+  { value: "dribbling", label: "Drible", available: false },
+];
+
 function Dashboard() {
+  // ── Estado seccion registro ──
   const [player, setPlayer] = useState(initialPlayer);
   const [isIdentified, setIsIdentified] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState("movement");
   const [draft, setDraft] = useState(initialDraft);
-  const [repetitions, setRepetitions] = useState([]);
+  const [firebaseStatus, setFirebaseStatus] = useState("");
 
+  // ── Estado analiticas ──
+  const [students, setStudents] = useState([]);
+  const [loadingStudents, setLoadingStudents] = useState(true);
+  const [studentsError, setStudentsError] = useState("");
+  const [chartStudent, setChartStudent] = useState("");
+  const [chartExercise, setChartExercise] = useState(MOVEMENT_EXERCISE_ID);
+  const [attempts, setAttempts] = useState([]);
+  const [loadingAttempts, setLoadingAttempts] = useState(false);
+  const [attemptsError, setAttemptsError] = useState("");
+
+  // Cargar lista de estudiantes al montar la pagina
+  useEffect(() => {
+    setLoadingStudents(true);
+    firestoreService
+      .getAllStudents()
+      .then((list) => {
+        setStudents(list);
+        if (list.length > 0) setChartStudent(list[0].id);
+      })
+      .catch((err) => setStudentsError(err.message))
+      .finally(() => setLoadingStudents(false));
+  }, []);
+
+  // Cargar attempts cuando cambia el estudiante o el ejercicio seleccionado
+  useEffect(() => {
+    if (!chartStudent) return;
+    const exercise = CHART_EXERCISES.find((e) => e.value === chartExercise);
+    if (!exercise?.available) { setAttempts([]); return; }
+
+    setLoadingAttempts(true);
+    setAttemptsError("");
+    firestoreService
+      .getStudentAttempts(chartStudent, chartExercise)
+      .then((data) => {
+        console.log("[Dashboard] attempts cargados:", data.length, data);
+        setAttempts(data);
+      })
+      .catch((err) => {
+        console.error("[Dashboard] error cargando attempts:", err);
+        setAttemptsError(err.message ?? String(err));
+      })
+      .finally(() => setLoadingAttempts(false));
+  }, [chartStudent, chartExercise]);
+
+  // ── Handlers seccion registro ──
   const handlePlayerChange = (event) => {
     const { name, value } = event.target;
-    setPlayer((currentPlayer) => ({ ...currentPlayer, [name]: value }));
+    setPlayer((p) => ({ ...p, [name]: value }));
   };
 
-  const handleIdentify = (event) => {
+  const handleIdentify = async (event) => {
     event.preventDefault();
-    setIsIdentified(true);
+    try {
+      const result = await firestoreService.createStudentIfNotExists(
+        player.name,
+        player.universityId,
+      );
+      setIsIdentified(true);
+      setFirebaseStatus(
+        result.created
+          ? "Estudiante creado en Firebase."
+          : "Estudiante existente recuperado de Firebase.",
+      );
+      setChartStudent(player.universityId);
+
+      firestoreService
+        .getAllStudents()
+        .then(setStudents)
+        .catch(() => {});
+    } catch (error) {
+      setFirebaseStatus(error.message);
+    }
   };
 
-  const handleDraftChange = (event) => {
+  const handleLevelChange = (levelIndex, event) => {
     const { name, value } = event.target;
-    setDraft((currentDraft) => ({ ...currentDraft, [name]: value }));
+    if (levelIndex === "session") {
+      setDraft((d) => ({ ...d, [name]: value }));
+      return;
+    }
+    setDraft((d) => ({
+      ...d,
+      levels: d.levels.map((lvl, i) => (i === levelIndex ? { ...lvl, [name]: value } : lvl)),
+    }));
   };
 
-  const handleAddRepetition = (event) => {
+  const handleSaveSession = async (event) => {
     event.preventDefault();
-
-    setRepetitions((currentRepetitions) => [
-      ...currentRepetitions,
-      {
-        exercise: selectedExercise,
-        reaction: Number(draft.reaction),
-        hits: Number(draft.hits),
-        attempts: Number(draft.attempts),
-        leftReaction: Number(draft.leftReaction),
-        rightReaction: Number(draft.rightReaction),
-        leftAccuracy: Number(draft.leftAccuracy),
-        rightAccuracy: Number(draft.rightAccuracy),
-      },
-    ]);
+    try {
+      let completedSession = firestoreService.createMovementSession();
+      draft.levels.forEach((lvl) => {
+        completedSession = firestoreService.addLevelToSession(completedSession, lvl);
+      });
+      const completedAt = `${draft.completedDate}T${draft.completedTime}:00`;
+      const savedAttempt = await firestoreService.saveCompletedAttempt(
+        player.universityId,
+        completedSession,
+        completedAt,
+      );
+      setFirebaseStatus(`Sesion guardada con ID ${savedAttempt.id}.`);
+      // Recargar graficas si el estudiante guardado es el mismo del selector
+      if (player.universityId === chartStudent && chartExercise === MOVEMENT_EXERCISE_ID) {
+        firestoreService
+          .getStudentAttempts(chartStudent, chartExercise)
+          .then(setAttempts)
+          .catch(() => {});
+      }
+    } catch (error) {
+      setFirebaseStatus(error.message);
+    }
   };
+
+  const selectedChartExercise = CHART_EXERCISES.find((e) => e.value === chartExercise);
+  const selectedStudentData = students.find((s) => s.id === chartStudent);
 
   return (
     <div className="page dashboard-page section-wrap">
       <div className="dashboard-top">
         <div>
           <h1 className="h-1">
-            Tu juego,
+            Tus resultados,
             <br />
-            <em>en números.</em>
+            <em>en cada sesion.</em>
           </h1>
         </div>
-        <span className="coming-badge">Simulación local</span>
+        <span className="coming-badge">Simulacion local</span>
       </div>
+
       <div className="dashboard-data-layout">
         <PlayerIdentitySection
           player={player}
@@ -85,13 +203,95 @@ function Dashboard() {
           selectedExercise={selectedExercise}
           onExerciseChange={(event) => setSelectedExercise(event.target.value)}
           draft={draft}
-          onDraftChange={handleDraftChange}
-          onAddRepetition={handleAddRepetition}
-          repetitions={repetitions}
+          onLevelChange={handleLevelChange}
+          onSaveSession={handleSaveSession}
           disabled={!isIdentified}
         />
-        <DashboardResultsSection repetitions={repetitions} />
       </div>
+
+      {firebaseStatus && (
+        <p className="dashboard-firebase-status b-3">{firebaseStatus}</p>
+      )}
+
+      {/* ── 03 / Analiticas ── */}
+      <section className="dashboard-panel dashboard-charts-section">
+        <div className="dashboard-panel-heading">
+          <div>
+            <p className="kicker">03 / Analiticas</p>
+            <h2 className="h-4">Resultados historicos por jugador.</h2>
+          </div>
+          {!loadingAttempts && selectedChartExercise?.available && chartStudent && (
+            <span className="dashboard-panel-counter b-3">
+              {attempts.length} sesion{attempts.length !== 1 ? "es" : ""}
+            </span>
+          )}
+        </div>
+
+        <div className="charts-controls-grid">
+          {/* Selector de estudiante */}
+          <label className="control-label">
+            <span className="b-3">Jugador (codigo de estudiante)</span>
+            {loadingStudents ? (
+              <div className="dashboard-charts-loading b-3">
+                <FiLoader className="spin-icon" /> Cargando jugadores...
+              </div>
+            ) : studentsError ? (
+              <p className="dashboard-firebase-status b-3">{studentsError}</p>
+            ) : (
+              <select
+                className="exercise-select"
+                value={chartStudent}
+                onChange={(e) => setChartStudent(e.target.value)}
+              >
+                {students.length === 0 && (
+                  <option value="">Sin jugadores registrados</option>
+                )}
+                {students.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.studentCode ?? s.id} — {s.name}
+                  </option>
+                ))}
+              </select>
+            )}
+          </label>
+
+          {/* Selector de ejercicio */}
+          <label className="control-label">
+            <span className="b-3">Ejercicio</span>
+            <select
+              className="exercise-select"
+              value={chartExercise}
+              onChange={(e) => setChartExercise(e.target.value)}
+            >
+              {CHART_EXERCISES.map((ex) => (
+                <option key={ex.value} value={ex.value}>
+                  {ex.label}{!ex.available ? " — en proceso" : ""}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        {selectedStudentData && (
+          <p className="charts-hint b-3">
+            Viendo: <strong>{selectedStudentData.name}</strong> &mdash; {selectedChartExercise?.label}
+          </p>
+        )}
+
+        {/* Contenido de graficas */}
+        {!selectedChartExercise?.available ? (
+          <ComingSoonChart exerciseId={chartExercise} />
+        ) : loadingAttempts ? (
+          <div className="dashboard-charts-loading b-2">
+            <FiLoader className="spin-icon" /> Cargando historial...
+          </div>
+        ) : attemptsError ? (
+          <p className="dashboard-firebase-status b-3">{attemptsError}</p>
+        ) : (
+          <MovementCharts attempts={attempts} />
+        )}
+      </section>
+
       <Button className="dashboard-back-button" to="/about" variant="primary">
         <FiArrowLeft /> Volver a la experiencia
       </Button>

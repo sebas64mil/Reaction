@@ -58,6 +58,29 @@
   color: var(--muted);
 }
 
+.result-session-meta {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.result-session-meta > div {
+  display: grid;
+  gap: 8px;
+  padding: 16px 20px;
+  border-top: 1px solid var(--line);
+}
+
+.result-session-meta span {
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.result-session-meta strong {
+  color: var(--ink);
+}
+
 .results-note {
   margin: 20px 0 0;
   color: var(--muted);
@@ -65,7 +88,8 @@
 
 @media (max-width: 760px) {
   .result-highlight-grid,
-  .hand-results-grid {
+  .hand-results-grid,
+  .result-session-meta {
     grid-template-columns: 1fr;
   }
 }
