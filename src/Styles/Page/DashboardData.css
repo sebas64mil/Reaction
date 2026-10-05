@@ -1,4 +1,6 @@
 .dashboard-data-layout {
   display: grid;
+  grid-template-columns: 1fr;
   gap: 24px;
+  align-items: start;
 }

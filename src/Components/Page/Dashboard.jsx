@@ -182,14 +182,11 @@ function Dashboard() {
   return (
     <div className="page dashboard-page section-wrap">
       <div className="dashboard-top">
-        <div>
-          <h1 className="h-1">
-            Tus resultados,
-            <br />
-            <em>en cada sesion.</em>
-          </h1>
-        </div>
-        <span className="coming-badge">Simulacion local</span>
+        <h1 className="h-1 dashboard-main-title">
+          En cada
+          <br />
+          <em>sesión.</em>
+        </h1>
       </div>
 
       <div className="dashboard-data-layout">

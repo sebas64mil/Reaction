@@ -1,5 +1,5 @@
 .player-identity-section {
-  margin-top: 55px;
+  margin-top: 0;
 }
 
 .dashboard-panel-heading {
@@ -34,11 +34,13 @@
   color: var(--color-tertiary-700);
 }
 
-@media (max-width: 760px) {
-  .player-identity-section {
-    margin-top: 40px;
+@media (max-width: 900px) {
+  .identity-form {
+    grid-template-columns: 1fr 1fr;
   }
+}
 
+@media (max-width: 640px) {
   .dashboard-panel-heading {
     display: block;
   }
