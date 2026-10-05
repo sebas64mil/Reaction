@@ -34,7 +34,13 @@
   color: var(--color-tertiary-700);
 }
 
-@media (max-width: 760px) {
+@media (max-width: 900px) {
+  .identity-form {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
   .player-identity-section {
     margin-top: 40px;
   }

@@ -20,24 +20,21 @@
 }
 
 .dashboard-top {
-  display: flex;
-  align-items: start;
-  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.dashboard-main-title {
+  margin: 0;
+  line-height: 0.82;
+  letter-spacing: -0.08em;
 }
 
 .dashboard-page h1 {
-  margin: 25px 0 22px;
+  margin: 0;
 }
 
 .coming-badge {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 12px;
-  border: 1px solid var(--line);
-  color: var(--muted);
-  font: var(--font-label);
-  text-transform: uppercase;
+  display: none;
 }
 
 .dashboard-placeholder {
@@ -109,12 +106,15 @@
   }
 
   .dashboard-top {
-    display: block;
+    margin-bottom: 18px;
+  }
+
+  .dashboard-main-title {
+    font-size: clamp(52px, 17vw, 96px);
   }
 
   .coming-badge {
-    width: fit-content;
-    margin-top: 25px;
+    display: none;
   }
 
   .dashboard-placeholder {

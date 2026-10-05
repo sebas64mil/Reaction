@@ -25,6 +25,15 @@ body {
   font-family: var(--font-body);
 }
 
+img {
+  display: block;
+  max-width: 100%;
+}
+
+main {
+  display: block;
+}
+
 a {
   color: inherit;
 }
@@ -91,9 +100,15 @@ h2 em {
   font-size: 14px;
 }
 
+@media (max-width: 900px) {
+  .section-wrap {
+    width: min(100% - 40px, 760px);
+  }
+}
+
 @media (max-width: 760px) {
   .section-wrap {
-    width: min(100% - 36px, 560px);
+    width: min(100% - 24px, 560px);
   }
 
   .section-heading {

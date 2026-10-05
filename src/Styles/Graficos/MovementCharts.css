@@ -54,3 +54,13 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 640px) {
+  .chart-card {
+    padding: 18px 16px;
+  }
+
+  .chart-canvas-wrap {
+    height: 220px;
+  }
+}
