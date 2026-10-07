@@ -2,7 +2,7 @@ import { FiArrowUpRight, FiPlay } from "react-icons/fi";
 import Button from "./Button.jsx";
 import "../../Styles/Ui/ExerciseCard.css";
 
-function ExerciseCard({ number, name, description, target, color }) {
+function ExerciseCard({ number, name, description, target, color, to }) {
   return (
     <article className="exercise-card">
       <div className={`exercise-visual ${color}`}>
@@ -13,7 +13,9 @@ function ExerciseCard({ number, name, description, target, color }) {
         <Button
           className="play-button"
           variant="secondary"
-          aria-label={`Ver demo de ${name}`}
+          to={to}
+          state={{ from: { pathname: "/about", hash: "#exercises" } }}
+          aria-label={`Ver detalle de ${name}`}
         >
           <FiPlay />
         </Button>
