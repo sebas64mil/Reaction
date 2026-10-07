@@ -3,7 +3,7 @@ import "../../../Styles/Sections/About/ExerciseSection.css";
 
 function ExerciseSection() {
   return (
-    <section className="exercise-section section-wrap">
+    <section id="exercises" className="exercise-section section-wrap">
       <div className="section-heading">
         <div>
           <p className="kicker">Protocolos de entrenamiento</p>
@@ -25,6 +25,7 @@ function ExerciseSection() {
           description="Identifica el estímulo que aparece fuera de tu foco central y responde con velocidad."
           target="Percepción periférica"
           color="visual-coral"
+          to="/exercises/luz-periferica"
         />
         <ExerciseCard
           number="2"
@@ -32,6 +33,7 @@ function ExerciseSection() {
           description="Elige el objetivo correcto cuando las señales visuales y sonoras compiten entre sí."
           target="Decisión bajo presión"
           color="visual-orange"
+          to="/exercises/pase-de-decision"
         />
         <ExerciseCard
           number="3"
@@ -39,6 +41,7 @@ function ExerciseSection() {
           description="Muévete dentro de la cancha virtual y encuentra la ruta más rápida hacia la señal."
           target="Tiempo de respuesta"
           color="visual-cyan"
+          to="/exercises/zona-de-reaccion"
         />
       </div>
     </section>
