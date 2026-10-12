@@ -181,3 +181,57 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ── Controles de sincronización y actualización con Firebase ── */
+.dashboard-sync-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.dashboard-sync-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: var(--color-surface-card, #ffffff);
+  border: 1px solid var(--line, #d9d8d1);
+  color: var(--ink, #060606);
+  font: var(--font-meta);
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+
+.dashboard-sync-button:hover:not(:disabled) {
+  border-color: var(--color-primary-500, #ff1f0d);
+  color: var(--color-primary-500, #ff1f0d);
+  background: rgba(255, 31, 13, 0.04);
+}
+
+.dashboard-sync-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.sync-icon {
+  font-size: 13px;
+}
+
+.dashboard-sync-feedback {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 12px 0 0;
+  color: var(--color-tertiary-700, #008785);
+  font: var(--font-meta);
+  font-size: 12px;
+}
+
+.sync-check-icon {
+  font-size: 14px;
+}
+

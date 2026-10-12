@@ -4,24 +4,28 @@ import TextInput from "../../Ui/TextInput.jsx";
 import "../../../Styles/Sections/Dashboard/ExerciseRecorderSection.css";
 
 const exercises = [
-  { value: "lights", label: "Luces", available: false },
+  { value: "lights", label: "Luces", available: true },
   { value: "movement", label: "Reacción de movimiento", available: true },
   { value: "passes", label: "Pases", available: false },
   { value: "dribbling", label: "Drible", available: false },
 ];
 
-const levelFields = [
-  [
-    ["averageReaction", "Reacción promedio (s)", "number", "0.01"],
-    ["correctAnswers", "Respuestas correctas", "number"],
-    ["totalAttempts", "Intentos totales", "number"],
-    ["leftHandReaction", "Reacción mano izquierda (s)", "number", "0.01"],
-    ["rightHandReaction", "Reacción mano derecha (s)", "number", "0.01"],
-    ["leftHandCorrect", "Aciertos mano izquierda", "number"],
-    ["leftHandAttempts", "Intentos mano izquierda", "number"],
-    ["rightHandCorrect", "Aciertos mano derecha", "number"],
-    ["rightHandAttempts", "Intentos mano derecha", "number"],
-  ],
+const movementLevelFields = [
+  ["averageReaction", "Reacción promedio (s)", "number", "0.01"],
+  ["correctAnswers", "Respuestas correctas", "number", undefined],
+  ["totalAttempts", "Intentos totales", "number", undefined],
+  ["leftHandReaction", "Reacción mano izquierda (s)", "number", "0.01"],
+  ["rightHandReaction", "Reacción mano derecha (s)", "number", "0.01"],
+  ["leftHandCorrect", "Aciertos mano izquierda", "number", undefined],
+  ["leftHandAttempts", "Intentos mano izquierda", "number", undefined],
+  ["rightHandCorrect", "Aciertos mano derecha", "number", undefined],
+  ["rightHandAttempts", "Intentos mano derecha", "number", undefined],
+];
+
+const lightsLevelFields = [
+  ["correctAnswers", "Aciertos", "number", undefined, "0", undefined],
+  ["accuracy", "Precisión (%)", "number", "0.1", "0", "100"],
+  ["averageReaction", "Reacción promedio (s)", "number", "0.01", "0", undefined],
 ];
 
 function ExerciseRecorderSection({
@@ -35,6 +39,8 @@ function ExerciseRecorderSection({
   const selected = exercises.find(
     (exercise) => exercise.value === selectedExercise,
   );
+
+  const isLights = selectedExercise === "lights";
 
   return (
     <section className="dashboard-panel exercise-recorder-section">
@@ -112,26 +118,45 @@ function ExerciseRecorderSection({
               <fieldset className="level-input-card" key={levelIndex}>
                 <legend className="h-5">Nivel {levelIndex + 1}</legend>
                 <div className="movement-input-grid">
-                  {levelFields[0].map(([name, label, type, step]) => (
-                    <TextInput
-                      key={name}
-                      id={`level-${levelIndex + 1}-${name}`}
-                      label={label}
-                      name={name}
-                      type={type}
-                      min="0"
-                      step={step}
-                      value={level[name]}
-                      onChange={(event) => onLevelChange(levelIndex, event)}
-                      disabled={disabled}
-                      required
-                    />
-                  ))}
+                  {isLights
+                    ? lightsLevelFields.map(([name, label, type, step, min, max]) => (
+                        <TextInput
+                          key={name}
+                          id={`level-${levelIndex + 1}-${name}`}
+                          label={label}
+                          name={name}
+                          type={type}
+                          min={min}
+                          max={max}
+                          step={step}
+                          value={level[name]}
+                          onChange={(event) => onLevelChange(levelIndex, event)}
+                          disabled={disabled}
+                          required
+                        />
+                      ))
+                    : movementLevelFields.map(([name, label, type, step]) => (
+                        <TextInput
+                          key={name}
+                          id={`level-${levelIndex + 1}-${name}`}
+                          label={label}
+                          name={name}
+                          type={type}
+                          min="0"
+                          step={step}
+                          value={level[name]}
+                          onChange={(event) => onLevelChange(levelIndex, event)}
+                          disabled={disabled}
+                          required
+                        />
+                      ))}
                 </div>
-                <p className="level-calculation b-3">
-                  Precisión por mano y combinada: se calculará con aciertos e
-                  intentos al guardar.
-                </p>
+                {!isLights && (
+                  <p className="level-calculation b-3">
+                    Precisión por mano y combinada: se calculará con aciertos e
+                    intentos al guardar.
+                  </p>
+                )}
               </fieldset>
             ))}
           </div>

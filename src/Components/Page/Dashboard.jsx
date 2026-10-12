@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { FiArrowLeft, FiLoader } from "react-icons/fi";
-import { FirestoreService, MOVEMENT_EXERCISE_ID } from "../../../Modules/firebase.service.js";
+import { FiArrowLeft, FiLoader, FiRefreshCw, FiCheckCircle } from "react-icons/fi";
+import { FirestoreService, MOVEMENT_EXERCISE_ID, LIGHTS_EXERCISE_ID } from "../../../Modules/firebase.service.js";
 import Button from "../Ui/Button.jsx";
 import ExerciseRecorderSection from "../Sections/Dashboard/ExerciseRecorderSection.jsx";
 import PlayerIdentitySection from "../Sections/Dashboard/PlayerIdentitySection.jsx";
 import MovementCharts from "../Graficos/MovementCharts.jsx";
+import LightsCharts from "../Graficos/LightsCharts.jsx";
 import ComingSoonChart from "../Graficos/ComingSoonChart.jsx";
 import "../../Styles/Page/Dashboard.css";
 import "../../Styles/Page/DashboardData.css";
@@ -49,12 +50,23 @@ const initialDraft = {
   ],
 };
 
+const initialDraftLights = {
+  completedDate: localDate,
+  completedTime: localTime,
+  levels: [
+    { correctAnswers: "", accuracy: "", averageReaction: "" },
+    { correctAnswers: "", accuracy: "", averageReaction: "" },
+    { correctAnswers: "", accuracy: "", averageReaction: "" },
+  ],
+};
+
 const CHART_EXERCISES = [
   { value: MOVEMENT_EXERCISE_ID, label: "Reaccion de movimiento", available: true },
-  { value: "lights", label: "Luces", available: false },
+  { value: LIGHTS_EXERCISE_ID, label: "Luces", available: true },
   { value: "passes", label: "Pases", available: false },
   { value: "dribbling", label: "Drible", available: false },
 ];
+
 
 function Dashboard() {
   // ── Estado seccion registro ──
@@ -73,8 +85,11 @@ function Dashboard() {
   const [attempts, setAttempts] = useState([]);
   const [loadingAttempts, setLoadingAttempts] = useState(false);
   const [attemptsError, setAttemptsError] = useState("");
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [lastSyncTime, setLastSyncTime] = useState(null);
+  const [syncFeedback, setSyncFeedback] = useState("");
 
-  // Cargar lista de estudiantes al montar la pagina
+  // Cargar lista de estudiantes al montar la pagina (usa cache si esta vigente)
   useEffect(() => {
     setLoadingStudents(true);
     firestoreService
@@ -87,7 +102,7 @@ function Dashboard() {
       .finally(() => setLoadingStudents(false));
   }, []);
 
-  // Cargar attempts cuando cambia el estudiante o el ejercicio seleccionado
+  // Cargar attempts cuando cambia el estudiante o el ejercicio seleccionado (usa cache si esta vigente)
   useEffect(() => {
     if (!chartStudent) return;
     const exercise = CHART_EXERCISES.find((e) => e.value === chartExercise);
@@ -107,6 +122,69 @@ function Dashboard() {
       })
       .finally(() => setLoadingAttempts(false));
   }, [chartStudent, chartExercise]);
+
+  // Sincronización periódica automática con Firebase cada 60 segundos
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (!chartStudent) return;
+      const exercise = CHART_EXERCISES.find((e) => e.value === chartExercise);
+      if (!exercise?.available) return;
+
+      // Realiza el llamado a Firebase forzando refresco de la base de datos
+      firestoreService
+        .getStudentAttempts(chartStudent, chartExercise, true)
+        .then((data) => {
+          setAttempts(data);
+          const now = new Date();
+          setLastSyncTime(now);
+        })
+        .catch(() => {});
+
+      firestoreService
+        .getAllStudents(true)
+        .then((list) => {
+          setStudents(list);
+        })
+        .catch(() => {});
+    }, 60000);
+
+    return () => clearInterval(intervalId);
+  }, [chartStudent, chartExercise]);
+
+  // Handler para el botón manual que revisa si se actualizó la base de datos
+  const handleSyncDatabase = async () => {
+    setIsSyncing(true);
+    setSyncFeedback("");
+    try {
+      const exercise = CHART_EXERCISES.find((e) => e.value === chartExercise);
+      const [latestStudents, latestAttempts] = await Promise.all([
+        firestoreService.getAllStudents(true),
+        chartStudent && exercise?.available
+          ? firestoreService.getStudentAttempts(chartStudent, chartExercise, true)
+          : Promise.resolve([]),
+      ]);
+
+      setStudents(latestStudents);
+      if (chartStudent && exercise?.available) {
+        setAttempts(latestAttempts);
+      }
+
+      const now = new Date();
+      setLastSyncTime(now);
+      setSyncFeedback(
+        `Base de datos al día. Última revisión: ${now.toLocaleTimeString("es-CO", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        })}`
+      );
+    } catch (err) {
+      console.error("[Dashboard] Error al sincronizar con Firebase:", err);
+      setSyncFeedback("Error al verificar actualizaciones en la base de datos.");
+    } finally {
+      setIsSyncing(false);
+    }
+  };
 
   // ── Handlers seccion registro ──
   const handlePlayerChange = (event) => {
@@ -138,6 +216,25 @@ function Dashboard() {
     }
   };
 
+  const handleExerciseChange = (event) => {
+    const newExercise = event.target.value;
+    setSelectedExercise(newExercise);
+    // Limpiar el draft con los campos correctos para el nuevo ejercicio
+    if (newExercise === "lights") {
+      setDraft({
+        completedDate: draft.completedDate,
+        completedTime: draft.completedTime,
+        levels: [
+          { correctAnswers: "", accuracy: "", averageReaction: "" },
+          { correctAnswers: "", accuracy: "", averageReaction: "" },
+          { correctAnswers: "", accuracy: "", averageReaction: "" },
+        ],
+      });
+    } else if (newExercise === "movement") {
+      setDraft(initialDraft);
+    }
+  };
+
   const handleLevelChange = (levelIndex, event) => {
     const { name, value } = event.target;
     if (levelIndex === "session") {
@@ -153,23 +250,56 @@ function Dashboard() {
   const handleSaveSession = async (event) => {
     event.preventDefault();
     try {
-      let completedSession = firestoreService.createMovementSession();
-      draft.levels.forEach((lvl) => {
-        completedSession = firestoreService.addLevelToSession(completedSession, lvl);
-      });
       const completedAt = `${draft.completedDate}T${draft.completedTime}:00`;
-      const savedAttempt = await firestoreService.saveCompletedAttempt(
-        player.universityId,
-        completedSession,
-        completedAt,
-      );
-      setFirebaseStatus(`Sesion guardada con ID ${savedAttempt.id}.`);
-      // Recargar graficas si el estudiante guardado es el mismo del selector
-      if (player.universityId === chartStudent && chartExercise === MOVEMENT_EXERCISE_ID) {
-        firestoreService
-          .getStudentAttempts(chartStudent, chartExercise)
-          .then(setAttempts)
-          .catch(() => {});
+
+      if (selectedExercise === "lights") {
+        // ── Flujo Reacción por Luces ──
+        let lightsSession = firestoreService.createLightsSession();
+        draft.levels.forEach((lvl) => {
+          lightsSession = firestoreService.addLightsLevelToSession(lightsSession, lvl);
+        });
+        const savedAttempt = await firestoreService.saveLightsAttempt(
+          player.universityId,
+          lightsSession,
+          completedAt,
+        );
+        setFirebaseStatus(`Sesión de luces guardada con ID ${savedAttempt.id}.`);
+        // Limpiar el draft de luces tras guardar correctamente
+        setDraft({
+          completedDate: draft.completedDate,
+          completedTime: draft.completedTime,
+          levels: [
+            { correctAnswers: "", accuracy: "", averageReaction: "" },
+            { correctAnswers: "", accuracy: "", averageReaction: "" },
+            { correctAnswers: "", accuracy: "", averageReaction: "" },
+          ],
+        });
+        // Recargar graficas si el estudiante guardado es el mismo del selector
+        if (player.universityId === chartStudent && chartExercise === LIGHTS_EXERCISE_ID) {
+          firestoreService
+            .getStudentAttempts(chartStudent, chartExercise, true)
+            .then(setAttempts)
+            .catch(() => {});
+        }
+      } else {
+        // ── Flujo Reacción de Movimiento (existente) ──
+        let completedSession = firestoreService.createMovementSession();
+        draft.levels.forEach((lvl) => {
+          completedSession = firestoreService.addLevelToSession(completedSession, lvl);
+        });
+        const savedAttempt = await firestoreService.saveCompletedAttempt(
+          player.universityId,
+          completedSession,
+          completedAt,
+        );
+        setFirebaseStatus(`Sesion guardada con ID ${savedAttempt.id}.`);
+        // Recargar graficas si el estudiante guardado es el mismo del selector
+        if (player.universityId === chartStudent && chartExercise === MOVEMENT_EXERCISE_ID) {
+          firestoreService
+            .getStudentAttempts(chartStudent, chartExercise, true)
+            .then(setAttempts)
+            .catch(() => {});
+        }
       }
     } catch (error) {
       setFirebaseStatus(error.message);
@@ -198,7 +328,7 @@ function Dashboard() {
         />
         <ExerciseRecorderSection
           selectedExercise={selectedExercise}
-          onExerciseChange={(event) => setSelectedExercise(event.target.value)}
+          onExerciseChange={handleExerciseChange}
           draft={draft}
           onLevelChange={handleLevelChange}
           onSaveSession={handleSaveSession}
@@ -217,12 +347,30 @@ function Dashboard() {
             <p className="kicker">03 / Analiticas</p>
             <h2 className="h-4">Resultados historicos por jugador.</h2>
           </div>
-          {!loadingAttempts && selectedChartExercise?.available && chartStudent && (
-            <span className="dashboard-panel-counter b-3">
-              {attempts.length} sesion{attempts.length !== 1 ? "es" : ""}
-            </span>
-          )}
+          <div className="dashboard-sync-controls">
+            {!loadingAttempts && selectedChartExercise?.available && chartStudent && (
+              <span className="dashboard-panel-counter b-3">
+                {attempts.length} sesion{attempts.length !== 1 ? "es" : ""}
+              </span>
+            )}
+            <button
+              type="button"
+              className="dashboard-sync-button b-3"
+              onClick={handleSyncDatabase}
+              disabled={isSyncing}
+              title="Revisar si se actualizó la base de datos en Firebase"
+            >
+              <FiRefreshCw className={`sync-icon ${isSyncing ? "spin-icon" : ""}`} />
+              <span>{isSyncing ? "Comprobando..." : "Sincronizar base de datos"}</span>
+            </button>
+          </div>
         </div>
+
+        {syncFeedback && (
+          <p className="dashboard-sync-feedback b-3">
+            <FiCheckCircle className="sync-check-icon" /> {syncFeedback}
+          </p>
+        )}
 
         <div className="charts-controls-grid">
           {/* Selector de estudiante */}
@@ -284,6 +432,8 @@ function Dashboard() {
           </div>
         ) : attemptsError ? (
           <p className="dashboard-firebase-status b-3">{attemptsError}</p>
+        ) : chartExercise === LIGHTS_EXERCISE_ID ? (
+          <LightsCharts attempts={attempts} />
         ) : (
           <MovementCharts attempts={attempts} />
         )}

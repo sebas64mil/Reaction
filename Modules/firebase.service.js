@@ -14,6 +14,7 @@ import { db } from "./firebase_init.js";
 
 const STUDENTS_COLLECTION = "students";
 const MOVEMENT_EXERCISE_ID = "reaction-movement";
+const LIGHTS_EXERCISE_ID = "reaction-lights";
 
 function normalizeStudentCode(studentCode) {
   const normalizedCode = String(studentCode ?? "").trim();
@@ -53,7 +54,81 @@ function normalizeLevel(level) {
   };
 }
 
+function normalizeLightsLevel(level) {
+  if (!Number.isInteger(level.level) || level.level < 1 || level.level > 3) {
+    throw new Error("El nivel debe ser 1, 2 o 3.");
+  }
+
+  const correctAnswers = Number(level.correctAnswers);
+  const accuracy = Number(level.accuracy);
+  const averageReaction = Number(level.averageReaction);
+
+  if (!Number.isFinite(correctAnswers) || correctAnswers < 0 || !Number.isInteger(correctAnswers)) {
+    throw new Error(`Nivel ${level.level}: los aciertos deben ser un entero no negativo.`);
+  }
+
+  if (!Number.isFinite(accuracy) || accuracy < 0 || accuracy > 100) {
+    throw new Error(`Nivel ${level.level}: la precisión debe estar entre 0 y 100.`);
+  }
+
+  if (!Number.isFinite(averageReaction) || averageReaction < 0) {
+    throw new Error(`Nivel ${level.level}: el tiempo de reacción promedio debe ser un número no negativo.`);
+  }
+
+  return {
+    level: level.level,
+    correctAnswers,
+    accuracy,
+    averageReaction,
+  };
+}
+
+const DEFAULT_CACHE_TTL = 12 * 60 * 60 * 1000;// 12 horas por defecto
+
 export class FirestoreService {
+  constructor(cacheTtl = DEFAULT_CACHE_TTL) {
+    this.cacheTtl = cacheTtl;
+    this.cache = new Map();
+    this.lastSync = null;
+  }
+
+  getCache(key) {
+    const entry = this.cache.get(key);
+    if (!entry) return null;
+    if (Date.now() - entry.timestamp > (entry.ttl ?? this.cacheTtl)) {
+      this.cache.delete(key);
+      return null;
+    }
+    return entry.data;
+  }
+
+  setCache(key, data, ttl = this.cacheTtl) {
+    this.cache.set(key, {
+      data,
+      timestamp: Date.now(),
+      ttl,
+    });
+    this.lastSync = new Date();
+  }
+
+  invalidateCache(filter = null) {
+    if (!filter) {
+      this.cache.clear();
+      return;
+    }
+    for (const key of this.cache.keys()) {
+      if (typeof filter === "string" && key.includes(filter)) {
+        this.cache.delete(key);
+      } else if (filter instanceof RegExp && filter.test(key)) {
+        this.cache.delete(key);
+      }
+    }
+  }
+
+  getLastSyncTime() {
+    return this.lastSync;
+  }
+
   async getStudent(studentCode) {
     const normalizedCode = normalizeStudentCode(studentCode);
     const studentRef = doc(db, STUDENTS_COLLECTION, normalizedCode);
@@ -87,6 +162,9 @@ export class FirestoreService {
       studentCode: normalizedCode,
       createdAt: serverTimestamp(),
     });
+
+    // Invalida la lista de estudiantes para que el nuevo estudiante sea visible
+    this.invalidateCache("students:all");
 
     return {
       created: true,
@@ -150,19 +228,106 @@ export class FirestoreService {
       levels: session.levels,
     });
 
+    // Invalida la caché de intentos del estudiante para reflejar el nuevo intento
+    this.invalidateCache(`attempts:${normalizedCode}`);
+
     return {
       id: attemptReference.id,
       path: attemptReference.path,
     };
   }
-  async getAllStudents() {
-    const studentsRef = collection(db, STUDENTS_COLLECTION);
-    const snapshot = await getDocs(studentsRef);
-    return snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+
+  // ── Métodos para Reacción por Luces ──
+
+  createLightsSession() {
+    return {
+      exerciseId: LIGHTS_EXERCISE_ID,
+      levels: [],
+    };
   }
 
-  async getStudentAttempts(studentCode, exerciseId = null) {
+  addLightsLevelToSession(session, levelData) {
+    if (!session || session.exerciseId !== LIGHTS_EXERCISE_ID) {
+      throw new Error("La sesión de reacción por luces no es válida.");
+    }
+
+    if (session.levels.length >= 3) {
+      throw new Error("La sesión ya tiene los tres niveles registrados.");
+    }
+
+    const level = normalizeLightsLevel({
+      ...levelData,
+      level: session.levels.length + 1,
+    });
+
+    return {
+      ...session,
+      levels: [...session.levels, level],
+    };
+  }
+
+  async saveLightsAttempt(studentCode, session, completedAt = new Date()) {
     const normalizedCode = normalizeStudentCode(studentCode);
+
+    if (!session || session.exerciseId !== LIGHTS_EXERCISE_ID) {
+      throw new Error("La sesión no corresponde a reaction-lights.");
+    }
+
+    if (session.levels.length !== 3) {
+      throw new Error("La sesión debe tener exactamente tres niveles.");
+    }
+
+    const attemptsRef = collection(
+      db,
+      STUDENTS_COLLECTION,
+      normalizedCode,
+      "attempts",
+    );
+    const attemptReference = await addDoc(attemptsRef, {
+      exerciseId: session.exerciseId,
+      completedAt: completedAt instanceof Timestamp
+        ? completedAt
+        : Timestamp.fromDate(new Date(completedAt)),
+      levels: session.levels,
+    });
+
+    // Invalida la caché de intentos del estudiante para reflejar el nuevo intento
+    this.invalidateCache(`attempts:${normalizedCode}`);
+
+    return {
+      id: attemptReference.id,
+      path: attemptReference.path,
+    };
+  }
+
+  async getAllStudents(forceRefresh = false) {
+    const cacheKey = "students:all";
+    if (!forceRefresh) {
+      const cached = this.getCache(cacheKey);
+      if (cached) {
+        return cached;
+      }
+    }
+
+    const studentsRef = collection(db, STUDENTS_COLLECTION);
+    const snapshot = await getDocs(studentsRef);
+    const data = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+
+    this.setCache(cacheKey, data);
+    return data;
+  }
+
+  async getStudentAttempts(studentCode, exerciseId = null, forceRefresh = false) {
+    const normalizedCode = normalizeStudentCode(studentCode);
+    const cacheKey = `attempts:${normalizedCode}:${exerciseId ?? "all"}`;
+
+    if (!forceRefresh) {
+      const cached = this.getCache(cacheKey);
+      if (cached) {
+        return cached;
+      }
+    }
+
     const attemptsRef = collection(
       db,
       STUDENTS_COLLECTION,
@@ -182,8 +347,26 @@ export class FirestoreService {
       docs = docs.filter((d) => d.exerciseId === exerciseId);
     }
 
+    this.setCache(cacheKey, docs);
     return docs;
+  }
+
+  /**
+   * Fuerza la revisión de la base de datos para verificar si hay datos nuevos.
+   */
+  async checkDatabaseUpdates(studentCode = null, exerciseId = null) {
+    const students = await this.getAllStudents(true);
+    let attempts = [];
+    if (studentCode) {
+      attempts = await this.getStudentAttempts(studentCode, exerciseId, true);
+    }
+    return {
+      students,
+      attempts,
+      lastSync: this.lastSync,
+    };
   }
 }
 
-export { MOVEMENT_EXERCISE_ID };
+export { MOVEMENT_EXERCISE_ID, LIGHTS_EXERCISE_ID, DEFAULT_CACHE_TTL };
+
