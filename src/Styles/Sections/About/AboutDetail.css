@@ -1,58 +1,260 @@
-.about-detail {
+.about-detail-section {
+  padding-top: 110px;
+  padding-bottom: 120px;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+}
+
+/* Header asimétrico */
+.about-detail-header {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  padding: 75px 0 125px;
-  border-top: 1px solid var(--line);
-  gap: 60px;
+  grid-template-columns: 180px 1.2fr 1fr;
+  gap: 36px;
+  align-items: start;
+  margin-bottom: 65px;
 }
 
-.about-statement > span {
-  font: var(--font-label);
-  color: var(--muted);
+.about-detail-badge {
+  padding-top: 6px;
 }
 
-.about-statement h2 {
-  margin: 35px 0 0;
+.about-detail-headline h2 {
+  line-height: var(--line-height-h2);
+  letter-spacing: var(--letter-spacing-h2);
 }
 
-.about-statement em {
+.about-detail-headline em {
   color: var(--red);
   font-style: normal;
 }
 
-.about-copy {
-  max-width: 460px;
+.about-detail-summary p {
   color: var(--muted);
+  line-height: 1.7;
+  margin: 0;
 }
 
-.feature-list {
-  display: grid;
-  gap: 11px;
-  margin-top: 35px;
+/* Bloque del ciclo perceptual-motor */
+.perception-cycle-block {
+  padding: 36px 32px 42px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-surface-card-line);
+  margin-bottom: 55px;
+  position: relative;
+}
+
+.cycle-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--color-surface-card-line);
+  margin-bottom: 30px;
+}
+
+.cycle-kicker {
+  font: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   color: var(--ink);
+  font-weight: 600;
+}
+
+.cycle-header p {
+  color: var(--muted);
+  max-width: 480px;
+  margin: 0;
+}
+
+/* Grid de pasos del flujo */
+.perception-flow-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  position: relative;
+}
+
+.flow-step-card {
+  position: relative;
+  padding: 24px 20px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.flow-step-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--red);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+.flow-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.flow-number {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  color: var(--color-process-subtle);
+}
+
+.flow-icon {
+  font-size: 18px;
+  color: var(--red);
+  display: grid;
+  place-items: center;
+}
+
+.flow-tag {
+  display: inline-block;
+  font: var(--font-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--orange);
+  margin-bottom: 8px;
+}
+
+.flow-title {
+  margin: 0 0 10px;
+  color: var(--ink);
+}
+
+.flow-desc {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.flow-connector {
+  position: absolute;
+  right: -15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-process-subtle);
+  font-size: 18px;
+  font-weight: bold;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Bloque editorial complementario */
+.about-context-editorial {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.editorial-callout {
+  padding: 34px 30px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--line);
+}
+
+.editorial-callout.highlight-callout {
+  border-left-color: var(--red);
+  background: linear-gradient(to bottom right, var(--paper), var(--color-surface-card));
+}
+
+.callout-label {
+  display: block;
   font: var(--font-caption);
   text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-process-subtle);
+  margin-bottom: 12px;
 }
 
-.feature-list span {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.editorial-callout h3 {
+  margin: 0 0 14px;
+  color: var(--ink);
 }
 
-.feature-list svg {
-  color: var(--red);
+.editorial-callout p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* Animaciones de entrada al scroll */
+.about-detail-header,
+.perception-cycle-block,
+.about-context-editorial {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 700ms ease, transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about-detail-section.is-visible .about-detail-header {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.about-detail-section.is-visible .perception-cycle-block {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 200ms;
+}
+
+.about-detail-section.is-visible .about-context-editorial {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 350ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-detail-header,
+  .perception-cycle-block,
+  .about-context-editorial {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .about-detail-header {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .perception-flow-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .flow-connector {
+    display: none;
+  }
 }
 
 @media (max-width: 760px) {
-  .about-detail {
-    display: block;
+  .about-detail-section {
     padding-top: 75px;
     padding-bottom: 80px;
   }
 
-  .about-statement h2 {
-    margin-bottom: 38px;
+  .perception-cycle-block {
+    padding: 24px 18px;
   }
 
+  .perception-flow-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .about-context-editorial {
+    grid-template-columns: 1fr;
+  }
+
+  .editorial-callout {
+    padding: 24px 20px;
+  }
 }

@@ -3,7 +3,6 @@ import AboutDetail from "../Sections/About/AboutDetail.jsx";
 import AboutAimSection from "../Sections/About/AboutAimSection.jsx";
 import AboutGallerySection from "../Sections/About/AboutGallerySection.jsx";
 import ExerciseSection from "../Sections/About/ExerciseSection.jsx";
-import SessionSection from "../Sections/About/SessionSection.jsx";
 
 function About() {
   return (
@@ -13,7 +12,6 @@ function About() {
       <AboutAimSection />
       <AboutGallerySection />
       <ExerciseSection />
-      <SessionSection />
     </div>
   );
 }

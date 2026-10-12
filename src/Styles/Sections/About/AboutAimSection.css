@@ -1,72 +1,204 @@
-.about-aim {
+.about-aim-section {
+  padding-top: 120px;
+  padding-bottom: 130px;
+  background: var(--ink);
+  color: var(--paper);
+  border-bottom: 1px solid var(--color-process-line);
+  position: relative;
+}
+
+/* Cabecera de la sección oscura */
+.about-aim-header {
   display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: 80px;
-  padding: 110px 0 130px;
-  border-top: 1px solid var(--line);
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 50px;
+  align-items: start;
+  margin-bottom: 65px;
 }
 
-.about-aim-heading h2 {
-  margin-top: 18px;
+.aim-kicker {
+  font: var(--font-label);
+  color: var(--color-process-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 16px;
 }
 
-.about-aim-copy > p {
-  margin: 0 0 45px;
-  color: var(--muted);
-  font-size: 17px;
-  line-height: 1.7;
+.aim-title {
+  color: var(--paper);
+  line-height: var(--line-height-h2);
+  letter-spacing: var(--letter-spacing-h2);
 }
 
-.aim-grid {
+.aim-title em {
+  color: var(--orange);
+  font-style: normal;
+}
+
+.aim-intro {
+  color: var(--color-process-copy);
+  line-height: 1.75;
+  margin: 0 0 20px;
+}
+
+.aim-disclaimer-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: rgba(255, 140, 1, 0.08);
+  border: 1px solid rgba(255, 140, 1, 0.25);
+  color: var(--orange);
+  font: var(--font-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.aim-disclaimer-pill svg {
+  flex-shrink: 0;
+  font-size: 14px;
+}
+
+/* Grid de los 3 ejes */
+.aim-pillars-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
+  gap: 22px;
 }
 
-.aim-grid article {
-  position: relative;
-  padding: 25px 20px;
-  border: 1px solid var(--line);
-  background: var(--color-surface-card);
+.aim-pillar-card {
+  padding: 34px 28px;
+  background: #0e0e0e;
+  border: 1px solid var(--color-process-line);
+  display: flex;
+  flex-direction: column;
+  transition: transform 220ms ease, border-color 220ms ease;
 }
 
-.aim-grid svg {
-  color: var(--red);
-  font-size: 22px;
+.aim-pillar-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--orange);
 }
 
-.aim-grid article > span {
-  position: absolute;
-  top: 25px;
-  right: 20px;
+.pillar-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.pillar-num {
+  font-family: var(--font-heading);
+  font-size: 32px;
   color: var(--color-process-subtle);
-  font: var(--font-label);
+  letter-spacing: -0.04em;
 }
 
-.aim-grid h3 {
-  margin: 32px 0 10px;
+.pillar-icon {
+  font-size: 22px;
+  color: var(--orange);
 }
 
-.aim-grid p {
+.pillar-title {
+  color: var(--paper);
+  margin: 0 0 8px;
+  font-size: 24px;
+}
+
+.pillar-subtitle {
+  display: block;
+  font: var(--font-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--color-process-subtle);
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-process-line);
+}
+
+.pillar-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pillar-comparison {
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.comparison-tag {
+  display: inline-block;
+  font: var(--font-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.challenge-tag {
+  color: var(--color-process-subtle);
+}
+
+.solution-tag {
+  color: var(--orange);
+}
+
+.pillar-comparison p {
   margin: 0;
-  color: var(--muted);
-  font-size: 13px;
+  color: var(--color-process-copy);
   line-height: 1.6;
 }
 
-@media (max-width: 900px) {
-  .about-aim {
+/* Animaciones de entrada al scroll */
+.about-aim-header,
+.aim-pillars-grid {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 700ms ease, transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about-aim-section.is-visible .about-aim-header {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.about-aim-section.is-visible .aim-pillars-grid {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 200ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-aim-header,
+  .aim-pillars-grid {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+  .about-aim-header {
     grid-template-columns: 1fr;
-    gap: 45px;
+    gap: 30px;
+  }
+
+  .aim-pillars-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 }
 
 @media (max-width: 760px) {
-  .about-aim {
-    padding: 75px 0 80px;
+  .about-aim-section {
+    padding-top: 80px;
+    padding-bottom: 85px;
   }
 
-  .aim-grid {
-    grid-template-columns: 1fr;
+  .aim-pillar-card {
+    padding: 24px 20px;
   }
 }
