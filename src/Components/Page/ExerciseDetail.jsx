@@ -10,6 +10,7 @@ const exercises = {
     objective: "Percepción periférica",
     duration: "4–6 minutos",
     accent: "coral",
+    videoUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
     description:
       "La reacción periférica es una habilidad esencial en deportes donde la atención debe cubrir un amplio entorno. En este ejercicio, una señal aparece fuera de la línea central de la cancha y el jugador debe responder lo antes posible.",
     steps: [
@@ -27,6 +28,7 @@ const exercises = {
     objective: "Decisión bajo presión",
     duration: "5–8 minutos",
     accent: "orange",
+    videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
     description:
       "En este escenario, el jugador debe interpretar varias señales y seleccionar la acción correcta antes de que el tiempo expire. La dificultad aumenta cuando el entorno introduce ruido y desacuerdo entre estímulos.",
     steps: [
@@ -44,6 +46,7 @@ const exercises = {
     objective: "Tiempo de respuesta",
     duration: "6–10 minutos",
     accent: "cyan",
+    videoUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm",
     description:
       "El jugador debe desplazarse por un espacio virtual para alcanzar una zona de reacción. Cada recorrido exige planificación, percepción y ejecución, convirtiendo el movimiento en un componente central de la medición.",
     steps: [
@@ -115,6 +118,28 @@ function ExerciseDetail() {
           </ol>
         </aside>
       </div>
+
+      <section className="exercise-showcase-section">
+        <div className="exercise-showcase-inner section-wrap">
+          <div className="exercise-showcase-copy">
+            <p className="eyebrow">Demostración</p>
+            <h2 className="h-2">Observa el<br />ejercicio en<br />acción.</h2>
+          </div>
+
+          <div className="exercise-showcase-video-wrap">
+            <video
+              className="exercise-showcase-video"
+              controls
+              playsInline
+              preload="metadata"
+              poster="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1200&q=80"
+            >
+              <source src={exercise.videoUrl} type="video/mp4" />
+              Tu navegador no soporta videos HTML5.
+            </video>
+          </div>
+        </div>
+      </section>
 
       <div className="exercise-tip">
         <FiCheckCircle />
