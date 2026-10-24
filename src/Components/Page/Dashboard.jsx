@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { FiArrowLeft, FiLoader, FiRefreshCw, FiCheckCircle } from "react-icons/fi";
-import { FirestoreService, MOVEMENT_EXERCISE_ID, LIGHTS_EXERCISE_ID } from "../../../Modules/firebase.service.js";
+import { FirestoreService, MOVEMENT_EXERCISE_ID, LIGHTS_EXERCISE_ID, PASSES_EXERCISE_ID } from "../../../Modules/firebase.service.js";
 import Button from "../Ui/Button.jsx";
 import ExerciseRecorderSection from "../Sections/Dashboard/ExerciseRecorderSection.jsx";
 import PlayerIdentitySection from "../Sections/Dashboard/PlayerIdentitySection.jsx";
 import MovementCharts from "../Graficos/MovementCharts.jsx";
 import LightsCharts from "../Graficos/LightsCharts.jsx";
+import PassesCharts from "../Graficos/PassesCharts.jsx";
 import ComingSoonChart from "../Graficos/ComingSoonChart.jsx";
 import "../../Styles/Page/Dashboard.css";
 import "../../Styles/Page/DashboardData.css";
@@ -60,10 +61,20 @@ const initialDraftLights = {
   ],
 };
 
+const initialDraftPasses = {
+  completedDate: localDate,
+  completedTime: localTime,
+  levels: [
+    { correctAnswers: "", totalAttempts: "", accuracy: "", averageReaction: "" },
+    { correctAnswers: "", totalAttempts: "", accuracy: "", averageReaction: "" },
+    { correctAnswers: "", totalAttempts: "", accuracy: "", averageReaction: "" },
+  ],
+};
+
 const CHART_EXERCISES = [
   { value: MOVEMENT_EXERCISE_ID, label: "Reaccion de movimiento", available: true },
   { value: LIGHTS_EXERCISE_ID, label: "Luces", available: true },
-  { value: "passes", label: "Pases", available: false },
+  { value: PASSES_EXERCISE_ID, label: "Pases", available: true },
   { value: "dribbling", label: "Drible", available: false },
 ];
 
@@ -230,6 +241,16 @@ function Dashboard() {
           { correctAnswers: "", accuracy: "", averageReaction: "" },
         ],
       });
+    } else if (newExercise === "passes") {
+      setDraft({
+        completedDate: draft.completedDate,
+        completedTime: draft.completedTime,
+        levels: [
+          { correctAnswers: "", totalAttempts: "", accuracy: "", averageReaction: "" },
+          { correctAnswers: "", totalAttempts: "", accuracy: "", averageReaction: "" },
+          { correctAnswers: "", totalAttempts: "", accuracy: "", averageReaction: "" },
+        ],
+      });
     } else if (newExercise === "movement") {
       setDraft(initialDraft);
     }
@@ -243,7 +264,23 @@ function Dashboard() {
     }
     setDraft((d) => ({
       ...d,
-      levels: d.levels.map((lvl, i) => (i === levelIndex ? { ...lvl, [name]: value } : lvl)),
+      levels: d.levels.map((lvl, i) => {
+        if (i !== levelIndex) return lvl;
+        const updated = { ...lvl, [name]: value };
+        // Auto-calcular precisión para pases si se proporcionan aciertos e intentos totales
+        if (selectedExercise === "passes") {
+          const ca = name === "correctAnswers" ? value : updated.correctAnswers;
+          const ta = name === "totalAttempts" ? value : updated.totalAttempts;
+          if (name !== "accuracy" && ca !== "" && ta !== "" && Number(ta) > 0) {
+            const numCa = Number(ca);
+            const numTa = Number(ta);
+            if (!isNaN(numCa) && !isNaN(numTa) && numTa > 0) {
+              updated.accuracy = ((numCa / numTa) * 100).toFixed(1);
+            }
+          }
+        }
+        return updated;
+      }),
     }));
   };
 
@@ -276,6 +313,35 @@ function Dashboard() {
         });
         // Recargar graficas si el estudiante guardado es el mismo del selector
         if (player.universityId === chartStudent && chartExercise === LIGHTS_EXERCISE_ID) {
+          firestoreService
+            .getStudentAttempts(chartStudent, chartExercise, true)
+            .then(setAttempts)
+            .catch(() => {});
+        }
+      } else if (selectedExercise === "passes") {
+        // ── Flujo Ejercicio de Pases ──
+        let passesSession = firestoreService.createPassesSession();
+        draft.levels.forEach((lvl) => {
+          passesSession = firestoreService.addPassesLevelToSession(passesSession, lvl);
+        });
+        const savedAttempt = await firestoreService.savePassesAttempt(
+          player.universityId,
+          passesSession,
+          completedAt,
+        );
+        setFirebaseStatus(`Sesión de pases guardada con ID ${savedAttempt.id}.`);
+        // Limpiar el draft de pases tras guardar correctamente
+        setDraft({
+          completedDate: draft.completedDate,
+          completedTime: draft.completedTime,
+          levels: [
+            { correctAnswers: "", totalAttempts: "", accuracy: "", averageReaction: "" },
+            { correctAnswers: "", totalAttempts: "", accuracy: "", averageReaction: "" },
+            { correctAnswers: "", totalAttempts: "", accuracy: "", averageReaction: "" },
+          ],
+        });
+        // Recargar graficas si el estudiante guardado es el mismo del selector
+        if (player.universityId === chartStudent && chartExercise === PASSES_EXERCISE_ID) {
           firestoreService
             .getStudentAttempts(chartStudent, chartExercise, true)
             .then(setAttempts)
@@ -434,6 +500,8 @@ function Dashboard() {
           <p className="dashboard-firebase-status b-3">{attemptsError}</p>
         ) : chartExercise === LIGHTS_EXERCISE_ID ? (
           <LightsCharts attempts={attempts} />
+        ) : chartExercise === PASSES_EXERCISE_ID ? (
+          <PassesCharts attempts={attempts} />
         ) : (
           <MovementCharts attempts={attempts} />
         )}

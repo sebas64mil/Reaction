@@ -15,6 +15,7 @@ import { db } from "./firebase_init.js";
 const STUDENTS_COLLECTION = "students";
 const MOVEMENT_EXERCISE_ID = "reaction-movement";
 const LIGHTS_EXERCISE_ID = "reaction-lights";
+const PASSES_EXERCISE_ID = "reaction-passes";
 
 function normalizeStudentCode(studentCode) {
   const normalizedCode = String(studentCode ?? "").trim();
@@ -81,6 +82,59 @@ function normalizeLightsLevel(level) {
     accuracy,
     averageReaction,
   };
+}
+
+function normalizePassesLevel(level) {
+  if (!Number.isInteger(level.level) || level.level < 1 || level.level > 3) {
+    throw new Error("El nivel debe ser 1, 2 o 3.");
+  }
+
+  const correctAnswers = Number(level.correctAnswers);
+  const totalAttempts =
+    level.totalAttempts !== undefined &&
+    level.totalAttempts !== "" &&
+    level.totalAttempts !== null
+      ? Number(level.totalAttempts)
+      : null;
+  let accuracy =
+    level.accuracy !== undefined && level.accuracy !== ""
+      ? Number(level.accuracy)
+      : NaN;
+  const averageReaction = Number(level.averageReaction);
+
+  if (!Number.isFinite(correctAnswers) || correctAnswers < 0) {
+    throw new Error(`Nivel ${level.level}: los aciertos deben ser un número no negativo.`);
+  }
+
+  if (totalAttempts !== null) {
+    if (!Number.isFinite(totalAttempts) || totalAttempts < correctAnswers) {
+      throw new Error(`Nivel ${level.level}: los intentos totales deben ser mayores o iguales a los aciertos.`);
+    }
+    if (isNaN(accuracy) && totalAttempts > 0) {
+      accuracy = Number(((correctAnswers / totalAttempts) * 100).toFixed(1));
+    }
+  }
+
+  if (!Number.isFinite(accuracy) || accuracy < 0 || accuracy > 100) {
+    throw new Error(`Nivel ${level.level}: la precisión debe estar entre 0 y 100.`);
+  }
+
+  if (!Number.isFinite(averageReaction) || averageReaction < 0) {
+    throw new Error(`Nivel ${level.level}: el tiempo de reacción promedio debe ser un número no negativo.`);
+  }
+
+  const result = {
+    level: level.level,
+    correctAnswers,
+    accuracy: Number(Number(accuracy).toFixed(2)),
+    averageReaction,
+  };
+
+  if (totalAttempts !== null) {
+    result.totalAttempts = totalAttempts;
+  }
+
+  return result;
 }
 
 const DEFAULT_CACHE_TTL = 12 * 60 * 60 * 1000;// 12 horas por defecto
@@ -300,6 +354,69 @@ export class FirestoreService {
     };
   }
 
+  // ── Métodos para Ejercicio de Pases ──
+
+  createPassesSession() {
+    return {
+      exerciseId: PASSES_EXERCISE_ID,
+      levels: [],
+    };
+  }
+
+  addPassesLevelToSession(session, levelData) {
+    if (!session || (session.exerciseId !== PASSES_EXERCISE_ID && session.exerciseId !== "passes")) {
+      throw new Error("La sesión de pases no es válida.");
+    }
+
+    if (session.levels.length >= 3) {
+      throw new Error("La sesión ya tiene los tres niveles registrados.");
+    }
+
+    const level = normalizePassesLevel({
+      ...levelData,
+      level: session.levels.length + 1,
+    });
+
+    return {
+      ...session,
+      levels: [...session.levels, level],
+    };
+  }
+
+  async savePassesAttempt(studentCode, session, completedAt = new Date()) {
+    const normalizedCode = normalizeStudentCode(studentCode);
+
+    if (!session || (session.exerciseId !== PASSES_EXERCISE_ID && session.exerciseId !== "passes")) {
+      throw new Error("La sesión no corresponde a reaction-passes.");
+    }
+
+    if (session.levels.length !== 3) {
+      throw new Error("La sesión debe tener exactamente tres niveles.");
+    }
+
+    const attemptsRef = collection(
+      db,
+      STUDENTS_COLLECTION,
+      normalizedCode,
+      "attempts",
+    );
+    const attemptReference = await addDoc(attemptsRef, {
+      exerciseId: session.exerciseId,
+      completedAt: completedAt instanceof Timestamp
+        ? completedAt
+        : Timestamp.fromDate(new Date(completedAt)),
+      levels: session.levels,
+    });
+
+    // Invalida la caché de intentos del estudiante para reflejar el nuevo intento
+    this.invalidateCache(`attempts:${normalizedCode}`);
+
+    return {
+      id: attemptReference.id,
+      path: attemptReference.path,
+    };
+  }
+
   async getAllStudents(forceRefresh = false) {
     const cacheKey = "students:all";
     if (!forceRefresh) {
@@ -344,7 +461,13 @@ export class FirestoreService {
     let docs = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
 
     if (exerciseId) {
-      docs = docs.filter((d) => d.exerciseId === exerciseId);
+      docs = docs.filter(
+        (d) =>
+          d.exerciseId === exerciseId ||
+          (exerciseId === PASSES_EXERCISE_ID && (d.exerciseId === "passes" || d.exerciseId === "reaction-passes")) ||
+          (exerciseId === LIGHTS_EXERCISE_ID && (d.exerciseId === "lights" || d.exerciseId === "reaction-lights")) ||
+          (exerciseId === MOVEMENT_EXERCISE_ID && (d.exerciseId === "movement" || d.exerciseId === "reaction-movement"))
+      );
     }
 
     this.setCache(cacheKey, docs);
@@ -368,5 +491,5 @@ export class FirestoreService {
   }
 }
 
-export { MOVEMENT_EXERCISE_ID, LIGHTS_EXERCISE_ID, DEFAULT_CACHE_TTL };
+export { MOVEMENT_EXERCISE_ID, LIGHTS_EXERCISE_ID, PASSES_EXERCISE_ID, DEFAULT_CACHE_TTL };
 

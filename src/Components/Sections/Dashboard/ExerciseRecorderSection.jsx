@@ -6,7 +6,7 @@ import "../../../Styles/Sections/Dashboard/ExerciseRecorderSection.css";
 const exercises = [
   { value: "lights", label: "Luces", available: true },
   { value: "movement", label: "Reacción de movimiento", available: true },
-  { value: "passes", label: "Pases", available: false },
+  { value: "passes", label: "Pases", available: true },
   { value: "dribbling", label: "Drible", available: false },
 ];
 
@@ -28,6 +28,13 @@ const lightsLevelFields = [
   ["averageReaction", "Reacción promedio (s)", "number", "0.01", "0", undefined],
 ];
 
+const passesLevelFields = [
+  ["correctAnswers", "Aciertos", "number", undefined, "0", undefined, true],
+  ["totalAttempts", "Intentos totales", "number", undefined, "0", undefined, false],
+  ["accuracy", "Precisión (%)", "number", "0.1", "0", "100", true],
+  ["averageReaction", "Reacción promedio (s)", "number", "0.01", "0", undefined, true],
+];
+
 function ExerciseRecorderSection({
   selectedExercise,
   onExerciseChange,
@@ -41,6 +48,7 @@ function ExerciseRecorderSection({
   );
 
   const isLights = selectedExercise === "lights";
+  const isPasses = selectedExercise === "passes";
 
   return (
     <section className="dashboard-panel exercise-recorder-section">
@@ -118,7 +126,24 @@ function ExerciseRecorderSection({
               <fieldset className="level-input-card" key={levelIndex}>
                 <legend className="h-5">Nivel {levelIndex + 1}</legend>
                 <div className="movement-input-grid">
-                  {isLights
+                  {isPasses
+                    ? passesLevelFields.map(([name, label, type, step, min, max, required]) => (
+                        <TextInput
+                          key={name}
+                          id={`level-${levelIndex + 1}-${name}`}
+                          label={label}
+                          name={name}
+                          type={type}
+                          min={min}
+                          max={max}
+                          step={step}
+                          value={level[name] ?? ""}
+                          onChange={(event) => onLevelChange(levelIndex, event)}
+                          disabled={disabled}
+                          required={required}
+                        />
+                      ))
+                    : isLights
                     ? lightsLevelFields.map(([name, label, type, step, min, max]) => (
                         <TextInput
                           key={name}
@@ -129,7 +154,7 @@ function ExerciseRecorderSection({
                           min={min}
                           max={max}
                           step={step}
-                          value={level[name]}
+                          value={level[name] ?? ""}
                           onChange={(event) => onLevelChange(levelIndex, event)}
                           disabled={disabled}
                           required
@@ -144,19 +169,23 @@ function ExerciseRecorderSection({
                           type={type}
                           min="0"
                           step={step}
-                          value={level[name]}
+                          value={level[name] ?? ""}
                           onChange={(event) => onLevelChange(levelIndex, event)}
                           disabled={disabled}
                           required
                         />
                       ))}
                 </div>
-                {!isLights && (
+                {isPasses ? (
+                  <p className="level-calculation b-3">
+                    Precisión: se calcula automáticamente al indicar aciertos e intentos totales, o puedes ajustarla manualmente.
+                  </p>
+                ) : !isLights ? (
                   <p className="level-calculation b-3">
                     Precisión por mano y combinada: se calculará con aciertos e
                     intentos al guardar.
                   </p>
-                )}
+                ) : null}
               </fieldset>
             ))}
           </div>
