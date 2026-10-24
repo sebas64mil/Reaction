@@ -1,5 +1,5 @@
 import "./Styles/App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes, Navigate } from "react-router-dom";
 import Navbar from "./Components/Ui/Navbar.jsx";
 import Footer from "./Components/Ui/Footer.jsx";
 import Landing from "./Components/Page/Landing.jsx";
@@ -10,7 +10,7 @@ import ScrollManager from "./Components/Ui/ScrollManager.jsx";
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <ScrollManager />
       <Navbar />
       <main>
@@ -19,10 +19,11 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/exercises/:slug" element={<ExerciseDetail />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
       <Footer />
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
