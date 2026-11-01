@@ -1,0 +1,137 @@
+/* ── FloatingToggle Component Styles ── */
+.floating-toggle-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.floating-toggle-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px 10px 14px;
+  background: rgba(14, 14, 18, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 9999px;
+  color: #f5f4ef;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.3);
+  font-family: var(--font-body, "Electrolize", sans-serif);
+  transition: all 0.25s ease;
+  user-select: none;
+}
+
+.floating-toggle-pill:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55);
+}
+
+.floating-toggle-container.is-active .floating-toggle-pill {
+  border-color: var(--color-secondary-500, #ff8c01);
+  box-shadow: 0 10px 30px rgba(255, 140, 1, 0.25), 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.floating-toggle-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: #a5a5a2;
+  transition: all 0.25s ease;
+}
+
+.floating-toggle-container.is-active .floating-toggle-icon-wrap {
+  background: rgba(255, 140, 1, 0.2);
+  color: var(--color-secondary-500, #ff8c01);
+}
+
+.floating-toggle-icon {
+  font-size: 16px;
+}
+
+.floating-toggle-text-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  line-height: 1.2;
+}
+
+.floating-toggle-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #a5a5a2;
+  font-weight: 500;
+}
+
+.floating-toggle-badge {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.floating-toggle-container.is-active .floating-toggle-badge {
+  color: var(--color-secondary-500, #ff8c01);
+}
+
+/* ── Switch Pill & Thumb ── */
+.floating-toggle-switch {
+  width: 40px;
+  height: 22px;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 9999px;
+  position: relative;
+  transition: background-color 0.25s ease;
+  margin-left: 4px;
+}
+
+.floating-toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  background: #ffffff;
+  border-radius: 50%;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.floating-toggle-container.is-active .floating-toggle-switch {
+  background: var(--color-secondary-500, #ff8c01);
+}
+
+.floating-toggle-container.is-active .floating-toggle-thumb {
+  transform: translateX(18px);
+}
+
+@media (max-width: 768px) {
+  .floating-toggle-container {
+    bottom: 16px;
+    right: 16px;
+  }
+
+  .floating-toggle-pill {
+    padding: 8px 12px 8px 10px;
+    gap: 8px;
+  }
+
+  .floating-toggle-title {
+    display: none;
+  }
+
+  .floating-toggle-badge {
+    font-size: 12px;
+  }
+}

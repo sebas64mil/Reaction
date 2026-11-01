@@ -1,12 +1,20 @@
 import { useState, useEffect } from "react";
 import { FiArrowLeft, FiLoader, FiRefreshCw, FiCheckCircle } from "react-icons/fi";
-import { FirestoreService, MOVEMENT_EXERCISE_ID, LIGHTS_EXERCISE_ID, PASSES_EXERCISE_ID } from "../../../Modules/firebase.service.js";
+import {
+  FirestoreService,
+  MOVEMENT_EXERCISE_ID,
+  LIGHTS_EXERCISE_ID,
+  PASSES_EXERCISE_ID,
+  DRIBBLE_EXERCISE_ID,
+} from "../../../Modules/firebase.service.js";
 import Button from "../Ui/Button.jsx";
+import FloatingToggle from "../Ui/FloatingToggle.jsx";
 import ExerciseRecorderSection from "../Sections/Dashboard/ExerciseRecorderSection.jsx";
 import PlayerIdentitySection from "../Sections/Dashboard/PlayerIdentitySection.jsx";
 import MovementCharts from "../Graficos/MovementCharts.jsx";
 import LightsCharts from "../Graficos/LightsCharts.jsx";
 import PassesCharts from "../Graficos/PassesCharts.jsx";
+import DribbleCharts from "../Graficos/DribbleCharts.jsx";
 import ComingSoonChart from "../Graficos/ComingSoonChart.jsx";
 import "../../Styles/Page/Dashboard.css";
 import "../../Styles/Page/DashboardData.css";
@@ -71,15 +79,28 @@ const initialDraftPasses = {
   ],
 };
 
+const initialDraftDribble = {
+  completedDate: localDate,
+  completedTime: localTime,
+  levels: [
+    { correctAnswers: "", totalAttempts: "", accuracy: "", averageReaction: "" },
+    { correctAnswers: "", totalAttempts: "", accuracy: "", averageReaction: "" },
+    { correctAnswers: "", totalAttempts: "", accuracy: "", averageReaction: "" },
+  ],
+};
+
 const CHART_EXERCISES = [
   { value: MOVEMENT_EXERCISE_ID, label: "Reaccion de movimiento", available: true },
   { value: LIGHTS_EXERCISE_ID, label: "Luces", available: true },
   { value: PASSES_EXERCISE_ID, label: "Pases", available: true },
-  { value: "dribbling", label: "Drible", available: false },
+  { value: DRIBBLE_EXERCISE_ID, label: "Drible", available: true },
 ];
 
 
 function Dashboard() {
+  // ── Toggle de visibilidad para simulación / escritura (por defecto false) ──
+  const [showWriteSection, setShowWriteSection] = useState(false);
+
   // ── Estado seccion registro ──
   const [player, setPlayer] = useState(initialPlayer);
   const [isIdentified, setIsIdentified] = useState(false);
@@ -251,6 +272,16 @@ function Dashboard() {
           { correctAnswers: "", totalAttempts: "", accuracy: "", averageReaction: "" },
         ],
       });
+    } else if (newExercise === "dribbling" || newExercise === DRIBBLE_EXERCISE_ID) {
+      setDraft({
+        completedDate: draft.completedDate,
+        completedTime: draft.completedTime,
+        levels: [
+          { correctAnswers: "", totalAttempts: "", accuracy: "", averageReaction: "" },
+          { correctAnswers: "", totalAttempts: "", accuracy: "", averageReaction: "" },
+          { correctAnswers: "", totalAttempts: "", accuracy: "", averageReaction: "" },
+        ],
+      });
     } else if (newExercise === "movement") {
       setDraft(initialDraft);
     }
@@ -267,8 +298,12 @@ function Dashboard() {
       levels: d.levels.map((lvl, i) => {
         if (i !== levelIndex) return lvl;
         const updated = { ...lvl, [name]: value };
-        // Auto-calcular precisión para pases si se proporcionan aciertos e intentos totales
-        if (selectedExercise === "passes") {
+        // Auto-calcular precisión para pases y drible si se proporcionan aciertos e intentos totales
+        if (
+          selectedExercise === "passes" ||
+          selectedExercise === "dribbling" ||
+          selectedExercise === DRIBBLE_EXERCISE_ID
+        ) {
           const ca = name === "correctAnswers" ? value : updated.correctAnswers;
           const ta = name === "totalAttempts" ? value : updated.totalAttempts;
           if (name !== "accuracy" && ca !== "" && ta !== "" && Number(ta) > 0) {
@@ -347,6 +382,38 @@ function Dashboard() {
             .then(setAttempts)
             .catch(() => {});
         }
+      } else if (selectedExercise === "dribbling" || selectedExercise === DRIBBLE_EXERCISE_ID) {
+        // ── Flujo Ejercicio de Drible ──
+        let dribbleSession = firestoreService.createDribbleSession();
+        draft.levels.forEach((lvl) => {
+          dribbleSession = firestoreService.addDribbleLevelToSession(dribbleSession, lvl);
+        });
+        const savedAttempt = await firestoreService.saveDribbleAttempt(
+          player.universityId,
+          dribbleSession,
+          completedAt,
+        );
+        setFirebaseStatus(`Sesión de drible guardada con ID ${savedAttempt.id}.`);
+        // Limpiar el draft de drible tras guardar correctamente
+        setDraft({
+          completedDate: draft.completedDate,
+          completedTime: draft.completedTime,
+          levels: [
+            { correctAnswers: "", totalAttempts: "", accuracy: "", averageReaction: "" },
+            { correctAnswers: "", totalAttempts: "", accuracy: "", averageReaction: "" },
+            { correctAnswers: "", totalAttempts: "", accuracy: "", averageReaction: "" },
+          ],
+        });
+        // Recargar graficas si el estudiante guardado es el mismo del selector
+        if (
+          player.universityId === chartStudent &&
+          (chartExercise === DRIBBLE_EXERCISE_ID || chartExercise === "dribbling")
+        ) {
+          firestoreService
+            .getStudentAttempts(chartStudent, chartExercise, true)
+            .then(setAttempts)
+            .catch(() => {});
+        }
       } else {
         // ── Flujo Reacción de Movimiento (existente) ──
         let completedSession = firestoreService.createMovementSession();
@@ -385,25 +452,29 @@ function Dashboard() {
         </h1>
       </div>
 
-      <div className="dashboard-data-layout">
-        <PlayerIdentitySection
-          player={player}
-          onChange={handlePlayerChange}
-          onIdentify={handleIdentify}
-          isIdentified={isIdentified}
-        />
-        <ExerciseRecorderSection
-          selectedExercise={selectedExercise}
-          onExerciseChange={handleExerciseChange}
-          draft={draft}
-          onLevelChange={handleLevelChange}
-          onSaveSession={handleSaveSession}
-          disabled={!isIdentified}
-        />
-      </div>
+      {showWriteSection && (
+        <div className="dashboard-write-section">
+          <div className="dashboard-data-layout">
+            <PlayerIdentitySection
+              player={player}
+              onChange={handlePlayerChange}
+              onIdentify={handleIdentify}
+              isIdentified={isIdentified}
+            />
+            <ExerciseRecorderSection
+              selectedExercise={selectedExercise}
+              onExerciseChange={handleExerciseChange}
+              draft={draft}
+              onLevelChange={handleLevelChange}
+              onSaveSession={handleSaveSession}
+              disabled={!isIdentified}
+            />
+          </div>
 
-      {firebaseStatus && (
-        <p className="dashboard-firebase-status b-3">{firebaseStatus}</p>
+          {firebaseStatus && (
+            <p className="dashboard-firebase-status b-3">{firebaseStatus}</p>
+          )}
+        </div>
       )}
 
       {/* ── 03 / Analiticas ── */}
@@ -502,6 +573,8 @@ function Dashboard() {
           <LightsCharts attempts={attempts} />
         ) : chartExercise === PASSES_EXERCISE_ID ? (
           <PassesCharts attempts={attempts} />
+        ) : chartExercise === DRIBBLE_EXERCISE_ID ? (
+          <DribbleCharts attempts={attempts} />
         ) : (
           <MovementCharts attempts={attempts} />
         )}
@@ -510,6 +583,15 @@ function Dashboard() {
       <Button className="dashboard-back-button" to="/about" variant="primary">
         <FiArrowLeft /> Volver a la experiencia
       </Button>
+
+      {/* ── Toggle flotante flexible fijado abajo a la derecha ── */}
+      <FloatingToggle
+        isActive={showWriteSection}
+        onToggle={() => setShowWriteSection((prev) => !prev)}
+        label="Simulador de registro"
+        activeLabel="Visible"
+        inactiveLabel="Oculto"
+      />
     </div>
   );
 }

@@ -16,6 +16,7 @@ const STUDENTS_COLLECTION = "students";
 const MOVEMENT_EXERCISE_ID = "reaction-movement";
 const LIGHTS_EXERCISE_ID = "reaction-lights";
 const PASSES_EXERCISE_ID = "reaction-passes";
+const DRIBBLE_EXERCISE_ID = "reaction-dribble";
 
 function normalizeStudentCode(studentCode) {
   const normalizedCode = String(studentCode ?? "").trim();
@@ -109,6 +110,59 @@ function normalizePassesLevel(level) {
   if (totalAttempts !== null) {
     if (!Number.isFinite(totalAttempts) || totalAttempts < correctAnswers) {
       throw new Error(`Nivel ${level.level}: los intentos totales deben ser mayores o iguales a los aciertos.`);
+    }
+    if (isNaN(accuracy) && totalAttempts > 0) {
+      accuracy = Number(((correctAnswers / totalAttempts) * 100).toFixed(1));
+    }
+  }
+
+  if (!Number.isFinite(accuracy) || accuracy < 0 || accuracy > 100) {
+    throw new Error(`Nivel ${level.level}: la precisión debe estar entre 0 y 100.`);
+  }
+
+  if (!Number.isFinite(averageReaction) || averageReaction < 0) {
+    throw new Error(`Nivel ${level.level}: el tiempo de reacción promedio debe ser un número no negativo.`);
+  }
+
+  const result = {
+    level: level.level,
+    correctAnswers,
+    accuracy: Number(Number(accuracy).toFixed(2)),
+    averageReaction,
+  };
+
+  if (totalAttempts !== null) {
+    result.totalAttempts = totalAttempts;
+  }
+
+  return result;
+}
+
+function normalizeDribbleLevel(level) {
+  if (!Number.isInteger(level.level) || level.level < 1 || level.level > 3) {
+    throw new Error("El nivel debe ser 1, 2 o 3.");
+  }
+
+  const correctAnswers = Number(level.correctAnswers);
+  const totalAttempts =
+    level.totalAttempts !== undefined &&
+    level.totalAttempts !== "" &&
+    level.totalAttempts !== null
+      ? Number(level.totalAttempts)
+      : null;
+  let accuracy =
+    level.accuracy !== undefined && level.accuracy !== ""
+      ? Number(level.accuracy)
+      : NaN;
+  const averageReaction = Number(level.averageReaction);
+
+  if (!Number.isFinite(correctAnswers) || correctAnswers < 0) {
+    throw new Error(`Nivel ${level.level}: los aciertos deben ser un número no negativo.`);
+  }
+
+  if (totalAttempts !== null) {
+    if (!Number.isFinite(totalAttempts) || totalAttempts < correctAnswers) {
+      throw new Error(`Nivel ${level.level}: el total de reacciones debe ser mayor o igual a los aciertos.`);
     }
     if (isNaN(accuracy) && totalAttempts > 0) {
       accuracy = Number(((correctAnswers / totalAttempts) * 100).toFixed(1));
@@ -417,6 +471,79 @@ export class FirestoreService {
     };
   }
 
+  // ── Métodos para Ejercicio de Drible ──
+
+  createDribbleSession() {
+    return {
+      exerciseId: DRIBBLE_EXERCISE_ID,
+      levels: [],
+    };
+  }
+
+  addDribbleLevelToSession(session, levelData) {
+    if (
+      !session ||
+      (session.exerciseId !== DRIBBLE_EXERCISE_ID &&
+        session.exerciseId !== "dribbling" &&
+        session.exerciseId !== "drible")
+    ) {
+      throw new Error("La sesión de drible no es válida.");
+    }
+
+    if (session.levels.length >= 3) {
+      throw new Error("La sesión ya tiene los tres niveles registrados.");
+    }
+
+    const level = normalizeDribbleLevel({
+      ...levelData,
+      level: session.levels.length + 1,
+    });
+
+    return {
+      ...session,
+      levels: [...session.levels, level],
+    };
+  }
+
+  async saveDribbleAttempt(studentCode, session, completedAt = new Date()) {
+    const normalizedCode = normalizeStudentCode(studentCode);
+
+    if (
+      !session ||
+      (session.exerciseId !== DRIBBLE_EXERCISE_ID &&
+        session.exerciseId !== "dribbling" &&
+        session.exerciseId !== "drible")
+    ) {
+      throw new Error("La sesión no corresponde a reaction-dribble.");
+    }
+
+    if (session.levels.length !== 3) {
+      throw new Error("La sesión debe tener exactamente tres niveles.");
+    }
+
+    const attemptsRef = collection(
+      db,
+      STUDENTS_COLLECTION,
+      normalizedCode,
+      "attempts",
+    );
+    const attemptReference = await addDoc(attemptsRef, {
+      exerciseId: session.exerciseId,
+      completedAt: completedAt instanceof Timestamp
+        ? completedAt
+        : Timestamp.fromDate(new Date(completedAt)),
+      levels: session.levels,
+    });
+
+    // Invalida la caché de intentos del estudiante para reflejar el nuevo intento
+    this.invalidateCache(`attempts:${normalizedCode}`);
+
+    return {
+      id: attemptReference.id,
+      path: attemptReference.path,
+    };
+  }
+
   async getAllStudents(forceRefresh = false) {
     const cacheKey = "students:all";
     if (!forceRefresh) {
@@ -466,7 +593,8 @@ export class FirestoreService {
           d.exerciseId === exerciseId ||
           (exerciseId === PASSES_EXERCISE_ID && (d.exerciseId === "passes" || d.exerciseId === "reaction-passes")) ||
           (exerciseId === LIGHTS_EXERCISE_ID && (d.exerciseId === "lights" || d.exerciseId === "reaction-lights")) ||
-          (exerciseId === MOVEMENT_EXERCISE_ID && (d.exerciseId === "movement" || d.exerciseId === "reaction-movement"))
+          (exerciseId === MOVEMENT_EXERCISE_ID && (d.exerciseId === "movement" || d.exerciseId === "reaction-movement")) ||
+          (exerciseId === DRIBBLE_EXERCISE_ID && (d.exerciseId === "dribbling" || d.exerciseId === "reaction-dribble" || d.exerciseId === "drible"))
       );
     }
 
@@ -491,5 +619,5 @@ export class FirestoreService {
   }
 }
 
-export { MOVEMENT_EXERCISE_ID, LIGHTS_EXERCISE_ID, PASSES_EXERCISE_ID, DEFAULT_CACHE_TTL };
+export { MOVEMENT_EXERCISE_ID, LIGHTS_EXERCISE_ID, PASSES_EXERCISE_ID, DRIBBLE_EXERCISE_ID, DEFAULT_CACHE_TTL };
 
