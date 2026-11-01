@@ -8,7 +8,6 @@ function PlayerIdentitySection({ player, onChange, onIdentify, isIdentified }) {
     <section className="dashboard-panel player-identity-section">
       <div className="dashboard-panel-heading">
         <div>
-          <p className="kicker">01 / Identificación</p>
           <h2 className="h-4">Crea el perfil del jugador.</h2>
         </div>
         <span className="dashboard-panel-status">

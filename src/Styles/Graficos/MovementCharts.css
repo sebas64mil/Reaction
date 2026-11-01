@@ -8,6 +8,52 @@
   color: var(--color-process-subtle);
 }
 
+.session-chart-toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.session-chart-selector {
+  display: grid;
+  min-width: min(100%, 290px);
+  gap: 6px;
+}
+
+.session-chart-selector > span {
+  color: var(--color-process-subtle);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.chart-expand-button {
+  padding: 6px 10px;
+  border: 1px solid var(--color-surface-card-line);
+  color: var(--color-neutral-700);
+  background: var(--color-surface-card);
+  cursor: pointer;
+  transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+
+.chart-expand-button:hover {
+  color: var(--color-neutral-100);
+  background: var(--color-neutral-900);
+  border-color: var(--color-neutral-900);
+}
+
+.chart-modal-canvas {
+  position: relative;
+  height: min(65vh, 560px);
+  min-height: 340px;
+}
+
+.session-charts-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .charts-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -21,6 +67,10 @@
 }
 
 .chart-card-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   margin-bottom: 20px;
 }
 
@@ -29,6 +79,7 @@
 }
 
 .chart-card-heading h3 {
+  min-width: 0;
   color: var(--color-neutral-800);
 }
 
@@ -53,6 +104,10 @@
   .charts-grid {
     grid-template-columns: 1fr;
   }
+
+  .session-charts-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 640px) {
@@ -62,5 +117,31 @@
 
   .chart-canvas-wrap {
     height: 220px;
+  }
+
+  .chart-card-heading {
+    align-items: flex-start;
+  }
+
+  .chart-card-heading h3 {
+    font-size: 18px;
+  }
+
+  .chart-expand-button {
+    flex-shrink: 0;
+    padding: 5px 8px;
+  }
+
+  .session-charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .session-chart-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .session-chart-selector {
+    width: 100%;
   }
 }

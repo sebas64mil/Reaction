@@ -62,7 +62,6 @@ function ExerciseRecorderSection({
     <section className="dashboard-panel exercise-recorder-section">
       <div className="dashboard-panel-heading">
         <div>
-          <p className="kicker">02 / Registro</p>
           <h2 className="h-4">Simula una sesión de experiencia.</h2>
         </div>
         <span className="dashboard-panel-counter b-3">

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { FiArrowLeft, FiLoader, FiRefreshCw, FiCheckCircle } from "react-icons/fi";
 import {
   FirestoreService,
@@ -15,7 +15,7 @@ import MovementCharts from "../Graficos/MovementCharts.jsx";
 import LightsCharts from "../Graficos/LightsCharts.jsx";
 import PassesCharts from "../Graficos/PassesCharts.jsx";
 import DribbleCharts from "../Graficos/DribbleCharts.jsx";
-import ComingSoonChart from "../Graficos/ComingSoonChart.jsx";
+import ExerciseHistoricalChart from "../Graficos/ExerciseHistoricalChart.jsx";
 import "../../Styles/Page/Dashboard.css";
 import "../../Styles/Page/DashboardData.css";
 
@@ -89,13 +89,28 @@ const initialDraftDribble = {
   ],
 };
 
-const CHART_EXERCISES = [
-  { value: MOVEMENT_EXERCISE_ID, label: "Reaccion de movimiento", available: true },
-  { value: LIGHTS_EXERCISE_ID, label: "Luces", available: true },
-  { value: PASSES_EXERCISE_ID, label: "Pases", available: true },
-  { value: DRIBBLE_EXERCISE_ID, label: "Drible", available: true },
+const ANALYSIS_EXERCISES = [
+  {
+    value: "movement",
+    label: "Reacción de movimiento",
+    desc: "Aislamiento de respuesta refleja y asimetría funcional entre extremidades.",
+  },
+  {
+    value: "lights",
+    label: "Reacción por luces",
+    desc: "Campo visual periférico, detección de estímulos luminosos y porcentaje de precisión.",
+  },
+  {
+    value: "passes",
+    label: "Pases de decisión",
+    desc: "Toma de decisiones motriz bajo estímulos de selección rápida y precisión de entrega.",
+  },
+  {
+    value: "dribble",
+    label: "Drible y control",
+    desc: "Coordinación dinámica continua, cadencia de bote y efectividad de respuesta.",
+  },
 ];
-
 
 function Dashboard() {
   // ── Toggle de visibilidad para simulación / escritura (por defecto false) ──
@@ -113,13 +128,68 @@ function Dashboard() {
   const [loadingStudents, setLoadingStudents] = useState(true);
   const [studentsError, setStudentsError] = useState("");
   const [chartStudent, setChartStudent] = useState("");
-  const [chartExercise, setChartExercise] = useState(MOVEMENT_EXERCISE_ID);
+  const [selectedExerciseTab, setSelectedExerciseTab] = useState("movement");
   const [attempts, setAttempts] = useState([]);
   const [loadingAttempts, setLoadingAttempts] = useState(false);
   const [attemptsError, setAttemptsError] = useState("");
   const [isSyncing, setIsSyncing] = useState(false);
   const [lastSyncTime, setLastSyncTime] = useState(null);
   const [syncFeedback, setSyncFeedback] = useState("");
+
+  // Partición memoizada de intentos por cada ejercicio
+  const movementAttempts = useMemo(
+    () =>
+      attempts.filter(
+        (d) =>
+          d.exerciseId === MOVEMENT_EXERCISE_ID ||
+          d.exerciseId === "movement"
+      ),
+    [attempts]
+  );
+
+  const lightsAttempts = useMemo(
+    () =>
+      attempts.filter(
+        (d) =>
+          d.exerciseId === LIGHTS_EXERCISE_ID ||
+          d.exerciseId === "lights"
+      ),
+    [attempts]
+  );
+
+  const passesAttempts = useMemo(
+    () =>
+      attempts.filter(
+        (d) =>
+          d.exerciseId === PASSES_EXERCISE_ID ||
+          d.exerciseId === "passes"
+      ),
+    [attempts]
+  );
+
+  const dribbleAttempts = useMemo(
+    () =>
+      attempts.filter(
+        (d) =>
+          d.exerciseId === DRIBBLE_EXERCISE_ID ||
+          d.exerciseId === "dribbling" ||
+          d.exerciseId === "reaction-dribble" ||
+          d.exerciseId === "drible"
+      ),
+    [attempts]
+  );
+
+  // Intentos del ejercicio seleccionado actualmente
+  const currentExerciseAttempts = useMemo(() => {
+    if (selectedExerciseTab === "movement") return movementAttempts;
+    if (selectedExerciseTab === "lights") return lightsAttempts;
+    if (selectedExerciseTab === "passes") return passesAttempts;
+    if (selectedExerciseTab === "dribble") return dribbleAttempts;
+    return [];
+  }, [selectedExerciseTab, movementAttempts, lightsAttempts, passesAttempts, dribbleAttempts]);
+
+  const currentExerciseMeta =
+    ANALYSIS_EXERCISES.find((e) => e.value === selectedExerciseTab) || ANALYSIS_EXERCISES[0];
 
   // Cargar lista de estudiantes al montar la pagina (usa cache si esta vigente)
   useEffect(() => {
@@ -134,18 +204,19 @@ function Dashboard() {
       .finally(() => setLoadingStudents(false));
   }, []);
 
-  // Cargar attempts cuando cambia el estudiante o el ejercicio seleccionado (usa cache si esta vigente)
+  // Cargar todos los attempts cuando cambia el estudiante seleccionado
   useEffect(() => {
-    if (!chartStudent) return;
-    const exercise = CHART_EXERCISES.find((e) => e.value === chartExercise);
-    if (!exercise?.available) { setAttempts([]); return; }
+    if (!chartStudent) {
+      setAttempts([]);
+      return;
+    }
 
     setLoadingAttempts(true);
     setAttemptsError("");
     firestoreService
-      .getStudentAttempts(chartStudent, chartExercise)
+      .getStudentAttempts(chartStudent, null)
       .then((data) => {
-        console.log("[Dashboard] attempts cargados:", data.length, data);
+        console.log("[Dashboard] todos los attempts cargados:", data.length, data);
         setAttempts(data);
       })
       .catch((err) => {
@@ -153,18 +224,15 @@ function Dashboard() {
         setAttemptsError(err.message ?? String(err));
       })
       .finally(() => setLoadingAttempts(false));
-  }, [chartStudent, chartExercise]);
+  }, [chartStudent]);
 
   // Sincronización periódica automática con Firebase cada 60 segundos
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (!chartStudent) return;
-      const exercise = CHART_EXERCISES.find((e) => e.value === chartExercise);
-      if (!exercise?.available) return;
 
-      // Realiza el llamado a Firebase forzando refresco de la base de datos
       firestoreService
-        .getStudentAttempts(chartStudent, chartExercise, true)
+        .getStudentAttempts(chartStudent, null, true)
         .then((data) => {
           setAttempts(data);
           const now = new Date();
@@ -181,23 +249,22 @@ function Dashboard() {
     }, 60000);
 
     return () => clearInterval(intervalId);
-  }, [chartStudent, chartExercise]);
+  }, [chartStudent]);
 
   // Handler para el botón manual que revisa si se actualizó la base de datos
   const handleSyncDatabase = async () => {
     setIsSyncing(true);
     setSyncFeedback("");
     try {
-      const exercise = CHART_EXERCISES.find((e) => e.value === chartExercise);
       const [latestStudents, latestAttempts] = await Promise.all([
         firestoreService.getAllStudents(true),
-        chartStudent && exercise?.available
-          ? firestoreService.getStudentAttempts(chartStudent, chartExercise, true)
+        chartStudent
+          ? firestoreService.getStudentAttempts(chartStudent, null, true)
           : Promise.resolve([]),
       ]);
 
       setStudents(latestStudents);
-      if (chartStudent && exercise?.available) {
+      if (chartStudent) {
         setAttempts(latestAttempts);
       }
 
@@ -347,9 +414,9 @@ function Dashboard() {
           ],
         });
         // Recargar graficas si el estudiante guardado es el mismo del selector
-        if (player.universityId === chartStudent && chartExercise === LIGHTS_EXERCISE_ID) {
+        if (player.universityId === chartStudent) {
           firestoreService
-            .getStudentAttempts(chartStudent, chartExercise, true)
+            .getStudentAttempts(chartStudent, null, true)
             .then(setAttempts)
             .catch(() => {});
         }
@@ -376,9 +443,9 @@ function Dashboard() {
           ],
         });
         // Recargar graficas si el estudiante guardado es el mismo del selector
-        if (player.universityId === chartStudent && chartExercise === PASSES_EXERCISE_ID) {
+        if (player.universityId === chartStudent) {
           firestoreService
-            .getStudentAttempts(chartStudent, chartExercise, true)
+            .getStudentAttempts(chartStudent, null, true)
             .then(setAttempts)
             .catch(() => {});
         }
@@ -405,12 +472,9 @@ function Dashboard() {
           ],
         });
         // Recargar graficas si el estudiante guardado es el mismo del selector
-        if (
-          player.universityId === chartStudent &&
-          (chartExercise === DRIBBLE_EXERCISE_ID || chartExercise === "dribbling")
-        ) {
+        if (player.universityId === chartStudent) {
           firestoreService
-            .getStudentAttempts(chartStudent, chartExercise, true)
+            .getStudentAttempts(chartStudent, null, true)
             .then(setAttempts)
             .catch(() => {});
         }
@@ -427,9 +491,9 @@ function Dashboard() {
         );
         setFirebaseStatus(`Sesion guardada con ID ${savedAttempt.id}.`);
         // Recargar graficas si el estudiante guardado es el mismo del selector
-        if (player.universityId === chartStudent && chartExercise === MOVEMENT_EXERCISE_ID) {
+        if (player.universityId === chartStudent) {
           firestoreService
-            .getStudentAttempts(chartStudent, chartExercise, true)
+            .getStudentAttempts(chartStudent, null, true)
             .then(setAttempts)
             .catch(() => {});
         }
@@ -439,7 +503,6 @@ function Dashboard() {
     }
   };
 
-  const selectedChartExercise = CHART_EXERCISES.find((e) => e.value === chartExercise);
   const selectedStudentData = students.find((s) => s.id === chartStudent);
 
   return (
@@ -477,42 +540,11 @@ function Dashboard() {
         </div>
       )}
 
-      {/* ── 03 / Analiticas ── */}
-      <section className="dashboard-panel dashboard-charts-section">
-        <div className="dashboard-panel-heading">
-          <div>
-            <p className="kicker">03 / Analiticas</p>
-            <h2 className="h-4">Resultados historicos por jugador.</h2>
-          </div>
-          <div className="dashboard-sync-controls">
-            {!loadingAttempts && selectedChartExercise?.available && chartStudent && (
-              <span className="dashboard-panel-counter b-3">
-                {attempts.length} sesion{attempts.length !== 1 ? "es" : ""}
-              </span>
-            )}
-            <button
-              type="button"
-              className="dashboard-sync-button b-3"
-              onClick={handleSyncDatabase}
-              disabled={isSyncing}
-              title="Revisar si se actualizó la base de datos en Firebase"
-            >
-              <FiRefreshCw className={`sync-icon ${isSyncing ? "spin-icon" : ""}`} />
-              <span>{isSyncing ? "Comprobando..." : "Sincronizar base de datos"}</span>
-            </button>
-          </div>
-        </div>
-
-        {syncFeedback && (
-          <p className="dashboard-sync-feedback b-3">
-            <FiCheckCircle className="sync-check-icon" /> {syncFeedback}
-          </p>
-        )}
-
-        <div className="charts-controls-grid">
-          {/* Selector de estudiante */}
-          <label className="control-label">
-            <span className="b-3">Jugador (codigo de estudiante)</span>
+      {/* ── Barra Superior de Analíticas: Selector de Jugador y Sincronización ── */}
+      <section className="dashboard-panel dashboard-analytics-topbar">
+        <div style={{ flex: 1, minWidth: "260px" }}>
+          <label className="control-label" style={{ maxWidth: "460px" }}>
+            <span className="h-5 dashboard-player-label">Seleccionar Jugador (Código Universitario)</span>
             {loadingStudents ? (
               <div className="dashboard-charts-loading b-3">
                 <FiLoader className="spin-icon" /> Cargando jugadores...
@@ -536,49 +568,125 @@ function Dashboard() {
               </select>
             )}
           </label>
-
-          {/* Selector de ejercicio */}
-          <label className="control-label">
-            <span className="b-3">Ejercicio</span>
-            <select
-              className="exercise-select"
-              value={chartExercise}
-              onChange={(e) => setChartExercise(e.target.value)}
-            >
-              {CHART_EXERCISES.map((ex) => (
-                <option key={ex.value} value={ex.value}>
-                  {ex.label}{!ex.available ? " — en proceso" : ""}
-                </option>
-              ))}
-            </select>
-          </label>
         </div>
 
-        {selectedStudentData && (
-          <p className="charts-hint b-3">
-            Viendo: <strong>{selectedStudentData.name}</strong> &mdash; {selectedChartExercise?.label}
-          </p>
-        )}
-
-        {/* Contenido de graficas */}
-        {!selectedChartExercise?.available ? (
-          <ComingSoonChart exerciseId={chartExercise} />
-        ) : loadingAttempts ? (
-          <div className="dashboard-charts-loading b-2">
-            <FiLoader className="spin-icon" /> Cargando historial...
-          </div>
-        ) : attemptsError ? (
-          <p className="dashboard-firebase-status b-3">{attemptsError}</p>
-        ) : chartExercise === LIGHTS_EXERCISE_ID ? (
-          <LightsCharts attempts={attempts} />
-        ) : chartExercise === PASSES_EXERCISE_ID ? (
-          <PassesCharts attempts={attempts} />
-        ) : chartExercise === DRIBBLE_EXERCISE_ID ? (
-          <DribbleCharts attempts={attempts} />
-        ) : (
-          <MovementCharts attempts={attempts} />
-        )}
+        <div className="dashboard-sync-controls">
+          {selectedStudentData && (
+            <span className="charts-hint b-3" style={{ margin: 0 }}>
+              Expediente: <strong>{selectedStudentData.name}</strong> ({selectedStudentData.studentCode ?? selectedStudentData.id})
+            </span>
+          )}
+          <button
+            type="button"
+            className="dashboard-sync-button b-3"
+            onClick={handleSyncDatabase}
+            disabled={isSyncing}
+            title="Revisar si se actualizó la base de datos en Firebase"
+          >
+            <FiRefreshCw className={`sync-icon ${isSyncing ? "spin-icon" : ""}`} />
+            <span>{isSyncing ? "Comprobando..." : "Sincronizar base de datos"}</span>
+          </button>
+        </div>
       </section>
+
+      {syncFeedback && (
+        <p className="dashboard-sync-feedback b-3">
+          <FiCheckCircle className="sync-check-icon" /> {syncFeedback}
+        </p>
+      )}
+
+      {loadingAttempts ? (
+        <div className="dashboard-charts-loading b-2" style={{ padding: "60px 0", justifyContent: "center" }}>
+          <FiLoader className="spin-icon" style={{ fontSize: "24px" }} /> Cargando expediente de Firebase...
+        </div>
+      ) : attemptsError ? (
+        <p className="dashboard-firebase-status b-3">{attemptsError}</p>
+      ) : (
+        <>
+          {/* ══════════════════════════════════════════════════════════
+              SELECTOR DE EJERCICIO COMPARTIDO
+              Controla tanto el histórico (Sección A) como las gráficas
+              específicas (Sección B)
+              ══════════════════════════════════════════════════════════ */}
+          <section className="analytics-exercise-picker" aria-labelledby="exercise-picker-title">
+            <div className="analytics-exercise-picker-heading">
+              <div>
+                <h2 id="exercise-picker-title" className="h-5">Selecciona el análisis que quieres explorar</h2>
+                <p className="b-3">
+                  La selección se comparte entre el histórico y las gráficas detalladas de la sesión.
+                </p>
+              </div>
+              <span className="analytics-exercise-picker-current b-3">
+                {currentExerciseAttempts.length} {currentExerciseAttempts.length === 1 ? "sesión" : "sesiones"}
+              </span>
+            </div>
+            <div className="exercise-filter-tabs" role="tablist" aria-label="Ejercicios disponibles">
+            {ANALYSIS_EXERCISES.map((ex) => {
+              const count =
+                ex.value === "movement" ? movementAttempts.length :
+                ex.value === "lights"   ? lightsAttempts.length   :
+                ex.value === "passes"   ? passesAttempts.length   :
+                ex.value === "dribble"  ? dribbleAttempts.length  : 0;
+              return (
+                <button
+                  key={ex.value}
+                  type="button"
+                  role="tab"
+                  aria-selected={selectedExerciseTab === ex.value}
+                  className={`exercise-filter-tab b-3 ${selectedExerciseTab === ex.value ? "is-active" : ""}`}
+                  onClick={() => setSelectedExerciseTab(ex.value)}
+                >
+                  <span className="exercise-filter-tab-label">{ex.label}</span>
+                  <span className="exercise-filter-tab-count">{count}</span>
+                </button>
+              );
+            })}
+            </div>
+          </section>
+
+          {/* ══════════════════════════════════════════════════════════
+              SECCIÓN A: HISTÓRICO DEL EJERCICIO SELECCIONADO
+              Se oculta automáticamente si hay menos de 2 sesiones
+              ══════════════════════════════════════════════════════════ */}
+          <ExerciseHistoricalChart
+            attempts={currentExerciseAttempts}
+            exerciseLabel={currentExerciseMeta.label}
+          />
+
+          {attempts.length === 0 ? (
+            <section className="dashboard-panel dashboard-empty-results" role="status">
+              <div className="dashboard-empty-results-icon">—</div>
+              <h2 className="h-4">No hay resultados disponibles</h2>
+              <p className="b-2">
+                Este jugador todavía no tiene sesiones registradas. Cuando complete un ejercicio,
+                sus métricas aparecerán aquí.
+              </p>
+            </section>
+          ) : (
+            /* ══════════════════════════════════════════════════════════
+                SECCIÓN B: GRÁFICAS ESPECÍFICAS DE LA SESIÓN
+                ══════════════════════════════════════════════════════════ */
+            <section className="dashboard-panel exercise-breakdown-section">
+              <div className="exercise-section-header">
+                <span className={`exercise-indicator-tag tag-${selectedExerciseTab}`}>
+                  {selectedExerciseTab === "movement" ? "01" :
+                   selectedExerciseTab === "lights"   ? "02" :
+                   selectedExerciseTab === "passes"   ? "03" : "04"}
+                </span>
+                <div>
+                  <h3 className="h-5">{currentExerciseMeta.label}</h3>
+                  <p className="b-3 exercise-subdesc">{currentExerciseMeta.desc}</p>
+                </div>
+              </div>
+
+              {selectedExerciseTab === "movement" && <MovementCharts attempts={movementAttempts} />}
+              {selectedExerciseTab === "lights"   && <LightsCharts   attempts={lightsAttempts}   />}
+              {selectedExerciseTab === "passes"   && <PassesCharts   attempts={passesAttempts}   />}
+              {selectedExerciseTab === "dribble"  && <DribbleCharts  attempts={dribbleAttempts}  />}
+            </section>
+          )}
+        </>
+      )}
 
       <Button className="dashboard-back-button" to="/about" variant="primary">
         <FiArrowLeft /> Volver a la experiencia

@@ -20,7 +20,6 @@ function DashboardResultsSection({ repetitions, completedAt }) {
     <section className="dashboard-panel dashboard-results-section">
       <div className="dashboard-panel-heading">
         <div>
-          <p className="kicker">03 / Lectura</p>
           <h2 className="h-4">Resultados del jugador.</h2>
         </div>
         <span className="dashboard-panel-counter b-3">
