@@ -4,10 +4,10 @@ import TextInput from "../../Ui/TextInput.jsx";
 import "../../../Styles/Sections/Dashboard/ExerciseRecorderSection.css";
 
 const exercises = [
-  { value: "lights", label: "Luces", available: true },
-  { value: "movement", label: "Reacción de movimiento", available: true },
-  { value: "passes", label: "Pases", available: true },
-  { value: "dribbling", label: "Drible", available: true },
+  { value: "lights", label: "Sigue la Luz", available: true },
+  { value: "movement", label: "Alcance Reactivo", available: true },
+  { value: "passes", label: "Captura Selectiva", available: true },
+  { value: "dribbling", label: "Control de Dribleo", available: true },
 ];
 
 const movementLevelFields = [

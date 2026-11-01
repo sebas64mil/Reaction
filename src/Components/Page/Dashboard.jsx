@@ -92,22 +92,22 @@ const initialDraftDribble = {
 const ANALYSIS_EXERCISES = [
   {
     value: "movement",
-    label: "Reacción de movimiento",
+    label: "Alcance Reactivo",
     desc: "Aislamiento de respuesta refleja y asimetría funcional entre extremidades.",
   },
   {
     value: "lights",
-    label: "Reacción por luces",
+    label: "Sigue la Luz",
     desc: "Campo visual periférico, detección de estímulos luminosos y porcentaje de precisión.",
   },
   {
     value: "passes",
-    label: "Pases de decisión",
+    label: "Captura Selectiva",
     desc: "Toma de decisiones motriz bajo estímulos de selección rápida y precisión de entrega.",
   },
   {
     value: "dribble",
-    label: "Drible y control",
+    label: "Control de Dribleo",
     desc: "Coordinación dinámica continua, cadencia de bote y efectividad de respuesta.",
   },
 ];
@@ -365,7 +365,7 @@ function Dashboard() {
       levels: d.levels.map((lvl, i) => {
         if (i !== levelIndex) return lvl;
         const updated = { ...lvl, [name]: value };
-        // Auto-calcular precisión para pases y drible si se proporcionan aciertos e intentos totales
+        // Auto-calcular precisión para Captura Selectiva y Control de Dribleo.
         if (
           selectedExercise === "passes" ||
           selectedExercise === "dribbling" ||
@@ -392,7 +392,7 @@ function Dashboard() {
       const completedAt = `${draft.completedDate}T${draft.completedTime}:00`;
 
       if (selectedExercise === "lights") {
-        // ── Flujo Reacción por Luces ──
+        // ── Flujo Sigue la Luz ──
         let lightsSession = firestoreService.createLightsSession();
         draft.levels.forEach((lvl) => {
           lightsSession = firestoreService.addLightsLevelToSession(lightsSession, lvl);
@@ -421,7 +421,7 @@ function Dashboard() {
             .catch(() => {});
         }
       } else if (selectedExercise === "passes") {
-        // ── Flujo Ejercicio de Pases ──
+        // ── Flujo Captura Selectiva ──
         let passesSession = firestoreService.createPassesSession();
         draft.levels.forEach((lvl) => {
           passesSession = firestoreService.addPassesLevelToSession(passesSession, lvl);
@@ -431,8 +431,8 @@ function Dashboard() {
           passesSession,
           completedAt,
         );
-        setFirebaseStatus(`Sesión de pases guardada con ID ${savedAttempt.id}.`);
-        // Limpiar el draft de pases tras guardar correctamente
+        setFirebaseStatus(`Sesión de Captura Selectiva guardada con ID ${savedAttempt.id}.`);
+        // Limpiar el formulario tras guardar correctamente
         setDraft({
           completedDate: draft.completedDate,
           completedTime: draft.completedTime,
@@ -450,7 +450,7 @@ function Dashboard() {
             .catch(() => {});
         }
       } else if (selectedExercise === "dribbling" || selectedExercise === DRIBBLE_EXERCISE_ID) {
-        // ── Flujo Ejercicio de Drible ──
+        // ── Flujo Control de Dribleo ──
         let dribbleSession = firestoreService.createDribbleSession();
         draft.levels.forEach((lvl) => {
           dribbleSession = firestoreService.addDribbleLevelToSession(dribbleSession, lvl);
@@ -460,8 +460,8 @@ function Dashboard() {
           dribbleSession,
           completedAt,
         );
-        setFirebaseStatus(`Sesión de drible guardada con ID ${savedAttempt.id}.`);
-        // Limpiar el draft de drible tras guardar correctamente
+        setFirebaseStatus(`Sesión de Control de Dribleo guardada con ID ${savedAttempt.id}.`);
+        // Limpiar el formulario tras guardar correctamente
         setDraft({
           completedDate: draft.completedDate,
           completedTime: draft.completedTime,

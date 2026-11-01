@@ -23,7 +23,7 @@ function LightsCharts({ attempts = [] }) {
   const selectedAttempt = sorted[selectedIndex] ?? sorted[sorted.length - 1];
   const levels = levelsOf(selectedAttempt);
 
-  if (!sorted.length) return <EmptyChart message="No hay sesiones de reacción por luces disponibles." />;
+  if (!sorted.length) return <EmptyChart message="No hay sesiones de Sigue la Luz disponibles." />;
 
   const accuracy = levels.map((level) => numberOrNull(level?.accuracy));
   const reaction = levels.map((level) => numberOrNull(level?.averageReaction));
@@ -106,7 +106,7 @@ function LightsCharts({ attempts = [] }) {
 
   const expanded = expandedChart ? (
     <ChartModal
-      title={`Reacción por luces · ${sessionDate(selectedAttempt)}`}
+      title={`Sigue la Luz · ${sessionDate(selectedAttempt)}`}
       onClose={() => setExpandedChart(null)}
       headerExtra={<SessionSelector attempts={sorted} selectedIndex={selectedIndex} onChange={setSelectedIndex} />}
     >

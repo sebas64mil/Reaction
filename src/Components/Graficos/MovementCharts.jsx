@@ -23,7 +23,7 @@ function MovementCharts({ attempts = [] }) {
   const levels = levelsOf(selectedAttempt);
 
   if (!sorted.length) {
-    return <EmptyChart message="No hay sesiones de reacción de movimiento disponibles." />;
+    return <EmptyChart message="No hay sesiones de Alcance Reactivo disponibles." />;
   }
 
   const precisionData = {
@@ -131,7 +131,7 @@ function MovementCharts({ attempts = [] }) {
 
   const expanded = expandedChart ? (
     <ChartModal
-      title={`Reacción de movimiento · ${sessionDate(selectedAttempt)}`}
+      title={`Alcance Reactivo · ${sessionDate(selectedAttempt)}`}
       onClose={() => setExpandedChart(null)}
       headerExtra={<SessionSelector attempts={sorted} selectedIndex={selectedIndex} onChange={setSelectedIndex} />}
     >

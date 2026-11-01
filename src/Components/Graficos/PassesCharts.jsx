@@ -22,7 +22,7 @@ function PassesCharts({ attempts = [] }) {
   const selectedAttempt = sorted[selectedIndex] ?? sorted[sorted.length - 1];
   const levels = levelsOf(selectedAttempt);
 
-  if (!sorted.length) return <EmptyChart message="No hay sesiones de pases disponibles." />;
+  if (!sorted.length) return <EmptyChart message="No hay sesiones de Captura Selectiva disponibles." />;
 
   const correct = levels.map((level) => numberOrNull(level?.correctAnswers));
   const errors = levels.map((level) => {
@@ -77,7 +77,7 @@ function PassesCharts({ attempts = [] }) {
 
   const expanded = expandedChart ? (
     <ChartModal
-      title={`Pases · ${sessionDate(selectedAttempt)}`}
+      title={`Captura Selectiva · ${sessionDate(selectedAttempt)}`}
       onClose={() => setExpandedChart(null)}
       headerExtra={<SessionSelector attempts={sorted} selectedIndex={selectedIndex} onChange={setSelectedIndex} />}
     >

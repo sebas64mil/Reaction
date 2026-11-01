@@ -23,7 +23,7 @@ function DribbleCharts({ attempts = [] }) {
   const selectedAttempt = sorted[selectedIndex] ?? sorted[sorted.length - 1];
   const levels = levelsOf(selectedAttempt);
 
-  if (!sorted.length) return <EmptyChart message="No hay sesiones de drible disponibles." />;
+  if (!sorted.length) return <EmptyChart message="No hay sesiones de Control de Dribleo disponibles." />;
 
   const accuracy = levels.map((level) => numberOrNull(level?.accuracy));
   const reaction = levels.map((level) => numberOrNull(level?.averageReaction));
@@ -80,7 +80,7 @@ function DribbleCharts({ attempts = [] }) {
 
   const expanded = expandedChart ? (
     <ChartModal
-      title={`Drible · ${sessionDate(selectedAttempt)}`}
+      title={`Control de Dribleo · ${sessionDate(selectedAttempt)}`}
       onClose={() => setExpandedChart(null)}
       headerExtra={<SessionSelector attempts={sorted} selectedIndex={selectedIndex} onChange={setSelectedIndex} />}
     >

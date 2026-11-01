@@ -33,22 +33,22 @@ ChartJS.register(
 
 const EXERCISE_COLORS = {
   movement: {
-    name: "Reacción de movimiento",
+    name: "Alcance Reactivo",
     color: "#ff1f0d",
     bgColor: "rgba(255, 31, 13, 0.12)",
   },
   lights: {
-    name: "Reacción por luces",
+    name: "Sigue la Luz",
     color: "#ff8c01",
     bgColor: "rgba(255, 140, 1, 0.12)",
   },
   passes: {
-    name: "Pases",
+    name: "Captura Selectiva",
     color: "#15cbc9",
     bgColor: "rgba(21, 203, 201, 0.12)",
   },
   dribble: {
-    name: "Drible",
+    name: "Control de Dribleo",
     color: "#a855f7",
     bgColor: "rgba(168, 85, 247, 0.12)",
   },
@@ -209,22 +209,22 @@ function GeneralHistorySection({ attempts = [], student }) {
     const datasets = [
       {
         key: "movement",
-        label: "Reacción de movimiento",
+        label: "Alcance Reactivo",
         color: EXERCISE_COLORS.movement.color,
       },
       {
         key: "lights",
-        label: "Reacción por luces",
+        label: "Sigue la Luz",
         color: EXERCISE_COLORS.lights.color,
       },
       {
         key: "passes",
-        label: "Pases",
+        label: "Captura Selectiva",
         color: EXERCISE_COLORS.passes.color,
       },
       {
         key: "dribble",
-        label: "Drible",
+        label: "Control de Dribleo",
         color: EXERCISE_COLORS.dribble.color,
       },
     ].map((ex) => {
@@ -371,19 +371,19 @@ function GeneralHistorySection({ attempts = [], student }) {
           </strong>
           <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginTop: "4px" }}>
             <span className="b-3" style={{ fontSize: "11px", color: EXERCISE_COLORS.movement.color }}>
-              Mov: {countsByExercise.movement}
+              Alcance Reactivo: {countsByExercise.movement}
             </span>
             <span style={{ color: "rgba(255,255,255,0.2)" }}>•</span>
             <span className="b-3" style={{ fontSize: "11px", color: EXERCISE_COLORS.lights.color }}>
-              Luces: {countsByExercise.lights}
+              Sigue la Luz: {countsByExercise.lights}
             </span>
             <span style={{ color: "rgba(255,255,255,0.2)" }}>•</span>
             <span className="b-3" style={{ fontSize: "11px", color: EXERCISE_COLORS.passes.color }}>
-              Pases: {countsByExercise.passes}
+              Captura Selectiva: {countsByExercise.passes}
             </span>
             <span style={{ color: "rgba(255,255,255,0.2)" }}>•</span>
             <span className="b-3" style={{ fontSize: "11px", color: EXERCISE_COLORS.dribble.color }}>
-              Drible: {countsByExercise.dribble}
+              Control de Dribleo: {countsByExercise.dribble}
             </span>
           </div>
         </div>

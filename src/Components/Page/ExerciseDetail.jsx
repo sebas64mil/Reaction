@@ -5,7 +5,7 @@ import "../../Styles/Page/ExerciseDetail.css";
 const exercises = {
   "luz-periferica": {
     number: "01",
-    name: "Luz periférica",
+    name: "Sigue la Luz",
     shortDescription: "Identifica un estímulo fuera de tu foco central y responde antes de que desaparezca.",
     objective: "Percepción periférica",
     duration: "4–6 minutos",
@@ -23,7 +23,7 @@ const exercises = {
   },
   "pase-de-decision": {
     number: "02",
-    name: "Pase de decisión",
+    name: "Captura Selectiva",
     shortDescription: "Elige el objetivo correcto cuando señales visuales y sonoras compiten entre sí.",
     objective: "Decisión bajo presión",
     duration: "5–8 minutos",
@@ -41,7 +41,7 @@ const exercises = {
   },
   "zona-de-reaccion": {
     number: "03",
-    name: "Zona de reacción",
+    name: "Alcance Reactivo",
     shortDescription: "Muévete dentro de la cancha virtual y encuentra la ruta más rápida hacia la señal.",
     objective: "Tiempo de respuesta",
     duration: "6–10 minutos",
@@ -56,6 +56,24 @@ const exercises = {
       "Regresa a la posición inicial y repite el recorrido."
     ],
     tip: "Planifica la ruta antes de moverte. Un movimiento preciso reduce el tiempo total y evita errores adicionales."
+  },
+  "control-de-dribleo": {
+    number: "04",
+    name: "Control de Dribleo",
+    shortDescription: "Mantén el control del balón mientras respondes con precisión a los estímulos del entorno.",
+    objective: "Coordinación dinámica",
+    duration: "5–8 minutos",
+    accent: "cyan",
+    videoUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+    description:
+      "Este ejercicio combina control de balón, percepción y respuesta motora. El jugador debe mantener una cadencia estable mientras identifica y responde a los estímulos que aparecen durante la sesión.",
+    steps: [
+      "Adopta una postura estable y comienza el dribleo.",
+      "Mantén la mirada atenta a los estímulos del entorno.",
+      "Responde sin perder el control del balón.",
+      "Repite la ronda y busca mayor precisión en cada nivel."
+    ],
+    tip: "Prioriza un ritmo constante. El control del balón permite responder con precisión sin perder fluidez."
   }
 };
 
@@ -82,7 +100,7 @@ function ExerciseDetail() {
 
       <div className="exercise-detail-hero">
         <div>
-          <p className="kicker">Ejercicio {exercise.number} / 03</p>
+          <p className="kicker">Ejercicio {exercise.number} / 04</p>
           <h1 className="h-1">{exercise.name}</h1>
           <p className="b-1">{exercise.shortDescription}</p>
         </div>

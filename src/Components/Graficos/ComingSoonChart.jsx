@@ -1,9 +1,9 @@
 ﻿import "../../Styles/Graficos/ComingSoonChart.css";
 
 const exerciseLabels = {
-  lights: "Luces",
-  passes: "Pases",
-  dribbling: "Drible",
+  lights: "Sigue la Luz",
+  passes: "Captura Selectiva",
+  dribbling: "Control de Dribleo",
 };
 
 function ComingSoonChart({ exerciseId }) {
