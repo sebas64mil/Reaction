@@ -40,7 +40,7 @@ function ChartModal({ children, onClose, headerExtra, title }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: "32px 20px",
+        padding: "clamp(8px, 4vw, 32px) clamp(8px, 4vw, 20px)",
       }}
       onClick={onClose}
       role="dialog"
@@ -50,10 +50,10 @@ function ChartModal({ children, onClose, headerExtra, title }) {
         style={{
           width: "100%",
           maxWidth: "1080px",
-          maxHeight: "90vh",
+          maxHeight: "min(96vh, 96dvh)",
           backgroundColor: "var(--color-surface-paper, #f5f4ef)",
           border: "1px solid var(--color-surface-line, #d9d8d1)",
-          padding: "28px 32px",
+          padding: "clamp(12px, 4vw, 28px) clamp(12px, 4vw, 32px)",
           borderRadius: "12px",
           position: "relative",
           display: "flex",
@@ -105,7 +105,9 @@ function ChartModal({ children, onClose, headerExtra, title }) {
           </Button>
         </div>
 
-        <div style={{ flex: 1, minHeight: 0 }}>{children}</div>
+        <div style={{ flex: 1, minHeight: 0, minWidth: 0, width: "100%", overflowX: "hidden" }}>
+          {children}
+        </div>
       </div>
     </div>
   );

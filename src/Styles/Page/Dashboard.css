@@ -188,6 +188,12 @@
   }
 }
 
+@media (max-width: 380px) {
+  .dashboard-panel {
+    padding: 14px;
+  }
+}
+
 /* ── Controles de sincronización y actualización con Firebase ── */
 .dashboard-sync-controls {
   display: flex;
