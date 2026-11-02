@@ -310,19 +310,21 @@ function ExerciseHistoricalChart({ attempts = [], exerciseLabel = "Ejercicio" })
         </div>
       </div>
 
-      <div
-        className="chart-canvas-wrap"
-        style={{
-          position: "relative",
-          height: "360px",
-          marginTop: "16px",
-          background: "var(--color-surface-paper, #f5f4ef)",
-          padding: "16px",
-          border: "1px solid var(--color-surface-line, #d9d8d1)",
-          borderRadius: "8px",
-        }}
-      >
-        <Line data={chartData} options={chartOptions} />
+      <div className="exercise-history-chart-scroll" style={{ marginTop: "16px" }}>
+        <div
+          className="chart-canvas-wrap exercise-history-chart-canvas"
+          style={{
+            "--chart-session-count": sorted.length,
+            position: "relative",
+            height: "360px",
+            background: "var(--color-surface-paper, #f5f4ef)",
+            padding: "16px",
+            border: "1px solid var(--color-surface-line, #d9d8d1)",
+            borderRadius: "8px",
+          }}
+        >
+          <Line data={chartData} options={chartOptions} />
+        </div>
       </div>
 
       {isExpanded && (
@@ -331,8 +333,19 @@ function ExerciseHistoricalChart({ attempts = [], exerciseLabel = "Ejercicio" })
           headerExtra={MetricSelector}
           onClose={() => setIsExpanded(false)}
         >
-          <div style={{ height: "70vh", minHeight: "420px", padding: "12px 0" }}>
-            <Line data={chartData} options={chartOptions} />
+          <div className="exercise-history-chart-scroll">
+            <div
+              className="exercise-history-chart-canvas"
+              style={{
+                "--chart-session-count": sorted.length,
+                position: "relative",
+                height: "70vh",
+                minHeight: "420px",
+                padding: "12px 0",
+              }}
+            >
+              <Line data={chartData} options={chartOptions} />
+            </div>
           </div>
         </ChartModal>
       )}

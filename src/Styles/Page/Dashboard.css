@@ -135,6 +135,30 @@
   margin-top: 24px;
 }
 
+.exercise-history-chart-scroll {
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-color: var(--color-neutral-500, #92928e) transparent;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.exercise-history-chart-scroll > .exercise-history-chart-canvas {
+  width: 100%;
+  min-width: 0;
+}
+
+.exercise-history-chart-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.exercise-history-chart-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-neutral-500, #92928e);
+  border-radius: 4px;
+}
+
 .charts-controls-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -185,6 +209,10 @@
 @media (max-width: 760px) {
   .charts-controls-grid {
     grid-template-columns: 1fr;
+  }
+
+  .exercise-history-chart-scroll > .exercise-history-chart-canvas {
+    min-width: max(100%, calc(var(--chart-session-count) * 110px + 120px));
   }
 }
 
