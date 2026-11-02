@@ -20,6 +20,10 @@
   background: var(--cyan);
 }
 
+.visual-lime {
+  background: #b7cf3f;
+}
+
 .exercise-number {
   position: absolute;
   top: 18px;

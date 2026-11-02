@@ -63,7 +63,7 @@ const exercises = {
     shortDescription: "Mantén el control del balón mientras respondes con precisión a los estímulos del entorno.",
     objective: "Coordinación dinámica",
     duration: "5–8 minutos",
-    accent: "cyan",
+    accent: "lime",
     videoUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
     description:
       "Este ejercicio combina control de balón, percepción y respuesta motora. El jugador debe mantener una cadencia estable mientras identifica y responde a los estímulos que aparecen durante la sesión.",

@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -63,6 +63,68 @@ function formatDateTime(date) {
 function safeNum(val) {
   const n = Number(val);
   return isNaN(n) ? 0 : n;
+}
+
+function ExerciseHistoryScrollArea({ children, className = "" }) {
+  const scrollRef = useRef(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [maxScroll, setMaxScroll] = useState(0);
+
+  useEffect(() => {
+    const scrollElement = scrollRef.current;
+    if (!scrollElement) return undefined;
+
+    const updateScrollLimits = () => {
+      const nextMaxScroll = Math.max(
+        scrollElement.scrollWidth - scrollElement.clientWidth,
+        0,
+      );
+      setMaxScroll((current) => current === nextMaxScroll ? current : nextMaxScroll);
+      setScrollPosition((current) =>
+        current === scrollElement.scrollLeft ? current : scrollElement.scrollLeft,
+      );
+    };
+
+    const resizeObserver = new ResizeObserver(updateScrollLimits);
+    resizeObserver.observe(scrollElement);
+    if (scrollElement.firstElementChild) {
+      resizeObserver.observe(scrollElement.firstElementChild);
+    }
+    scrollElement.addEventListener("scroll", updateScrollLimits, { passive: true });
+    const animationFrame = window.requestAnimationFrame(updateScrollLimits);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      resizeObserver.disconnect();
+      scrollElement.removeEventListener("scroll", updateScrollLimits);
+    };
+  }, []);
+
+  const handleSliderChange = (event) => {
+    const nextPosition = Number(event.target.value);
+    if (scrollRef.current) scrollRef.current.scrollLeft = nextPosition;
+    setScrollPosition(nextPosition);
+  };
+
+  return (
+    <div className={`exercise-history-scroll-area ${className}`}>
+      <div className="exercise-history-chart-scroll" ref={scrollRef}>
+        {children}
+      </div>
+      <input
+        className="exercise-history-scroll-slider"
+        type="range"
+        min="0"
+        max={maxScroll}
+        value={Math.min(scrollPosition, maxScroll)}
+        onChange={handleSliderChange}
+        style={{
+          "--scroll-progress": `${maxScroll ? (scrollPosition / maxScroll) * 100 : 0}%`,
+        }}
+        aria-label="Desplazamiento horizontal de sesiones"
+      />
+    </div>
+  );
 }
 
 /**
@@ -303,7 +365,7 @@ function ExerciseHistoricalChart({ attempts = [], exerciseLabel = "Ejercicio" })
         </div>
       </div>
 
-      <div className="exercise-history-chart-scroll" style={{ marginTop: "16px" }}>
+      <ExerciseHistoryScrollArea className="exercise-history-scroll-main">
         <div
           className="chart-canvas-wrap exercise-history-chart-canvas"
           style={{
@@ -318,7 +380,7 @@ function ExerciseHistoricalChart({ attempts = [], exerciseLabel = "Ejercicio" })
         >
           <Line data={chartData} options={chartOptions} />
         </div>
-      </div>
+      </ExerciseHistoryScrollArea>
 
       {isExpanded && (
         <ChartModal
@@ -326,7 +388,7 @@ function ExerciseHistoricalChart({ attempts = [], exerciseLabel = "Ejercicio" })
           headerExtra={MetricSelector}
           onClose={() => setIsExpanded(false)}
         >
-          <div className="exercise-history-chart-scroll">
+          <ExerciseHistoryScrollArea className="exercise-history-scroll-modal">
             <div
               className="exercise-history-chart-canvas"
               style={{
@@ -339,7 +401,7 @@ function ExerciseHistoricalChart({ attempts = [], exerciseLabel = "Ejercicio" })
             >
               <Line data={chartData} options={chartOptions} />
             </div>
-          </div>
+          </ExerciseHistoryScrollArea>
         </ChartModal>
       )}
     </section>

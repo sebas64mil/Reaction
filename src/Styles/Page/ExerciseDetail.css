@@ -49,6 +49,10 @@
   background: var(--cyan);
 }
 
+.exercise-detail-lime .exercise-detail-visual {
+  background: #b7cf3f;
+}
+
 .exercise-detail-visual > span {
   position: absolute;
   top: 25px;

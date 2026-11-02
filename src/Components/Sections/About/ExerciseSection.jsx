@@ -61,7 +61,7 @@ function ExerciseSection() {
           name="Control de Dribleo"
           description="Mantén el control del balón, responde a los estímulos y conserva la precisión en movimiento."
           target="Coordinación dinámica"
-          color="visual-cyan"
+          color="visual-lime"
           to="/exercises/control-de-dribleo"
         />
       </div>
