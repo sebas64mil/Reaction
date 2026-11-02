@@ -251,10 +251,8 @@ function ExerciseHistoricalChart({ attempts = [], exerciseLabel = "Ejercicio" })
   };
 
   const MetricSelector = (
-    <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", alignItems: "center" }}>
-      <span className="b-3" style={{ color: "var(--color-process-subtle, #777773)", marginRight: "4px" }}>
-        Métrica:
-      </span>
+    <div className="exercise-metric-selector" role="group" aria-label="Métrica de la gráfica">
+      <span className="exercise-metric-label b-3">Métrica</span>
       {[
         { id: "reaction", label: "Tiempo de reacción", icon: <FiClock /> },
         { id: "hits", label: "Aciertos", icon: <FiCheckSquare /> },
@@ -264,16 +262,11 @@ function ExerciseHistoricalChart({ attempts = [], exerciseLabel = "Ejercicio" })
           key={btn.id}
           type="button"
           onClick={() => setMetric(btn.id)}
-          className={`exercise-filter-tab b-3 ${metric === btn.id ? "is-active" : ""}`}
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "6px",
-            padding: "6px 12px",
-            borderRadius: "4px",
-          }}
+          className={`exercise-metric-tab b-3 ${metric === btn.id ? "is-active" : ""}`}
+          aria-pressed={metric === btn.id}
+          aria-label={btn.label}
         >
-          {btn.icon}
+          <span className="exercise-metric-icon" aria-hidden="true">{btn.icon}</span>
           <span>{btn.label}</span>
         </button>
       ))}
