@@ -97,16 +97,18 @@ function TeamSection() {
         />
 
         <TeamMemberCard
-          initials="SV"
-          name="Sofía Vargas"
-          role="Investigación deportiva"
+          initials="MG"
+          name="Miguel Guerrero"
+          role="Desarrollador vr y Environment Artist"
+          image="src/assets/Img/IMG_1108.PNG"
           href="https://..."
         />
 
         <TeamMemberCard
-          initials="CT"
-          name="Camila Torres"
-          role="Producción audiovisual"
+          initials="JS"
+          name="Juan Sierra"
+          image="src/assets/Img/jdfoto.jpeg"
+          role="Desarrollo Web"
           href="https://..."
         />
       </div>
