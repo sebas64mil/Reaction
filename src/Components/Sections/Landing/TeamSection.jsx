@@ -4,6 +4,12 @@ import { FiArrowUpRight } from "react-icons/fi";
 import TeamMemberCard from "../../Ui/TeamMemberCard.jsx";
 import TextButton from "../../Ui/TextButton.jsx";
 
+// Importamos las imágenes respetando tus rutas actuales
+import sebasPhoto from "../../../assets/Img/SebasPhoto.jpeg";
+import katheFoto from "../../../assets/Img/KatheFoto.jpeg";
+import miguelFoto from "../../../assets/Img/IMG_1108.PNG";
+import juanFoto from "../../../assets/Img/jdfoto.jpeg";
+
 import "../../../Styles/Sections/Landing/TeamSection.css";
 
 function TeamSection() {
@@ -84,7 +90,7 @@ function TeamSection() {
           initials="SV"
           name="Sebastian Villamil"
           role="Desarrollo Web/UX/VR"
-          image="src/assets/Img/SebasPhoto.jpeg"
+          image={sebasPhoto}
           href="https://www.serbew.games"
         />
 
@@ -92,7 +98,7 @@ function TeamSection() {
           initials="KG"
           name="Katherine Guayazan"
           role="Artistas 3D y Diseñadora UI"
-          image="src/assets/Img/KatheFoto.jpeg"
+          image={katheFoto}
           href="https://www.behance.net/swnoswift"
         />
 
@@ -100,14 +106,16 @@ function TeamSection() {
           initials="MG"
           name="Miguel Guerrero"
           role="Desarrollador vr y Environment Artist"
-          image="src/assets/Img/IMG_1108.PNG"
+          image={miguelFoto}
           href="https://www.instagram.com/miguel_guerrero.01?srtk=NjVoamhnZmZua29r"
         />
 
         <TeamMemberCard
           initials="JS"
           name="Juan Sierra"
-          image="src/assets/Img/jdfoto.jpeg"
+          initials="JS"
+          name="Juan Sierra"
+          image={juanFoto}
           role="Desarrollo Web"
           href="https://www.instagram.com/juan_diego2804?exln=cW10NmlwcWZieHJv"
         />
