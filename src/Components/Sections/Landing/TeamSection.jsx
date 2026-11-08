@@ -101,7 +101,7 @@ function TeamSection() {
           name="Miguel Guerrero"
           role="Desarrollador vr y Environment Artist"
           image="src/assets/Img/IMG_1108.PNG"
-          href="https://..."
+          href="https://www.instagram.com/miguel_guerrero.01?srtk=NjVoamhnZmZua29r"
         />
 
         <TeamMemberCard
@@ -109,7 +109,7 @@ function TeamSection() {
           name="Juan Sierra"
           image="src/assets/Img/jdfoto.jpeg"
           role="Desarrollo Web"
-          href="https://..."
+          href="https://www.instagram.com/juan_diego2804?exln=cW10NmlwcWZieHJv"
         />
       </div>
     </section>
