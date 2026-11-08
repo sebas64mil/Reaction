@@ -4,7 +4,7 @@ import { FiArrowUpRight } from "react-icons/fi";
 import TeamMemberCard from "../../Ui/TeamMemberCard.jsx";
 import TextButton from "../../Ui/TextButton.jsx";
 
-// Importamos las imágenes respetando tus rutas actuales
+
 import sebasPhoto from "../../../assets/Img/SebasPhoto.jpeg";
 import katheFoto from "../../../assets/Img/KatheFoto.jpeg";
 import miguelFoto from "../../../assets/Img/IMG_1108.PNG";
@@ -111,8 +111,6 @@ function TeamSection() {
         />
 
         <TeamMemberCard
-          initials="JS"
-          name="Juan Sierra"
           initials="JS"
           name="Juan Sierra"
           image={juanFoto}
