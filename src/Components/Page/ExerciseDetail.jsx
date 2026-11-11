@@ -28,7 +28,7 @@ const exercises = {
     objective: "Decisión bajo presión",
     duration: "5–8 minutos",
     accent: "orange",
-    videoUrl: "https://youtu.be/1ti7Ezxb3Rk",
+    videoUrl: "https://www.youtube.com/watch?v=1ti7Ezxb3Rk",
     description:
       "En este escenario, el jugador debe interpretar varias señales y seleccionar la acción correcta antes de que el tiempo expire. La dificultad aumenta cuando el entorno introduce ruido y desacuerdo entre estímulos.",
     steps: [
@@ -64,7 +64,7 @@ const exercises = {
     objective: "Coordinación dinámica",
     duration: "5–8 minutos",
     accent: "lime",
-    videoUrl: "https://youtu.be/IJ1PsunRPgc",
+    videoUrl: "https://www.youtube.com/watch?v=IJ1PsunRPgc",
     description:
       "Este ejercicio combina control de balón, percepción y respuesta motora. El jugador debe mantener una cadencia estable mientras identifica y responde a los estímulos que aparecen durante la sesión.",
     steps: [
@@ -75,6 +75,20 @@ const exercises = {
     ],
     tip: "Prioriza un ritmo constante. El control del balón permite responder con precisión sin perder fluidez."
   }
+};
+
+// Función auxiliar para extraer el ID de YouTube y armar el link embed automáticamente
+const getYouTubeEmbedUrl = (url) => {
+  if (!url) return "";
+  let videoId = "";
+  
+  if (url.includes("youtu.be/")) {
+    videoId = url.split("youtu.be/")[1]?.split("?")[0];
+  } else if (url.includes("watch?v=")) {
+    videoId = url.split("watch?v=")[1]?.split("&")[0];
+  }
+  
+  return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
 };
 
 function ExerciseDetail() {
@@ -91,6 +105,8 @@ function ExerciseDetail() {
       </section>
     );
   }
+
+  const embedUrl = getYouTubeEmbedUrl(exercise.videoUrl);
 
   return (
     <section className={`exercise-detail-page exercise-detail-${exercise.accent} section-wrap`}>
@@ -145,16 +161,15 @@ function ExerciseDetail() {
           </div>
 
           <div className="exercise-showcase-video-wrap">
-            <video
+            {/* Usamos iframe para reproducir los videos de YouTube correctamente */}
+            <iframe
               className="exercise-showcase-video"
-              controls
-              playsInline
-              preload="metadata"
-              poster="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1200&q=80"
-            >
-              <source src={exercise.videoUrl} type="video/mp4" />
-              Tu navegador no soporta videos HTML5.
-            </video>
+              src={embedUrl}
+              title={exercise.name}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
           </div>
         </div>
       </section>
