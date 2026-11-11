@@ -10,7 +10,7 @@ const exercises = {
     objective: "Percepción periférica",
     duration: "4–6 minutos",
     accent: "coral",
-    videoUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+    videoUrl: "https://youtu.be/yGVHbp0Xqjk",
     description:
       "La reacción periférica es una habilidad esencial en deportes donde la atención debe cubrir un amplio entorno. En este ejercicio, una señal aparece fuera de la línea central de la cancha y el jugador debe responder lo antes posible.",
     steps: [
@@ -28,7 +28,7 @@ const exercises = {
     objective: "Decisión bajo presión",
     duration: "5–8 minutos",
     accent: "orange",
-    videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+    videoUrl: "https://youtu.be/1ti7Ezxb3Rk",
     description:
       "En este escenario, el jugador debe interpretar varias señales y seleccionar la acción correcta antes de que el tiempo expire. La dificultad aumenta cuando el entorno introduce ruido y desacuerdo entre estímulos.",
     steps: [
@@ -46,7 +46,7 @@ const exercises = {
     objective: "Tiempo de respuesta",
     duration: "6–10 minutos",
     accent: "cyan",
-    videoUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm",
+    videoUrl: "https://youtu.be/G-Xs6QaI-Bw",
     description:
       "El jugador debe desplazarse por un espacio virtual para alcanzar una zona de reacción. Cada recorrido exige planificación, percepción y ejecución, convirtiendo el movimiento en un componente central de la medición.",
     steps: [
@@ -64,7 +64,7 @@ const exercises = {
     objective: "Coordinación dinámica",
     duration: "5–8 minutos",
     accent: "lime",
-    videoUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+    videoUrl: "https://youtu.be/IJ1PsunRPgc",
     description:
       "Este ejercicio combina control de balón, percepción y respuesta motora. El jugador debe mantener una cadencia estable mientras identifica y responde a los estímulos que aparecen durante la sesión.",
     steps: [
