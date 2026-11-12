@@ -1,6 +1,7 @@
 import { FiArrowDownRight, FiArrowUpRight } from "react-icons/fi";
 import Button from "../../Ui/Button.jsx";
 import TextButton from "../../Ui/TextButton.jsx";
+import LandingBasketball from "./LandingBasketball.jsx";
 import "../../../Styles/Sections/Landing/LandingHero.css";
 
 function LandingHero() {
@@ -27,19 +28,15 @@ function LandingHero() {
       </div>
       <div
         className="hero-art"
-        aria-label="Visualizacion abstracta de una cancha de baloncesto en realidad virtual"
+        aria-label="Balon de baloncesto 3D girando"
       >
-        <div className="art-grid" />
-        <div className="art-ring art-ring-large" />
-        <div className="art-ring art-ring-small" />
-        <span className="art-cross">+</span>
+        <LandingBasketball />
         <span className="art-label art-label-top">VISUAL / 01</span>
         <span className="art-label art-label-bottom">
           REACTION
           <br />
           PROTOCOL
         </span>
-        <div className="art-ball" />
       </div>
     </section>
   );
