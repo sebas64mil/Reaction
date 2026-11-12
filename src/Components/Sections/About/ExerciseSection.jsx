@@ -35,7 +35,7 @@ function ExerciseSection() {
         <ExerciseCard
           number="1"
           name="Sigue la Luz"
-          description="Identifica el estímulo que aparece fuera de tu foco central y responde con velocidad."
+          description="Toca la luz indicada antes de que se agote el tiempo; los estímulos aparecen en distintas direcciones."
           target="Percepción periférica"
           color="visual-coral"
           to="/exercises/luz-periferica"
@@ -43,7 +43,7 @@ function ExerciseSection() {
         <ExerciseCard
           number="2"
           name="Captura Selectiva"
-          description="Elige el objetivo correcto cuando las señales visuales y sonoras compiten entre sí."
+          description="Decide qué balones atrapar y cuáles dejar pasar según la máquina que los lanza."
           target="Decisión bajo presión"
           color="visual-orange"
           to="/exercises/pase-de-decision"
@@ -51,7 +51,7 @@ function ExerciseSection() {
         <ExerciseCard
           number="3"
           name="Alcance Reactivo"
-          description="Muévete dentro de la cancha virtual y encuentra la ruta más rápida hacia la señal."
+          description="Alcanza los balones que señala el entrenador virtual antes de que vuelvan a su posición."
           target="Tiempo de respuesta"
           color="visual-cyan"
           to="/exercises/zona-de-reaccion"
@@ -59,7 +59,7 @@ function ExerciseSection() {
         <ExerciseCard
           number="4"
           name="Control de Dribleo"
-          description="Mantén el control del balón, responde a los estímulos y conserva la precisión en movimiento."
+          description="Dribla cambiando de mano y dirige el balón a las placas indicadas; activa unas y evita otras."
           target="Coordinación dinámica"
           color="visual-lime"
           to="/exercises/control-de-dribleo"

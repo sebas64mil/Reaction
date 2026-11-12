@@ -29,6 +29,7 @@
 
 .reactive-exercise-info {
   display: grid;
+  min-width: 0;
   gap: 28px;
   padding: 8px 0 70px;
 }
@@ -36,6 +37,7 @@
 .reactive-description {
   display: grid;
   grid-template-columns: 1fr 0.8fr;
+  min-width: 0;
   align-items: center;
   gap: clamp(28px, 6vw, 80px);
   padding: clamp(26px, 5vw, 58px);
@@ -53,6 +55,12 @@
   color: var(--orange);
 }
 
+.reactive-description-copy,
+.reactive-levels,
+.reactive-levels-scroll {
+  min-width: 0;
+}
+
 .reactive-description-copy h2,
 .reactive-levels h2 {
   margin: 0 0 22px;
@@ -68,6 +76,8 @@
 
 .reactive-demo-frame {
   aspect-ratio: 16 / 10;
+  width: 100%;
+  min-width: 0;
   min-height: 210px;
   overflow: hidden;
   background: #0a0a0a;
@@ -81,6 +91,7 @@
 }
 
 .reactive-levels {
+  min-width: 0;
   padding: clamp(24px, 4vw, 46px);
   color: #f4f1e9;
   background-color: #21180d;
@@ -92,6 +103,8 @@
 
 .reactive-levels-scroll {
   overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .reactive-levels table {
@@ -407,5 +420,29 @@
   .exercise-protocol,
   .exercise-tip {
     padding: 25px;
+  }
+
+  .reactive-exercise-info {
+    gap: 16px;
+    padding-bottom: 48px;
+  }
+
+  .reactive-description {
+    gap: 20px;
+    padding: 24px 18px;
+  }
+
+  .reactive-demo-frame {
+    min-height: 0;
+  }
+
+  .reactive-levels {
+    padding: 24px 18px;
+  }
+
+  .reactive-levels th,
+  .reactive-levels td {
+    padding: 15px 12px;
+    font-size: 13px;
   }
 }
