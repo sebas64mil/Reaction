@@ -29,61 +29,57 @@
 
 ## 🎯 1. Planteamiento de la Tesis
 
-En el baloncesto formativo y competitivo, la capacidad de procesar estímulos visuales y reaccionar en milésimas de segundo es fundamental para el rendimiento técnico (desmarques, pases bajo presión y transiciones defensivas). Los métodos analógicos tradicionales carecen de estandarización y no permiten medir con precisión milimétrica la evolución motriz del atleta.
+En el baloncesto competitivo, la capacidad de procesar estímulos visuales y reaccionar en milésimas de segundo define la efectividad motriz. Los métodos analógicos tradicionales carecen de estandarización reproducible y dificultan el registro milimétrico de datos.
 
 **Reaction Hoops** integra una experiencia inmersiva con visores **Meta Quest 3** y un **Dashboard Web de Telemetría** para:
-- Estandarizar pruebas perceptivo-motrices bajo condiciones de laboratorio idénticas.
+- Estandarizar pruebas perceptivo-motrices bajo condiciones de laboratorio controladas.
 - Capturar tiempos de reacción en milisegundos y porcentajes de precisión.
 - Proporcionar a entrenadores y evaluadores curvas de aprendizaje objetivas y comparativas entre jugadores universitarios.
 
 ---
 
-## 📐 2. Arquitectura del Ecosistema (Diagrama Interactivo)
+## 📐 2. Arquitectura del Ecosistema
 
-El ecosistema opera mediante una arquitectura desacoplada conectada a través de la nube:
-
-`mermaid
+```mermaid
 flowchart TD
     subgraph VR ["🥽 Entorno Virtual (Meta Quest 3)"]
         Unity["Unity 3D Engine (C#)"]
         Track["Tracking 6DoF de Cabeza y Mandos"]
-        Pruebas["Protocolos de Evaluación: Luces, Pases, Dribble y Movilidad"]
+        Pruebas["Protocolos: Luces, Pases, Dribble y Movilidad"]
         Unity --> Track --> Pruebas
     end
 
-    subgraph Cloud ["☁️ Cloud Backend (Firebase / Google Cloud)"]
+    subgraph Cloud ["☁️ Cloud Backend (Google Cloud / Firebase)"]
         Firestore[("Cloud Firestore")]
-        ColPlayers["Colección /players (Perfiles de Atletas)"]
-        ColSessions["Colección /sessions (Tiempos de Reacción en ms)"]
+        ColPlayers["Colección: /players"]
+        ColSessions["Colección: /sessions"]
         Firestore --- ColPlayers
         Firestore --- ColSessions
     end
 
-    subgraph WebApp ["💻 Plataforma Web de Analítica (React 19 + Vite)"]
+    subgraph WebApp ["💻 Plataforma Web (React 19 + Vite)"]
         Service["Modules/firebase.service.js"]
         Dashboard["Dashboard Principal (Dashboard.jsx)"]
         Charts["Módulos Estadísticos (Chart.js)"]
-        ThreeModel["Visor 3D Interactivo (Three.js)"]
+        ThreeModel["Visor 3D (Three.js)"]
         
         Service --> Dashboard
         Dashboard --> Charts
     end
 
-    Pruebas == 1. Registro de telemetría por sesión ==> Firestore
-    Firestore == 2. Sincronización en tiempo real ==> Service
-`
+    Pruebas -->|"Telemetría (ms y aciertos)"| Firestore
+    Firestore -->|"Sincronización en tiempo real"| Service
+```
 
 ---
 
 ## 🔄 3. Comunicación entre Componentes Web
 
-El flujo interno de datos en la aplicación web desacopla la obtención de datos de su representación gráfica:
-
-`mermaid
+```mermaid
 flowchart LR
     subgraph DataLayer ["Capa de Datos"]
         DB[("Cloud Firestore")]
-        FService["FirestoreService (Modules)"]
+        FService["FirestoreService"]
         DB <--> FService
     end
 
@@ -93,11 +89,11 @@ flowchart LR
     end
 
     subgraph Visualizers ["Capa de Gráficos (Chart.js)"]
-        L["LightsCharts.jsx (Tiempos de Reacción en ms)"]
-        P["PassesCharts.jsx (Precisión y Decisiones)"]
+        L["LightsCharts.jsx (Luces en ms)"]
+        P["PassesCharts.jsx (Precisión de Pases)"]
         D["DribbleCharts.jsx (Control de Balón)"]
         M["MovementCharts.jsx (Agilidad Lateral)"]
-        H["ExerciseHistoricalChart.jsx (Curva de Progreso)"]
+        H["ExerciseHistoricalChart.jsx (Curva Temporal)"]
     end
 
     Dash --> L
@@ -105,37 +101,54 @@ flowchart LR
     Dash --> D
     Dash --> M
     Dash --> H
-`
+```
 
-- **FirestoreService**: Centraliza todas las consultas asíncronas hacia Firestore, abstrayendo a los componentes de UI de la lógica de red y autenticación.
-- **Dashboard.jsx**: Administra el estado reactivo (selectedPlayer, sessionList, ctiveExercise) y orquesta el filtrado temporal por rondas.
+- **`FirestoreService`**: Centraliza todas las consultas asíncronas hacia Firestore, abstrayendo a los componentes de UI de la lógica de red y autenticación.
+- **`Dashboard.jsx`**: Administra el estado reactivo (`selectedPlayer`, `sessionList`, `activeExercise`) y orquesta el filtrado temporal por rondas.
 - **Módulos de Gráficos**: Componentes atómicos especializados que transforman las métricas en diagramas de radar, barras, dispersión y líneas continuas.
-- **LandingBasketball.jsx**: Componente 3D autónomo basado en **Three.js** que carga y renderiza interactivamente el modelo asketball.glb.
+- **`LandingBasketball.jsx`**: Componente 3D autónomo basado en **Three.js** que carga y renderiza interactivamente el modelo `basketball.glb`.
 
 ---
 
 ## 🔬 4. Dimensiones Evaluadas en el Entorno VR
 
-`mermaid
-mindmap
-  root((Reaction Hoops VR))
-    Luces de Reacción
-      Estímulos perimétricos aleatorios
-      Medición en milisegundos (ms)
-      Atención dividida
-    Sistema de Pases
-      Identificación de receptores libres
-      Cálculo de trayectoria y velocidad
-      Precisión en toma de decisiones
-    Control y Dribble
-      Cadencia de bote
-      Resistencia a distractores visuales
-      Coordinación ojo-mano
-    Movilidad y Agilidad
-      Desplazamientos laterales
-      Cambios de dirección rápidos
-      Coordinación espacial 6DoF
-`
+```mermaid
+flowchart TD
+    Root["🏀 Dimensiones Evaluadas en Reaction Hoops"]
+
+    subgraph Dim1 ["1. Luces de Reacción"]
+        L1["Estímulos perimétricos aleatorios"]
+        L2["Medición de tiempo de respuesta (ms)"]
+        L3["Atención dividida bajo presión"]
+        L1 --- L2 --- L3
+    end
+
+    subgraph Dim2 ["2. Sistema de Pases"]
+        P1["Identificación de receptores dinámicos"]
+        P2["Cálculo de trayectoria y fuerza"]
+        P3["Precisión y toma de decisiones"]
+        P1 --- P2 --- P3
+    end
+
+    subgraph Dim3 ["3. Control de Balón (Dribble)"]
+        D1["Cadencia y consistencia de bote"]
+        D2["Resistencia a distractores visuales"]
+        D3["Coordinación ojo-mano"]
+        D1 --- D2 --- D3
+    end
+
+    subgraph Dim4 ["4. Movilidad y Agilidad"]
+        M1["Desplazamientos defensivos laterales"]
+        M2["Cambios rápidos de dirección"]
+        M3["Coordinación espacial con tracking 6DoF"]
+        M1 --- M2 --- M3
+    end
+
+    Root --> Dim1
+    Root --> Dim2
+    Root --> Dim3
+    Root --> Dim4
+```
 
 ---
 
@@ -144,7 +157,7 @@ mindmap
 <details>
 <summary><b>Haz clic aquí para desplegar la estructura de carpetas</b></summary>
 
-`	ext
+```text
 Reaction/
 ├── Modules/                         # Servicios de integración
 │   ├── firebase_init.js            # Inicialización de Firebase con variables de entorno
@@ -179,7 +192,7 @@ Reaction/
 ├── package.json                     # Dependencias del proyecto
 ├── vite.config.js                   # Configuración del bundler Vite
 └── README.md                        # Documentación principal
-`
+```
 
 </details>
 
@@ -188,31 +201,31 @@ Reaction/
 ## 🚀 6. Instalación y Ejecución Local
 
 1. **Clonar el repositorio**:
-   `ash
+   ```bash
    git clone https://github.com/sebas64mil/Reaction.git
    cd Reaction
-   `
+   ```
 
 2. **Instalar dependencias**:
-   `ash
+   ```bash
    npm install
-   `
+   ```
 
 3. **Configurar variables de entorno**:
-   `ash
+   ```bash
    cp .env.example .env
-   `
-   *Configura tus credenciales de Firebase en .env (el archivo está protegido por .gitignore y no se subirá a Git).*
+   ```
+   *Configura tus credenciales de Firebase en `.env` (el archivo está protegido por `.gitignore` y no se subirá a Git).*
 
 4. **Ejecutar en desarrollo**:
-   `ash
+   ```bash
    npm run dev
-   `
+   ```
 
 5. **Compilar para producción**:
-   `ash
+   ```bash
    npm run build
-   `
+   ```
 
 ---
 
