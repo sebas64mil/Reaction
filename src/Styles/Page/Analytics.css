@@ -1,0 +1,105 @@
+﻿.analytics-page {
+  padding-top: 100px;
+  padding-bottom: 140px;
+  min-height: calc(100vh - 150px);
+}
+
+.analytics-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.analytics-page h1 {
+  margin: 25px 0 22px;
+}
+
+/* Controls */
+.analytics-controls {
+  margin-bottom: 16px;
+}
+
+.controls-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.control-label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.control-label span {
+  color: var(--color-process-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.control-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-process-muted);
+  padding: 10px 0;
+}
+
+.control-error {
+  color: var(--color-primary-500);
+  padding: 10px 0;
+}
+
+.control-hint {
+  margin-top: 14px;
+  color: var(--color-process-subtle);
+}
+
+/* Charts section */
+.analytics-charts {
+  min-height: 200px;
+}
+
+.analytics-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 40px 0;
+  color: var(--color-process-subtle);
+}
+
+.analytics-error {
+  padding: 20px 0;
+  color: var(--color-primary-600);
+}
+
+/* Spin animation */
+.spin-icon {
+  animation: spin 1.2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 760px) {
+  .analytics-page {
+    padding-top: 70px;
+    padding-bottom: 90px;
+  }
+
+  .analytics-top {
+    display: block;
+  }
+
+  .controls-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .coming-badge {
+    width: fit-content;
+    margin-top: 25px;
+  }
+}

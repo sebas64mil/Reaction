@@ -1,0 +1,290 @@
+@font-face {
+   font-family: "College";
+   src: url("../assets/Fonts/college.ttf") format("truetype");
+   font-style: normal;
+   font-weight: 400;
+   font-display: swap;
+}
+
+:root {
+   --font-heading: "College", sans-serif;
+   --font-body: "Electrolize", sans-serif;
+   --font-label: 14px "Electrolize", sans-serif;
+   --font-meta: 10px "Electrolize", sans-serif;
+   --font-caption: 12px "Electrolize", sans-serif;
+
+   --color-surface-paper: #f5f4ef;
+   --color-surface-line: #d9d8d1;
+   --color-surface-card: #e9e8e1;
+   --color-surface-card-line: #cccac0;
+   --color-surface-placeholder: #eeede7;
+   --color-art-grid: #787878;
+   --color-art-glow: #27e9e744;
+   --color-process-line: #3d3d3a;
+   --color-process-subtle: #777773;
+   --color-process-muted: #92928e;
+   --color-process-copy: #a5a5a2;
+   --gradient-team-card: linear-gradient(
+      to top,
+      rgba(6, 6, 6, 0.96) 0%,
+      rgba(6, 6, 6, 0.72) 32%,
+      rgba(6, 6, 6, 0) 78%
+   );
+
+   /* ---------- Typography ---------- */
+
+   --font-size-h1: clamp(64px, 9vw, 124px);
+   --font-size-h2: clamp(36px, 4.5vw, 58px);
+   --font-size-h3: 32px;
+   --font-size-h4: 24px;
+   --font-size-h5: 20px;
+   --font-size-h6: 16px;
+
+   --line-height-h1: 0.90;
+   --line-height-h2: 0.98;
+   --line-height-h3: 1;
+   --line-height-h4: 1.1;
+   --line-height-h5: 1.2;
+   --line-height-h6: 1.3;
+
+   --letter-spacing-h1: -0.085em;
+   --letter-spacing-h2: -0.07em;
+   --letter-spacing-h3: -0.05em;
+   --letter-spacing-h4: -0.03em;
+   --letter-spacing-h5: 0;
+   --letter-spacing-h6: 0;
+
+   --font-size-b1: 16px;
+   --font-size-b2: 14px;
+   --font-size-b3: 12px;
+
+   --line-height-b1: 1.65;
+   --line-height-b2: 1.55;
+   --line-height-b3: 1.4;
+
+   --letter-spacing-b1: 0;
+   --letter-spacing-b2: 0;
+   --letter-spacing-b3: 0;
+
+  /* ========================================
+     COLORS
+     ======================================== */
+
+  /* ---------- Primary ---------- */
+
+  --color-primary-100: #ffd2cf;
+  --color-primary-200: #ffa59e;
+  --color-primary-300: #ff796e;
+  --color-primary-400: #ff4c3d;
+  --color-primary-500: #ff1f0d;
+  --color-primary-600: #e41100;
+  --color-primary-700: #bb0e00;
+  --color-primary-800: #930b00;
+  --color-primary-900: #6a0800;
+
+  --color-primary-alpha-10: #ff1f0d1a;
+  --color-primary-alpha-50: #ff1f0d80;
+
+  /* ---------- Secondary ---------- */
+
+  --color-secondary-100: #ffe8cc;
+  --color-secondary-200: #ffd199;
+  --color-secondary-300: #ffba67;
+  --color-secondary-400: #ffa334;
+  --color-secondary-500: #ff8c01;
+  --color-secondary-600: #da7700;
+  --color-secondary-700: #b36200;
+  --color-secondary-800: #8d4d00;
+  --color-secondary-900: #663800;
+
+  --color-secondary-alpha-10: #ff8c011a;
+  --color-secondary-alpha-50: #ff8c0180;
+
+  /* ---------- Neutral ---------- */
+
+  --color-neutral-100: #eaeaea;
+  --color-neutral-200: #cdcdcd;
+  --color-neutral-300: #b1b1b1;
+  --color-neutral-400: #949494;
+  --color-neutral-500: #787878;
+  --color-neutral-600: #5b5b5b;
+  --color-neutral-700: #3f3f3f;
+  --color-neutral-800: #222222;
+  --color-neutral-900: #060606;
+
+  --color-neutral-alpha-10: #0606061a;
+
+  /* ---------- Tertiary ---------- */
+
+  --color-tertiary-100: #a8f6f5;
+  --color-tertiary-200: #7df2f0;
+  --color-tertiary-300: #52edec;
+  --color-tertiary-400: #27e9e7;
+  --color-tertiary-500: #15cbc9;
+  --color-tertiary-600: #109f9e;
+  --color-tertiary-700: #0c7473;
+  --color-tertiary-800: #095554;
+  --color-tertiary-900: #063636;
+
+  --color-tertiary-alpha-10: #0c74731a;
+  --color-tertiary-alpha-50: #0c747380;
+
+  /* ---------- Red ---------- */
+
+  --color-red-100: #fb3748;
+  --color-red-200: #d00416;
+
+  --color-red-alpha-10: #fb37481a;
+
+  /* ---------- Yellow ---------- */
+
+  --color-yellow-100: #ffdb43;
+  --color-yellow-200: #dfb400;
+
+  --color-yellow-alpha-10: #ffdb431a;
+
+  /* ---------- Green ---------- */
+
+  --color-green-100: #84ebb4;
+  --color-green-200: #1fc16b;
+
+  --color-green-alpha-10: #1fc16b1a;
+
+  /* ========================================
+     RADIUS
+     ======================================== */
+
+  --radius-none: 0px;
+  --radius-2xs: 2px;
+  --radius-xs: 4px;
+  --radius-s: 6px;
+  --radius-m: 8px;
+  --radius-l: 10px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 20px;
+  --radius-4xl: 24px;
+  --radius-5xl: 28px;
+  --radius-6xl: 32px;
+  --radius-7xl: 36px;
+  --radius-8xl: 40px;
+  --radius-full: 999px;
+
+  /* ========================================
+     STROKE
+     ======================================== */
+
+  --stroke-s: 1px;
+  --stroke-m: 2px;
+  --stroke-l: 4px;
+  --stroke-xl: 6px;
+  --stroke-2xl: 8px;
+  --stroke-3xl: 10px;
+
+  /* ========================================
+     SPACING
+     ======================================== */
+
+  --spacing-3xs: 2px;
+  --spacing-2xs: 4px;
+  --spacing-xs: 8px;
+  --spacing-s: 12px;
+  --spacing-m: 16px;
+  --spacing-l: 20px;
+  --spacing-xl: 24px;
+  --spacing-2xl: 32px;
+  --spacing-3xl: 40px;
+  --spacing-4xl: 48px;
+  --spacing-5xl: 56px;
+  --spacing-6xl: 64px;
+  --spacing-7xl: 72px;
+  --spacing-8xl: 80px;
+  --spacing-9xl: 96px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+   margin: 0;
+   color: inherit;
+   font-family: var(--font-heading);
+   font-weight: 400;
+}
+
+.h-1,
+.h-2,
+.h-3,
+.h-4,
+.h-5,
+.h-6 {
+   margin: 0;
+   color: inherit;
+   font-family: var(--font-heading);
+   font-weight: 400;
+}
+
+.h-1 {
+   font-size: var(--font-size-h1);
+   line-height: var(--line-height-h1);
+   letter-spacing: var(--letter-spacing-h1);
+}
+
+.h-2 {
+   font-size: var(--font-size-h2);
+   line-height: var(--line-height-h2);
+   letter-spacing: var(--letter-spacing-h2);
+}
+
+.h-3 {
+   font-size: var(--font-size-h3);
+   line-height: var(--line-height-h3);
+   letter-spacing: var(--letter-spacing-h3);
+}
+
+.h-4 {
+   font-size: var(--font-size-h4);
+   line-height: var(--line-height-h4);
+   letter-spacing: var(--letter-spacing-h4);
+}
+
+.h-5 {
+   font-size: var(--font-size-h5);
+   line-height: var(--line-height-h5);
+   letter-spacing: var(--letter-spacing-h5);
+}
+
+.h-6 {
+   font-size: var(--font-size-h6);
+   line-height: var(--line-height-h6);
+   letter-spacing: var(--letter-spacing-h6);
+}
+
+.b-1,
+.b-2,
+.b-3 {
+   margin: 0;
+   color: inherit;
+   font-family: var(--font-body);
+   font-weight: 400;
+}
+
+.b-1 {
+   font-size: var(--font-size-b1);
+   line-height: var(--line-height-b1);
+   letter-spacing: var(--letter-spacing-b1);
+}
+
+.b-2 {
+   font-size: var(--font-size-b2);
+   line-height: var(--line-height-b2);
+   letter-spacing: var(--letter-spacing-b2);
+}
+
+.b-3 {
+   font-size: var(--font-size-b3);
+   line-height: var(--line-height-b3);
+   letter-spacing: var(--letter-spacing-b3);
+}

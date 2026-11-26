@@ -1,0 +1,122 @@
+@import "./SystemDesign.css";
+
+:root {
+  --ink: var(--color-neutral-900);
+  --paper: var(--color-surface-paper);
+  --muted: var(--color-neutral-600);
+  --line: var(--color-surface-line);
+  --orange: var(--color-secondary-500);
+  --red: var(--color-primary-500);
+  --cyan: var(--color-tertiary-400);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: var(--font-body);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+main {
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+.page {
+  overflow: hidden;
+}
+
+.section-wrap {
+  width: min(1180px, calc(100% - 64px));
+  margin: 0 auto;
+}
+
+.kicker,
+.eyebrow {
+  color: var(--muted);
+  font: var(--font-label);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.kicker {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+}
+
+.live-dot,
+.pulse-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 0 4px var(--color-primary-alpha-10);
+}
+
+h1 em,
+h2 em {
+  color: var(--red);
+  font-style: normal;
+}
+
+.section-intro h2,
+.section-heading h2,
+.team-section h2,
+.cta-section h2,
+.session-section h2 {
+  margin: 14px 0 0;
+}
+
+.section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 50px;
+  margin-bottom: 55px;
+}
+
+.section-heading > p {
+  max-width: 340px;
+  color: var(--color-process-copy);
+  line-height: 1.65;
+  font-size: 14px;
+}
+
+@media (max-width: 900px) {
+  .section-wrap {
+    width: min(100% - 40px, 760px);
+  }
+}
+
+@media (max-width: 760px) {
+  .section-wrap {
+    width: min(100% - 24px, 560px);
+  }
+
+  .section-heading {
+    display: block;
+    margin-bottom: 38px;
+  }
+
+  .section-heading > p {
+    margin-top: 25px;
+  }
+}

@@ -1,0 +1,47 @@
+﻿.coming-soon-chart {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 40px 0 20px;
+  max-width: 600px;
+}
+
+.coming-soon-mark {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border: 1px solid var(--color-surface-line);
+  background: var(--color-surface-card);
+}
+
+.coming-soon-symbol {
+  font: var(--font-label);
+  color: var(--color-process-muted);
+  letter-spacing: 0;
+}
+
+.coming-soon-chart h3 {
+  color: var(--color-neutral-800);
+}
+
+.coming-soon-chart p {
+  color: var(--color-process-subtle);
+}
+
+.coming-soon-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.coming-soon-pill {
+  padding: 5px 10px;
+  border: 1px solid var(--color-surface-line);
+  color: var(--color-process-muted);
+  font: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}

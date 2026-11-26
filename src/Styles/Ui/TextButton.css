@@ -1,0 +1,48 @@
+.text-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.text-button-primary {
+  color: var(--red);
+}
+
+.text-button-secondary {
+  color: var(--ink);
+}
+
+.text-button:hover {
+  color: var(--color-primary-600);
+}
+
+.text-button:active {
+  transform: translateY(2px);
+  transition-delay: 80ms;
+}
+
+.text-button-underline {
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 4px;
+}
+
+.text-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.text-button svg {
+  font-size: 15px;
+}

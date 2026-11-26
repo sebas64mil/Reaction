@@ -1,0 +1,123 @@
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-s);
+
+  padding: var(--spacing-s) var(--spacing-m);
+
+  border: var(--stroke-m) solid transparent;
+  border-radius: var(--radius-xs);
+
+  text-decoration: none;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+  position: relative;
+
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 100ms ease;
+}
+
+/* ========================================
+   PRIMARY
+   ======================================== */
+
+.button-primary {
+  color: var(--color-neutral-100);
+
+  background: linear-gradient(
+    to bottom,
+    var(--color-primary-400),
+    var(--color-primary-600)
+  );
+
+  border-color: var(--color-primary-700);
+
+
+}
+
+.button-primary:hover {
+  background: linear-gradient(
+    to bottom,
+    var(--color-primary-600),
+    var(--color-primary-400)
+  );
+
+  border-color: var(--color-primary-600);
+}
+
+.button-primary:active {
+  background: linear-gradient(
+    to bottom,
+    var(--color-primary-600),
+    var(--color-primary-400)
+  );
+
+  border-color: var(--color-primary-700);
+
+  transform: scale(0.94);
+
+  box-shadow:
+    0 2px 0 var(--color-primary-alpha-50);
+
+  transition-duration: 80ms;
+}
+
+/* ========================================
+   SECONDARY
+   ======================================== */
+
+.button-secondary {
+  color: var(--color-neutral-100);
+
+  background: linear-gradient(
+    to bottom,
+    var(--color-neutral-700),
+    var(--color-neutral-900)
+  );
+
+  border-color: var(--color-neutral-800);
+
+}
+
+.button-secondary:hover {
+  background: linear-gradient(
+    to bottom,
+    var(--color-neutral-900),
+    var(--color-neutral-700)
+  );
+
+  border-color: var(--color-neutral-700);
+
+}
+
+.button-secondary:active {
+  background: linear-gradient(
+    to bottom,
+    var(--color-neutral-900),
+    var(--color-neutral-700)
+  );
+
+  border-color: var(--color-neutral-800);
+
+  transform: scale(0.94);
+
+  transition-duration: 80ms;
+}
+
+/* ========================================
+   DISABLED
+   ======================================== */
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  pointer-events: none;
+}

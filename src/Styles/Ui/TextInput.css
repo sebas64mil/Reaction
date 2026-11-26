@@ -1,0 +1,31 @@
+.text-input {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+}
+
+.text-input span {
+  text-transform: uppercase;
+}
+
+.text-input input,
+.exercise-select {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xs);
+  color: var(--ink);
+  background: var(--color-surface-paper);
+  font: var(--font-body);
+  outline: none;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.text-input input:focus,
+.exercise-select:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px var(--color-secondary-alpha-10);
+}
