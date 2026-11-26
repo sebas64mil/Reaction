@@ -1,14 +1,24 @@
 ﻿# 🏀 Reaction Hoops — Plataforma Web & Analítica VR
 
-> **Proyecto de Grado / Tesis de Grado**  
+<p align="center">
+  <img src="https://img.shields.io/badge/React-19.2-61DAFB?logo=react&logoColor=black&style=for-the-badge" alt="React 19" />
+  <img src="https://img.shields.io/badge/Vite-8.3-646CFF?logo=vite&logoColor=white&style=for-the-badge" alt="Vite 8" />
+  <img src="https://img.shields.io/badge/Firebase-Firestore-FFCA28?logo=firebase&logoColor=black&style=for-the-badge" alt="Firebase Firestore" />
+  <img src="https://img.shields.io/badge/Unity-VR_Engine-black?logo=unity&logoColor=white&style=for-the-badge" alt="Unity" />
+  <img src="https://img.shields.io/badge/Meta_Quest_3-Immersive-0082FB?logo=meta&logoColor=white&style=for-the-badge" alt="Meta Quest 3" />
+  <img src="https://img.shields.io/badge/Chart.js-Visualizations-FF6384?logo=chartdotjs&logoColor=white&style=for-the-badge" alt="Chart.js" />
+  <img src="https://img.shields.io/badge/Three.js-3D_Viewport-black?logo=threedotjs&logoColor=white&style=for-the-badge" alt="Three.js" />
+</p>
+
+> **Proyecto de Grado / Trabajo de Tesis**  
 > **Universidad de San Buenaventura - Sede Bogotá**  
-> **Objetivo de Investigación**: Evaluación y mejora de la capacidad de reacción en jugadores universitarios de baloncesto mediante una experiencia inmersiva en Realidad Virtual con **Meta Quest 3**.
+> **Línea de Investigación**: Evaluación y optimización de la velocidad de reacción y toma de decisiones en deportistas universitarios de baloncesto mediante entornos virtuales inmersivos con **Meta Quest 3**.
 
 ---
 
-## 👥 Integrantes del Proyecto
+## 👥 Equipo de Investigación y Desarrollo
 
-| Nombre | Rol en el Proyecto | Perfil / Portafolio |
+| Integrante | Rol Principal | Enlace Profesional |
 | :--- | :--- | :--- |
 | **Sebastian Villamil** | Desarrollo Web / UX / VR | [serbew.games](https://www.serbew.games) |
 | **Katherine Guayazan** | Artista 3D y Diseñadora UI | [Behance](https://www.behance.net/swnoswift) |
@@ -17,117 +27,161 @@
 
 ---
 
-## 🎯 1. Planteamiento y Propósito de la Tesis
+## 🎯 1. Planteamiento de la Tesis
 
-En el baloncesto competitivo, fracciones de segundo determinan la efectividad de un pase, un desmarque o una intercepción defensiva. Tradicionalmente, la velocidad de reacción y la toma de decisiones se entrenan mediante métodos analógicos (conos, silbatos, luces físicas) que son difíciles de estandarizar y cuantificar de forma objetiva.
+En el baloncesto formativo y competitivo, la capacidad de procesar estímulos visuales y reaccionar en milésimas de segundo es fundamental para el rendimiento técnico (desmarques, pases bajo presión y transiciones defensivas). Los métodos analógicos tradicionales carecen de estandarización y no permiten medir con precisión milimétrica la evolución motriz del atleta.
 
-### La Solución: Reaction Hoops
-Este proyecto de tesis propone una **herramienta tecnológica integral** compuesta por:
-
-1. **Entorno VR Calibrado (Meta Quest 3 + Unity)**: Los jugadores universitarios se sumergen en una cancha virtual donde ejecutan protocolos estandarizados de estímulo-respuesta con demandas visuales, auditivas y motrices reales.
-2. **Plataforma Web de Analítica (Esta Aplicación)**: Captura la telemetría de cada sesión en la nube para que entrenadores, preparadores físicos y evaluadores puedan analizar métricas objetivas (tiempos de respuesta en milisegundos, precisión de pases, control de bote y cadencia).
+**Reaction Hoops** integra una experiencia inmersiva con visores **Meta Quest 3** y un **Dashboard Web de Telemetría** para:
+- Estandarizar pruebas perceptivo-motrices bajo condiciones de laboratorio idénticas.
+- Capturar tiempos de reacción en milisegundos y porcentajes de precisión.
+- Proporcionar a entrenadores y evaluadores curvas de aprendizaje objetivas y comparativas entre jugadores universitarios.
 
 ---
 
-## ⚙️ 2. Arquitectura del Sistema y Flujo de Datos
+## 📐 2. Arquitectura del Ecosistema (Diagrama Interactivo)
 
-`	ext
- ┌────────────────────────────────────────────────────────┐
- │            VISOR VR: META QUEST 3                      │
- │  - Motor: Unity 3D (C#)                                │
- │  - Tracking 6DoF de cabeza y mandos Touch Plus         │
- │  - Protocolos de prueba: Luces, Pases, Dribble y Mov.  │
- └──────────────────────────┬─────────────────────────────┘
-                            │
-                            │  1. Telemetría por sesión (ms, aciertos, fallos)
-                            ▼
- ┌────────────────────────────────────────────────────────┐
- │           BASE DE DATOS: CLOUD FIRESTORE               │
- │  - Colección /players: Identidad y código universitario│
- │  - Colección /sessions: Historial de rondas evaluadas  │
- │  - Colección /exercises: Catálogo de pruebas           │
- └──────────────────────────┬─────────────────────────────┘
-                            │
-                            │  2. Sincronización en tiempo real (SDK v12)
-                            ▼
- ┌────────────────────────────────────────────────────────┐
- │          PLATAFORMA WEB: REACTION HOOPS               │
- │  - Frontend: React 19 + Vite                           │
- │  - Render 3D: Three.js (Landing Page)                  │
- │  - Analítica: Chart.js (Curvas de aprendizaje)         │
- └────────────────────────────────────────────────────────┘
+El ecosistema opera mediante una arquitectura desacoplada conectada a través de la nube:
+
+`mermaid
+flowchart TD
+    subgraph VR ["🥽 Entorno Virtual (Meta Quest 3)"]
+        Unity["Unity 3D Engine (C#)"]
+        Track["Tracking 6DoF de Cabeza y Mandos"]
+        Pruebas["Protocolos de Evaluación: Luces, Pases, Dribble y Movilidad"]
+        Unity --> Track --> Pruebas
+    end
+
+    subgraph Cloud ["☁️ Cloud Backend (Firebase / Google Cloud)"]
+        Firestore[("Cloud Firestore")]
+        ColPlayers["Colección /players (Perfiles de Atletas)"]
+        ColSessions["Colección /sessions (Tiempos de Reacción en ms)"]
+        Firestore --- ColPlayers
+        Firestore --- ColSessions
+    end
+
+    subgraph WebApp ["💻 Plataforma Web de Analítica (React 19 + Vite)"]
+        Service["Modules/firebase.service.js"]
+        Dashboard["Dashboard Principal (Dashboard.jsx)"]
+        Charts["Módulos Estadísticos (Chart.js)"]
+        ThreeModel["Visor 3D Interactivo (Three.js)"]
+        
+        Service --> Dashboard
+        Dashboard --> Charts
+    end
+
+    Pruebas == 1. Registro de telemetría por sesión ==> Firestore
+    Firestore == 2. Sincronización en tiempo real ==> Service
 `
 
-### Comunicación entre Componentes Web
-- **Modules/firebase.service.js**: Actúa como la capa de abstracción de datos. Expone la clase FirestoreService que centraliza las consultas asíncronas de atletas y sesiones hacia Firestore.
-- **src/Components/Page/Dashboard.jsx**: Es el componente contenedor de analítica. Gestiona el estado reactivo (selectedPlayer, ctiveExercise, sessionList), filtrando los datos del atleta y delegando la renderización visual a los módulos de gráficos.
-- **src/Components/Graficos/**: Subcomponentes modulares especializados (MovementCharts, LightsCharts, PassesCharts, DribbleCharts, ExerciseHistoricalChart) que transforman los registros brutos en gráficos de radar, barras, dispersión y líneas temporales mediante **Chart.js**.
-- **src/Components/Sections/Landing/LandingBasketball.jsx**: Módulo desacoplado de renderizado que monta un viewport interactivo con **Three.js** para visualizar en 3D el balón oficial del proyecto (asketball.glb).
+---
+
+## 🔄 3. Comunicación entre Componentes Web
+
+El flujo interno de datos en la aplicación web desacopla la obtención de datos de su representación gráfica:
+
+`mermaid
+flowchart LR
+    subgraph DataLayer ["Capa de Datos"]
+        DB[("Cloud Firestore")]
+        FService["FirestoreService (Modules)"]
+        DB <--> FService
+    end
+
+    subgraph Container ["Componente Contenedor"]
+        Dash["Dashboard.jsx (Manejo de Estado)"]
+        FService --> Dash
+    end
+
+    subgraph Visualizers ["Capa de Gráficos (Chart.js)"]
+        L["LightsCharts.jsx (Tiempos de Reacción en ms)"]
+        P["PassesCharts.jsx (Precisión y Decisiones)"]
+        D["DribbleCharts.jsx (Control de Balón)"]
+        M["MovementCharts.jsx (Agilidad Lateral)"]
+        H["ExerciseHistoricalChart.jsx (Curva de Progreso)"]
+    end
+
+    Dash --> L
+    Dash --> P
+    Dash --> D
+    Dash --> M
+    Dash --> H
+`
+
+- **FirestoreService**: Centraliza todas las consultas asíncronas hacia Firestore, abstrayendo a los componentes de UI de la lógica de red y autenticación.
+- **Dashboard.jsx**: Administra el estado reactivo (selectedPlayer, sessionList, ctiveExercise) y orquesta el filtrado temporal por rondas.
+- **Módulos de Gráficos**: Componentes atómicos especializados que transforman las métricas en diagramas de radar, barras, dispersión y líneas continuas.
+- **LandingBasketball.jsx**: Componente 3D autónomo basado en **Three.js** que carga y renderiza interactivamente el modelo asketball.glb.
 
 ---
 
-## 📁 3. Organización del Código
+## 🔬 4. Dimensiones Evaluadas en el Entorno VR
+
+`mermaid
+mindmap
+  root((Reaction Hoops VR))
+    Luces de Reacción
+      Estímulos perimétricos aleatorios
+      Medición en milisegundos (ms)
+      Atención dividida
+    Sistema de Pases
+      Identificación de receptores libres
+      Cálculo de trayectoria y velocidad
+      Precisión en toma de decisiones
+    Control y Dribble
+      Cadencia de bote
+      Resistencia a distractores visuales
+      Coordinación ojo-mano
+    Movilidad y Agilidad
+      Desplazamientos laterales
+      Cambios de dirección rápidos
+      Coordinación espacial 6DoF
+`
+
+---
+
+## 📁 5. Estructura de Directorios
+
+<details>
+<summary><b>Haz clic aquí para desplegar la estructura de carpetas</b></summary>
 
 `	ext
 Reaction/
-├── Modules/                         # Capa de integración y servicios en la nube
+├── Modules/                         # Servicios de integración
 │   ├── firebase_init.js            # Inicialización de Firebase con variables de entorno
-│   └── firebase.service.js         # Métodos de negocio para Firestore (Jugadores, Sesiones)
-├── public/                          # Archivos estáticos directos
+│   └── firebase.service.js         # API de persistencia y consultas a Firestore
+├── public/                          # Recursos estáticos servidos directamente
 ├── src/
-│   ├── assets/                      # Recursos multimedia del proyecto
+│   ├── assets/                      # Multimedia del proyecto
 │   │   ├── Fonts/                  # Fuentes tipográficas (College, etc.)
-│   │   ├── Img/                    # Fotos del equipo, evidencias de laboratorio
+│   │   ├── Img/                    # Fotos del equipo y evidencias de laboratorio
 │   │   └── modelo/                 # Modelo 3D (basketball.glb)
-│   ├── Components/                  # Arquitectura de componentes React
-│   │   ├── Graficos/               # Visualizaciones estadísticas con Chart.js
-│   │   │   ├── DribbleCharts.jsx               # Control de balón
-│   │   │   ├── ExerciseHistoricalChart.jsx     # Evolución temporal
-│   │   │   ├── GeneralHistorySection.jsx       # Resumen general
-│   │   │   ├── LightsCharts.jsx                # Luces de reacción (ms)
-│   │   │   ├── MovementCharts.jsx              # Desplazamiento y agilidad
-│   │   │   └── PassesCharts.jsx                # Precisión y velocidad de pase
+│   ├── Components/                  # Componentes de la interfaz
+│   │   ├── Graficos/               # Visualizaciones con Chart.js
+│   │   │   ├── DribbleCharts.jsx
+│   │   │   ├── ExerciseHistoricalChart.jsx
+│   │   │   ├── GeneralHistorySection.jsx
+│   │   │   ├── LightsCharts.jsx
+│   │   │   ├── MovementCharts.jsx
+│   │   │   └── PassesCharts.jsx
 │   │   ├── Page/                   # Vistas principales (Routing)
-│   │   │   ├── Landing.jsx                     # Página principal institucional
-│   │   │   ├── About.jsx                       # Marco teórico y metodología
-│   │   │   ├── Dashboard.jsx                   # Analítica y registro de jugadores
-│   │   │   └── ExerciseDetail.jsx              # Ficha técnica de cada ejercicio VR
+│   │   │   ├── About.jsx
+│   │   │   ├── Dashboard.jsx
+│   │   │   ├── ExerciseDetail.jsx
+│   │   │   └── Landing.jsx
 │   │   ├── Sections/               # Secciones específicas por página (About, Dashboard, Landing)
-│   │   └── Ui/                     # Componentes atómicos reutilizables (Botones, Modales, Cards, Nav)
-│   ├── hooks/                       # Hooks personalizados (useScrollReveal, etc.)
-│   ├── Styles/                      # Arquitectura CSS modular y Sistema de Diseño (SystemDesign.css)
+│   │   └── Ui/                     # Componentes atómicos reutilizables (Botones, Modales, Cards)
+│   ├── hooks/                       # Custom hooks de React (useScrollReveal)
+│   ├── Styles/                      # CSS modular y Sistema de Diseño (SystemDesign.css)
 │   ├── App.jsx                      # Configuración de rutas (HashRouter)
 │   └── main.jsx                     # Punto de entrada de la aplicación
-├── .env.example                     # Plantilla pública de variables de entorno
-├── .gitignore                       # Configuración de exclusión segura de Git
-├── package.json                     # Definición de dependencias
+├── .env.example                     # Plantilla de variables de entorno
+├── .gitignore                       # Exclusiones de seguridad para Git
+├── package.json                     # Dependencias del proyecto
 ├── vite.config.js                   # Configuración del bundler Vite
 └── README.md                        # Documentación principal
 `
 
----
-
-## 🔬 4. Pruebas VR Implementadas
-
-El sistema evalúa cuatro dimensiones motrices y perceptuales en los deportistas:
-
-1. **Luces de Reacción (lights)**: Estímulos perimétricos aleatorios en el campo visual del atleta; mide el tiempo de respuesta en milisegundos desde la aparición del estímulo hasta el impacto.
-2. **Sistema de Pases (passes)**: Detección de receptores dinámicos y cálculo de la precisión del pase y velocidad de decisión.
-3. **Control y Dribble (dribble)**: Evaluación de la consistencia del bote bajo distractores visuales simulados.
-4. **Desplazamiento y Movilidad (movement)**: Coordinación de cambios de dirección y agilidad lateral sobre la cancha virtual.
-
----
-
-## 🛠️ 5. Tecnologías Utilizadas
-
-- **Visor VR**: Meta Quest 3 (Standalone)
-- **Motor de Desarrollo VR**: Unity 3D / C#
-- **Frontend Web**: React 19, Vite 8
-- **Base de Datos**: Cloud Firestore (Firebase SDK v12)
-- **Visualización Gráfica**: Chart.js, react-chartjs-2
-- **Gráficos 3D Web**: Three.js
-- **Enrutamiento**: React Router DOM (HashRouter)
-- **Despliegue y Hosting**: Vercel
+</details>
 
 ---
 
@@ -144,22 +198,13 @@ El sistema evalúa cuatro dimensiones motrices y perceptuales en los deportistas
    npm install
    `
 
-3. **Configurar credenciales locales**:
-   Copia el archivo de ejemplo:
+3. **Configurar variables de entorno**:
    `ash
    cp .env.example .env
    `
-   Configura tus variables en .env:
-   `env
-   VITE_FIREBASE_API_KEY=tu_api_key
-   VITE_FIREBASE_AUTH_DOMAIN=tu_proyecto.firebaseapp.com
-   VITE_FIREBASE_PROJECT_ID=tu_proyecto_id
-   VITE_FIREBASE_STORAGE_BUCKET=tu_proyecto.firebasestorage.app
-   VITE_FIREBASE_MESSAGING_SENDER_ID=tu_sender_id
-   VITE_FIREBASE_APP_ID=tu_app_id
-   `
+   *Configura tus credenciales de Firebase en .env (el archivo está protegido por .gitignore y no se subirá a Git).*
 
-4. **Iniciar el servidor de desarrollo**:
+4. **Ejecutar en desarrollo**:
    `ash
    npm run dev
    `
@@ -171,18 +216,19 @@ El sistema evalúa cuatro dimensiones motrices y perceptuales en los deportistas
 
 ---
 
-## ⏳ 7. Estado del Proyecto & Próximas Entregas (Roadmap)
+## ⏳ 7. Estado del Proyecto & Hoja de Ruta (Roadmap de la Tesis)
 
-> **Nota para evaluadores y visitantes**:  
-> La arquitectura técnica y la conexión con la base de datos ya se encuentran 100% operativas. Durante las próximas semanas se estará completando la capa de contenidos y divulgación del proyecto:
+> [!NOTE]
+> La arquitectura de software, la base de datos y la conexión con el entorno VR se encuentran **100% implementadas y operativas**. Durante las siguientes semanas se estará finalizando la capa de divulgación y validación experimental:
 
-- [ ] **Material Audiovisual Real**: Incorporación de videos demostrativos que muestran a los jugadores universitarios interactuando con las **Meta Quest 3** en las sesiones de prueba.
-- [ ] **Galería Fotográfica de Campo**: Fotografías en alta resolución del proceso de validación en la universidad, preparación de atletas y equipo de trabajo.
-- [ ] **Textos Académicos Definitivos**: Redacción formal del marco metodológico, muestra evaluada, hipótesis y conclusiones estadísticas dentro de la sección *About*.
-- [ ] **Exportación de Reportes**: Generación de informes consolidados de rendimiento por atleta para el cuerpo técnico.
+- [ ] **Material Audiovisual**: Integración de videos demostrativos de deportistas universitarios ejecutando las pruebas con los visores **Meta Quest 3**.
+- [ ] **Galería Fotográfica Oficial**: Registro fotográfico de alta resolución de las sesiones de captura en laboratorio y campo.
+- [ ] **Redacción del Marco Teórico y Metodológico**: Redacción y pulido de los textos definitivos de la tesis en la sección *About* (muestra evaluada, metodología, hipótesis y resultados estadísticos).
+- [ ] **Módulo de Reportes**: Exportación de informes individuales y comparativos de rendimiento en PDF/CSV.
 
 ---
 
-## 🎓 Universidad de San Buenaventura - Bogotá
-**Facultad de Ingeniería / Trabajo de Grado**  
-Bogotá D.C., Colombia
+<p align="center">
+  <b>Universidad de San Buenaventura - Sede Bogotá</b><br />
+  Facultad de Ingeniería — Trabajo de Grado 2026
+</p>
